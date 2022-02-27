@@ -11,6 +11,7 @@ import (
 	"github.com/iancoleman/strcase"
 	"github.com/suifengpiao14/errorformatter"
 	"github.com/suifengpiao14/gqt/v2"
+	"github.com/suifengpiao14/gqttool"
 )
 
 func main() {
@@ -171,14 +172,14 @@ func GenerateEntity(rep *gqt.Repository) (entityMap map[string]string, err error
 	if err != nil {
 		return
 	}
-	tableList, err := GenerateTable(ddlList)
+	tableList, err := gqttool.GenerateTable(ddlList)
 	if err != nil {
 		return
 	}
 	for _, table := range tableList {
 		//todo get sqlTpl
 		sqlTpl := ""
-		entityStruct, err := RepositoryEntity(table, sqlTpl)
+		entityStruct, err := gqttool.RepositoryEntity(table, sqlTpl)
 		if err != nil {
 			return nil, err
 		}
@@ -193,12 +194,12 @@ func GenerateCrud(rep *gqt.Repository) (tplMap map[string]string, err error) {
 	if err != nil {
 		return
 	}
-	tableList, err := GenerateTable(ddlList)
+	tableList, err := gqttool.GenerateTable(ddlList)
 	if err != nil {
 		return
 	}
 	for _, table := range tableList {
-		tplMap, err = Crud(table)
+		tplMap, err = gqttool.Crud(table)
 		if err != nil {
 			return
 		}
@@ -211,11 +212,11 @@ func GenerateTableModel(rep *gqt.Repository) (modelMap map[string]string, err er
 	if err != nil {
 		return
 	}
-	tableList, err := GenerateTable(ddlList)
+	tableList, err := gqttool.GenerateTable(ddlList)
 	if err != nil {
 		return
 	}
-	modelMap, err = GenerateModel(tableList)
+	modelMap, err = gqttool.GenerateModel(tableList)
 	return
 }
 
