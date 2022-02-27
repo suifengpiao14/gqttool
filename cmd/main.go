@@ -159,15 +159,13 @@ func saveFile(filename string, content string) (err error) {
 func IsExist(path string) bool {
 	_, err := os.Stat(path) //os.Stat获取文件信息
 	if err != nil {
-		if os.IsExist(err) {
-			return true
-		}
-		return false
+		return os.IsExist(err)
 	}
 	return true
 }
 
 func GenerateEntity(rep *gqt.Repository) (entityMap map[string]string, err error) {
+	entityMap = make(map[string]string)
 	ddlList, err := getDDLFromRepository(rep)
 	if err != nil {
 		return
