@@ -9,7 +9,6 @@ import (
 	"github.com/pkg/errors"
 
 	executor "github.com/bytewatch/ddl-executor"
-	"github.com/iancoleman/strcase"
 )
 
 //map for converting mysql type to golang types
@@ -154,13 +153,13 @@ func GenerateTable(ddlList []string) (tables []*Table, err error) {
 
 		table := &Table{
 			TableName:      tableName,
-			TableNameCamel: strcase.ToCamel(tableName),
+			TableNameCamel: ToCamel(tableName),
 			Columns:        make([]*Column, 0),
 		}
 		for _, indice := range tableDef.Indices {
 			if indice.Name == "PRIMARY" {
 				table.PrimaryKey = indice.Columns[0] // 暂时取第一个为主键，不支持多字段主键
-				table.PrimaryKeyCamel = strcase.ToCamel(table.PrimaryKey)
+				table.PrimaryKeyCamel = ToCamel(table.PrimaryKey)
 			}
 		}
 		for _, columnDef := range tableDef.Columns {
@@ -171,23 +170,23 @@ func GenerateTable(ddlList []string) (tables []*Table, err error) {
 			}
 			if columnDef.OnUpdate {
 				table.UpdateAtColumn = columnDef.Name
-				table.UpdateAtCamel = strcase.ToCamel(columnDef.Name)
+				table.UpdateAtCamel = ToCamel(columnDef.Name)
 			}
 			if strings.Contains(columnDef.DefaultValue, "current_timestamp") && !columnDef.OnUpdate {
 				table.CreatedAtColumn = columnDef.Name
-				table.CreatedAtCamel = strcase.ToCamel(columnDef.Name)
+				table.CreatedAtCamel = ToCamel(columnDef.Name)
 			}
 			if isTimeMysqlType(columnDef.Type) && strings.Contains(columnDef.Name, "deleted_at") {
 				table.DeleteAtColumn = columnDef.Name
-				table.DeleteAtCamel = strcase.ToCamel(columnDef.Name)
+				table.DeleteAtCamel = ToCamel(columnDef.Name)
 			}
 			columnPt := &Column{
-				CamelName: strcase.ToCamel(columnDef.Name),
+				CamelName: ToCamel(columnDef.Name),
 				Name:      columnDef.Name,
 				Type:      goType,
 				Comment:   columnDef.Comment,
 				Nullable:  columnDef.Nullable,
-				Tag:       fmt.Sprintf("`json:\"%s\"`", strcase.ToLowerCamel(columnDef.Name)),
+				Tag:       fmt.Sprintf("`json:\"%s\"`", ToLowerCamel(columnDef.Name)),
 			}
 			table.Columns = append(table.Columns, columnPt)
 		}
@@ -198,7 +197,7 @@ func GenerateTable(ddlList []string) (tables []*Table, err error) {
 
 func structTpl() string {
 	return `
-		type {{.TableName}} struct{
+		type {{.TableNameCamel}} struct{
 			{{range .Columns }} 
 			// {{.Comment}}
 			{{.CamelName}} {{.Type}} {{if .Tag}} {{.Tag}} {{end}}

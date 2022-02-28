@@ -6,6 +6,9 @@ import (
 	"io"
 	"io/fs"
 	"os"
+	"path"
+	"sort"
+	"strings"
 	"testing"
 
 	"github.com/iancoleman/strcase"
@@ -23,8 +26,11 @@ func main() {
 		err       error
 	)
 	modelCmd := flag.NewFlagSet("model", flag.ExitOnError)
+	modelCmd.Usage = help
 	crudCmd := flag.NewFlagSet("crud", flag.ExitOnError)
+	crudCmd.Usage = help
 	entiryCmd := flag.NewFlagSet("entity", flag.ExitOnError)
+	entiryCmd.Usage = help
 	modelCmd.StringVar(&ddlFile, "ddl", "template/ddl.sql.tpl", "ddl template file name")
 	modelCmd.StringVar(&modelDir, "dir", "model", "ddl template file name")
 
@@ -36,94 +42,132 @@ func main() {
 	testing.Init()
 
 	if len(os.Args) < 3 {
-		fmt.Println("expected 'model' or 'crud' or 'entiry' subcommands")
-		os.Exit(1)
+		help()
 	}
 	args := os.Args[2:]
 	switch os.Args[1] {
 	case "model":
 		modelCmd.Parse(args)
-		repo := gqt.NewRepository()
-		errChain := errorformatter.NewErrorChain()
-		var content string
-		var modelMap map[string]string
-		errChain.Run(func() (err error) {
-			content, err = GetFileContent(ddlFile)
-			return
-		}).
-			SetError(repo.AddByNamespace("ddl", content, gqt.TemplatefuncMap)).
-			Run(func() (err error) {
-				modelMap, err = GenerateTableModel(repo)
-				return
-			})
-		err = errChain.Error()
+		err = runCmdModel(ddlFile, modelDir)
 		if err != nil {
 			panic(err)
-		}
-		for name, model := range modelMap {
-			snakeName := strcase.ToSnake(name)
-			filename := fmt.Sprintf("%s/%s.model.go", modelDir, snakeName)
-			err = saveFile(filename, model)
-			if err != nil {
-				panic(err)
-			}
 		}
 
 	case "crud":
 		crudCmd.Parse(args)
-		repo := gqt.NewRepository()
-		errChain := errorformatter.NewErrorChain()
-		var content string
-		var tplMap map[string]string
-		errChain.Run(func() (err error) {
-			content, err = GetFileContent(ddlFile)
-			return
-		}).
-			SetError(repo.AddByNamespace("ddl", content, gqt.TemplatefuncMap)).
-			Run(func() (err error) {
-				tplMap, err = GenerateCrud(repo)
-				return
-			})
-
-		err = errChain.Error()
+		err = runCmdCrud(ddlFile, tplDir)
 		if err != nil {
 			panic(err)
 		}
-		for name, tpl := range tplMap {
-			snakeName := strcase.ToSnake(name)
-			filename := fmt.Sprintf("%s/%s.sql.tpl", tplDir, snakeName)
-			err = saveFile(filename, tpl)
-			if err != nil {
-				panic(err)
-			}
-		}
+
 	case "entity":
 		entiryCmd.Parse(args)
-		repo := gqt.NewRepository()
-		errChain := errorformatter.NewErrorChain()
-		var entityMap map[string]string
-		errChain.SetError(repo.AddByDir(entiryDir, gqt.TemplatefuncMap)).
-			Run(func() (err error) {
-				entityMap, err = GenerateEntity(repo)
-				return
-			})
-
-		err = errChain.Error()
+		err = runCmdEntity(tplDir, entiryDir)
 		if err != nil {
 			panic(err)
 		}
-		for name, entity := range entityMap {
-			snakeName := strcase.ToSnake(name)
-			filename := fmt.Sprintf("%s/%s.entity.go", entiryDir, snakeName)
-			err = saveFile(filename, entity)
-			if err != nil {
-				panic(err)
-			}
-		}
+
 	default:
-		fmt.Println("expected 'model' or 'crud' or 'entiry' subcommands")
-		os.Exit(1)
+		help()
 	}
+}
+
+func runCmdModel(ddlFile string, dstDir string) (err error) {
+	repo := gqt.NewRepository()
+	errChain := errorformatter.NewErrorChain()
+	var content string
+	var modelMap map[string]string
+	errChain.Run(func() (err error) {
+		content, err = GetFileContent(ddlFile)
+		return
+	}).
+		SetError(repo.AddByNamespace("ddl", content, gqt.TemplatefuncMap)).
+		Run(func() (err error) {
+			modelMap, err = GenerateTableModel(repo)
+			return
+		})
+	err = errChain.Error()
+	if err != nil {
+		return
+	}
+	contentArr := make([]string, 0)
+	basename := path.Base(dstDir)
+	packageName := strings.ToLower(strcase.ToLowerCamel(basename))
+	packageLine := fmt.Sprintf("package %s", packageName)
+	contentArr = append(contentArr, packageLine)
+	tableList := make([]string, 0)
+	for name := range modelMap {
+		tableList = append(tableList, name)
+	}
+	sort.Strings(tableList) // 排序后写入文件
+
+	for _, tablename := range tableList {
+		model := modelMap[tablename]
+		contentArr = append(contentArr, model)
+	}
+
+	content = strings.Join(contentArr, "\n")
+	filename := fmt.Sprintf("%s/model.go", dstDir)
+	err = saveFile(filename, content)
+	if err != nil {
+		return
+	}
+	return
+}
+
+func runCmdCrud(ddlFile string, dstDir string) (err error) {
+	repo := gqt.NewRepository()
+	errChain := errorformatter.NewErrorChain()
+	var content string
+	var tplMap map[string]string
+	errChain.Run(func() (err error) {
+		content, err = GetFileContent(ddlFile)
+		return
+	}).
+		SetError(repo.AddByNamespace("ddl", content, gqt.TemplatefuncMap)).
+		Run(func() (err error) {
+			tplMap, err = GenerateCrud(repo)
+			return
+		})
+
+	err = errChain.Error()
+	if err != nil {
+		return
+	}
+	for name, tpl := range tplMap {
+		snakeName := strcase.ToSnake(name)
+		filename := fmt.Sprintf("%s/%s.sql.tpl", dstDir, snakeName)
+		err = saveFile(filename, tpl)
+		if err != nil {
+			return
+		}
+	}
+	return
+}
+
+func runCmdEntity(sqlTplDir string, entiryDir string) (err error) {
+	repo := gqt.NewRepository()
+	errChain := errorformatter.NewErrorChain()
+	var entityMap map[string]string
+	errChain.SetError(repo.AddByDir(sqlTplDir, gqt.TemplatefuncMap)).
+		Run(func() (err error) {
+			entityMap, err = GenerateEntity(repo)
+			return
+		})
+
+	err = errChain.Error()
+	if err != nil {
+		return
+	}
+	for name, entity := range entityMap {
+		snakeName := strcase.ToSnake(name)
+		filename := fmt.Sprintf("%s/%s.entity.go", entiryDir, snakeName)
+		err = saveFile(filename, entity)
+		if err != nil {
+			return
+		}
+	}
+	return
 }
 
 func GetFileContent(file string) (content string, err error) {
@@ -228,4 +272,76 @@ func getDDLFromRepository(rep *gqt.Repository) (ddlList []string, err error) {
 		ddlList = append(ddlList, ddl)
 	}
 	return
+}
+
+func helpModel() {
+	fmt.Fprint(os.Stderr, `gqttool model is generate go struct from mysql ddl
+
+Usage:
+  gqttool model  -ddl ddlFilename -dir modelSaveDir
+  gqttool crud  -ddl ddlFilename -dir sqlTplSaveDir
+  gqttool entiry  -tplDir sqlTplDir -entiryDir entirySaveDir
+  
+Commands:
+  model
+  		Generate go struct from  mysql ddl
+  crud
+        Generate crud sql.tpl from mysql ddl
+  version
+  		Generate sql.tpl input entiry from mysql sqlTplDir
+
+Flags:
+  -ddl
+        mysql ddl file path
+
+  -dir
+        save model/sqlTpl file path
+
+ -tplDir 
+		sqlTpl file dir
+ -entityDir 
+		sqlTpl  argument entity save dir
+
+Example:
+
+  gqttool model template/ddl.sql.tpl -o template
+
+`)
+	os.Exit(1)
+}
+
+func help() {
+	fmt.Fprint(os.Stderr, `gqttool is the code generation tool for the gqt package.
+
+Usage:
+  gqttool model  -ddl ddlFilename -dir modelSaveDir
+  gqttool crud  -ddl ddlFilename -dir sqlTplSaveDir
+  gqttool entiry  -tplDir sqlTplDir -entiryDir entirySaveDir
+  
+Commands:
+  model
+  		Generate go struct from  mysql ddl
+  crud
+        Generate crud sql.tpl from mysql ddl
+  version
+  		Generate sql.tpl input entiry from mysql sqlTplDir
+
+Flags:
+  -ddl
+        mysql ddl file path
+
+  -dir
+        save model/sqlTpl file path
+
+ -tplDir 
+		sqlTpl file dir
+ -entityDir 
+		sqlTpl  argument entity save dir
+
+Example:
+
+  gqttool model template/ddl.sql.tpl -o template
+
+`)
+	os.Exit(1)
 }
