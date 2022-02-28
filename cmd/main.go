@@ -19,26 +19,26 @@ import (
 
 func main() {
 	var (
-		ddlFile   string
-		modelDir  string
-		tplDir    string
-		entiryDir string
-		err       error
+		ddlFile        string
+		modelFilename  string
+		tplDir         string
+		entiryFilename string
+		err            error
 	)
 	modelCmd := flag.NewFlagSet("model", flag.ExitOnError)
-	modelCmd.Usage = help
+	modelCmd.Usage = helpModel
 	crudCmd := flag.NewFlagSet("crud", flag.ExitOnError)
-	crudCmd.Usage = help
+	crudCmd.Usage = helpCrud
 	entiryCmd := flag.NewFlagSet("entity", flag.ExitOnError)
-	entiryCmd.Usage = help
+	entiryCmd.Usage = helpEntity
 	modelCmd.StringVar(&ddlFile, "ddl", "template/ddl.sql.tpl", "ddl template file name")
-	modelCmd.StringVar(&modelDir, "dir", "model", "ddl template file name")
+	modelCmd.StringVar(&modelFilename, "model", "repository.model.go", "ddl template file name")
 
 	crudCmd.StringVar(&ddlFile, "ddl", "template/ddl.sql.tpl", "ddl template file name")
-	crudCmd.StringVar(&tplDir, "dir", "template", "sql template dir")
+	crudCmd.StringVar(&tplDir, "tplDir", "template", "sql template dir")
 
 	entiryCmd.StringVar(&tplDir, "tplDir", "template", "sql template dir")
-	entiryCmd.StringVar(&entiryDir, "entiryDir", "entity", "entity dir")
+	entiryCmd.StringVar(&entiryFilename, "entiry", "repository.entity.go", "entity file")
 	testing.Init()
 
 	if len(os.Args) < 3 {
@@ -48,7 +48,7 @@ func main() {
 	switch os.Args[1] {
 	case "model":
 		modelCmd.Parse(args)
-		err = runCmdModel(ddlFile, modelDir)
+		err = runCmdModel(ddlFile, modelFilename)
 		if err != nil {
 			panic(err)
 		}
@@ -62,7 +62,7 @@ func main() {
 
 	case "entity":
 		entiryCmd.Parse(args)
-		err = runCmdEntity(tplDir, entiryDir)
+		err = runCmdEntity(tplDir, entiryFilename)
 		if err != nil {
 			panic(err)
 		}
@@ -278,33 +278,60 @@ func helpModel() {
 	fmt.Fprint(os.Stderr, `gqttool model is generate go struct from mysql ddl
 
 Usage:
-  gqttool model  -ddl ddlFilename -dir modelSaveDir
-  gqttool crud  -ddl ddlFilename -dir sqlTplSaveDir
-  gqttool entiry  -tplDir sqlTplDir -entiryDir entirySaveDir
-  
-Commands:
-  model
-  		Generate go struct from  mysql ddl
-  crud
-        Generate crud sql.tpl from mysql ddl
-  version
-  		Generate sql.tpl input entiry from mysql sqlTplDir
+  gqttool model  -ddl ddlFilename -model modelFilename
 
 Flags:
   -ddl
         mysql ddl file path
 
-  -dir
-        save model/sqlTpl file path
-
- -tplDir 
-		sqlTpl file dir
- -entityDir 
-		sqlTpl  argument entity save dir
+  -model
+        model file path
 
 Example:
 
-  gqttool model template/ddl.sql.tpl -o template
+  gqttool model template/ddl.sql.tpl -model repository.model.go
+
+`)
+	os.Exit(1)
+}
+
+func helpCrud() {
+	fmt.Fprint(os.Stderr, `gqttool crud is  generation crud sql from mysql ddl
+
+Usage:
+  gqttool crud  -ddl ddlFilename -tplDir sqlTplSaveDir
+  
+Flags:
+  -ddl
+        mysql ddl file path
+
+  -tplDir
+        save sqlTpl file path
+
+Example:
+
+  gqttool crud template/ddl.sql.tpl -tplDir template
+
+`)
+	os.Exit(1)
+}
+
+func helpEntity() {
+	fmt.Fprint(os.Stderr, `gqttool entity is  generation sql template inpur args entity
+
+Usage:
+  gqttool entiry  -tplDir sqlTplDir -entiry entiryFilename
+  
+
+Flags:
+ -tplDir 
+		sqlTpl file dir
+ -entity 
+		sqlTpl  entiry file name
+
+Example:
+
+  gqttool entity -tplDir template -entity repository.entity.go
 
 `)
 	os.Exit(1)
@@ -314,33 +341,31 @@ func help() {
 	fmt.Fprint(os.Stderr, `gqttool is the code generation tool for the gqt package.
 
 Usage:
-  gqttool model  -ddl ddlFilename -dir modelSaveDir
-  gqttool crud  -ddl ddlFilename -dir sqlTplSaveDir
-  gqttool entiry  -tplDir sqlTplDir -entiryDir entirySaveDir
+  gqttool model  -ddl ddlFilename -model modelFilename
+  gqttool crud  -ddl ddlFilename -tplDir sqlTplSaveDir
+  gqttool entiry  -tplDir sqlTplDir -entiry entiryFilename
   
 Commands:
   model
   		Generate go struct from  mysql ddl
   crud
         Generate crud sql.tpl from mysql ddl
-  version
+  entiry
   		Generate sql.tpl input entiry from mysql sqlTplDir
 
 Flags:
   -ddl
         mysql ddl file path
-
-  -dir
-        save model/sqlTpl file path
-
+  -model
+        repository model file name
  -tplDir 
 		sqlTpl file dir
- -entityDir 
-		sqlTpl  argument entity save dir
+ -entity 
+		sqlTpl  argument entity file name
 
 Example:
 
-  gqttool model template/ddl.sql.tpl -o template
+  gqttool model template/ddl.sql.tpl -model repository.model.go
 
 `)
 	os.Exit(1)
