@@ -17,6 +17,15 @@ func TestRunCmdModel(t *testing.T) {
 
 }
 
+func TestRunCmdEntity(*testing.T) {
+	tplDir := "../example/template"
+	entity := "../example/repository.entity.go"
+	err := runCmdEntity(tplDir, entity)
+	if err != nil {
+		panic(err)
+	}
+}
+
 func TestGenerateModel(t *testing.T) {
 	repo := gqt.NewRepository()
 	err := repo.AddByDir("../example", gqt.TemplatefuncMap)

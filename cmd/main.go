@@ -145,13 +145,13 @@ func runCmdCrud(ddlFile string, dstDir string) (err error) {
 	return
 }
 
-func runCmdEntity(sqlTplDir string, entityDir string) (err error) {
+func runCmdEntity(sqlTplDir string, entityFilename string) (err error) {
 	repo := gqt.NewRepository()
 	errChain := errorformatter.NewErrorChain()
-	var entityMap map[string]string
+	var entityList = make([]string, 0)
 	errChain.SetError(repo.AddByDir(sqlTplDir, gqt.TemplatefuncMap)).
 		Run(func() (err error) {
-			entityMap, err = GenerateEntity(repo)
+			entityList, err = GenerateEntity(repo)
 			return
 		})
 
@@ -159,13 +159,11 @@ func runCmdEntity(sqlTplDir string, entityDir string) (err error) {
 	if err != nil {
 		return
 	}
-	for name, entity := range entityMap {
-		snakeName := strcase.ToSnake(name)
-		filename := fmt.Sprintf("%s/%s.entity.go", entityDir, snakeName)
-		err = saveFile(filename, entity)
-		if err != nil {
-			return
-		}
+	sort.Strings(entityList)
+	entities := strings.Join(entityList, "\n")
+	err = saveFile(entityFilename, entities)
+	if err != nil {
+		return
 	}
 	return
 }
@@ -208,8 +206,8 @@ func IsExist(path string) bool {
 	return true
 }
 
-func GenerateEntity(rep *gqt.Repository) (entityMap map[string]string, err error) {
-	entityMap = make(map[string]string)
+func GenerateEntity(rep *gqt.Repository) (entityList []string, err error) {
+	entityList = make([]string, 0)
 	ddlList, err := getDDLFromRepository(rep)
 	if err != nil {
 		return
@@ -225,7 +223,7 @@ func GenerateEntity(rep *gqt.Repository) (entityMap map[string]string, err error
 		if err != nil {
 			return nil, err
 		}
-		entityMap[table.TableNameCamel] = entityStruct
+		entityList = append(entityList, entityStruct)
 	}
 
 	return

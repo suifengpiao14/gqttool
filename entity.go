@@ -28,6 +28,22 @@ func RepositoryEntity(table *Table, sqlTpl string) (entityStruct string, err err
 	return
 }
 
+func ParseDefine(content []byte) {
+	s := content
+	leftDelim := []byte("{{")
+	rightDelim := []byte("}}")
+	defineBegin := false
+	defineSelfEnd := false
+	defineEnd := false
+	leftDelimCount := 0
+	rightDelimCount := 0
+	index := bytes.Index(s, leftDelim)
+	define := "" //找到define 关键字
+	if index > -1 {
+
+	}
+}
+
 type EntityTplData struct {
 	StructName string
 	Attributes Variables
