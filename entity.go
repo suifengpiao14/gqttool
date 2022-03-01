@@ -10,7 +10,9 @@ import (
 //RepositoryEntity 根据数据表ddl和sql tpl 生成 sql tpl 调用的输入、输出实体
 func RepositoryEntity(table *Table, sqlTpl string) (entityStruct string, err error) {
 	variableMap := ParsSqlTplVariable(sqlTpl)
-	entityTplData, err := GetEntityData(table, variableMap)
+	definName := GetDefineName(sqlTpl)
+	structName := ToCamel(definName)
+	entityTplData, err := GetEntityData(table, variableMap, structName)
 	if err != nil {
 		return
 	}
@@ -28,20 +30,10 @@ func RepositoryEntity(table *Table, sqlTpl string) (entityStruct string, err err
 	return
 }
 
-func ParseDefine(content []byte) {
-	s := content
-	leftDelim := []byte("{{")
-	rightDelim := []byte("}}")
-	defineBegin := false
-	defineSelfEnd := false
-	defineEnd := false
-	leftDelimCount := 0
-	rightDelimCount := 0
-	index := bytes.Index(s, leftDelim)
-	define := "" //找到define 关键字
-	if index > -1 {
-
-	}
+func ParseDefine(content string) (defineList []string) {
+	delim := "{{define "
+	defineList = strings.Split(content, delim)
+	return
 }
 
 type EntityTplData struct {
@@ -49,9 +41,9 @@ type EntityTplData struct {
 	Attributes Variables
 }
 
-func GetEntityData(table *Table, variableMap map[string]*Variable) (entityTplData *EntityTplData, err error) {
+func GetEntityData(table *Table, variableMap map[string]*Variable, structName string) (entityTplData *EntityTplData, err error) {
 	entityTplData = &EntityTplData{
-		StructName: table.TableNameCamel,
+		StructName: structName,
 		Attributes: make(Variables, 0),
 	}
 	tableColumnMap := make(map[string]*Column)
@@ -212,6 +204,26 @@ func parsePrefixVariable(item []byte, variableStart byte) (variable Variable, po
 		Type:       "interface{}",
 		AllowEmpty: true,
 	}
+	return
+}
+
+func GetDefineName(sqlTpl string) (defineName string) {
+	delim := []byte("{{define \"")
+	sqlTplByte := []byte(sqlTpl)
+	index := bytes.Index(sqlTplByte, delim)
+	nameByte := make([]byte, 0)
+	if index >= 0 {
+		for i := index + 1; i < len(sqlTplByte); i++ {
+			c := sqlTplByte[i]
+			if c != '"' {
+				nameByte = append(nameByte, sqlTplByte[i])
+			} else {
+				break
+			}
+
+		}
+	}
+	defineName = string(nameByte)
 	return
 }
 

@@ -7,6 +7,7 @@ import (
 	"io/fs"
 	"os"
 	"path"
+	"path/filepath"
 	"sort"
 	"strings"
 	"testing"
@@ -72,6 +73,13 @@ func main() {
 	}
 }
 
+func generatePackageName(dstDir string) (packageName string) {
+	basename := path.Base(dstDir)
+	packageName = strings.ToLower(strcase.ToLowerCamel(basename))
+	return
+
+}
+
 func runCmdModel(ddlFile string, dstDir string) (err error) {
 	repo := gqt.NewRepository()
 	errChain := errorformatter.NewErrorChain()
@@ -91,8 +99,7 @@ func runCmdModel(ddlFile string, dstDir string) (err error) {
 		return
 	}
 	contentArr := make([]string, 0)
-	basename := path.Base(dstDir)
-	packageName := strings.ToLower(strcase.ToLowerCamel(basename))
+	packageName := generatePackageName(dstDir)
 	packageLine := fmt.Sprintf("package %s", packageName)
 	contentArr = append(contentArr, packageLine)
 	tableList := make([]string, 0)
@@ -149,9 +156,14 @@ func runCmdEntity(sqlTplDir string, entityFilename string) (err error) {
 	repo := gqt.NewRepository()
 	errChain := errorformatter.NewErrorChain()
 	var entityList = make([]string, 0)
+	var sqlTplList = make([]string, 0)
 	errChain.SetError(repo.AddByDir(sqlTplDir, gqt.TemplatefuncMap)).
 		Run(func() (err error) {
-			entityList, err = GenerateEntity(repo)
+			sqlTplList, err = getAllSqlTpl(sqlTplDir)
+			return
+		}).
+		Run(func() (err error) {
+			entityList, err = GenerateEntity(repo, sqlTplList)
 			return
 		})
 
@@ -160,10 +172,37 @@ func runCmdEntity(sqlTplDir string, entityFilename string) (err error) {
 		return
 	}
 	sort.Strings(entityList)
-	entities := strings.Join(entityList, "\n")
-	err = saveFile(entityFilename, entities)
+
+	contentArr := make([]string, 0)
+	packageName := generatePackageName(filepath.Dir(sqlTplDir))
+	packageLine := fmt.Sprintf("package %s", packageName)
+	contentArr = append(contentArr, packageLine)
+	contentArr = append(contentArr, entityList...)
+	content := strings.Join(contentArr, "\n")
+	err = saveFile(entityFilename, content)
 	if err != nil {
 		return
+	}
+	return
+}
+
+func getAllSqlTpl(sqlTplDir string) (sqlTplList []string, err error) {
+	suffix := ".sql.tpl"
+	pattern := fmt.Sprintf("%s/*%s", strings.TrimRight(sqlTplDir, "/"), suffix)
+	allFileList, err := filepath.Glob(pattern)
+	if err != nil {
+		return
+	}
+	for _, filename := range allFileList {
+		if filename == "ddl.sql.tpl" { //skep ddl file
+			continue
+		}
+		b, err := os.ReadFile(filename)
+		if err != nil {
+			return nil, err
+		}
+		defineList := gqttool.ParseDefine(string(b))
+		sqlTplList = append(sqlTplList, defineList...)
 	}
 	return
 }
@@ -206,7 +245,7 @@ func IsExist(path string) bool {
 	return true
 }
 
-func GenerateEntity(rep *gqt.Repository) (entityList []string, err error) {
+func GenerateEntity(rep *gqt.Repository, sqlTplList []string) (entityList []string, err error) {
 	entityList = make([]string, 0)
 	ddlList, err := getDDLFromRepository(rep)
 	if err != nil {
@@ -217,13 +256,14 @@ func GenerateEntity(rep *gqt.Repository) (entityList []string, err error) {
 		return
 	}
 	for _, table := range tableList {
-		//todo get sqlTpl
-		sqlTpl := ""
-		entityStruct, err := gqttool.RepositoryEntity(table, sqlTpl)
-		if err != nil {
-			return nil, err
+		for _, sqlTpl := range sqlTplList {
+			entityStruct, err := gqttool.RepositoryEntity(table, sqlTpl)
+			if err != nil {
+				return nil, err
+			}
+			entityList = append(entityList, entityStruct)
 		}
-		entityList = append(entityList, entityStruct)
+
 	}
 
 	return
