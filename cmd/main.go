@@ -22,23 +22,23 @@ func main() {
 		ddlFile        string
 		modelFilename  string
 		tplDir         string
-		entiryFilename string
+		entityFilename string
 		err            error
 	)
 	modelCmd := flag.NewFlagSet("model", flag.ExitOnError)
 	modelCmd.Usage = helpModel
 	crudCmd := flag.NewFlagSet("crud", flag.ExitOnError)
 	crudCmd.Usage = helpCrud
-	entiryCmd := flag.NewFlagSet("entity", flag.ExitOnError)
-	entiryCmd.Usage = helpEntity
+	entityCmd := flag.NewFlagSet("entity", flag.ExitOnError)
+	entityCmd.Usage = helpEntity
 	modelCmd.StringVar(&ddlFile, "ddl", "template/ddl.sql.tpl", "ddl template file name")
 	modelCmd.StringVar(&modelFilename, "model", "repository.model.go", "ddl template file name")
 
 	crudCmd.StringVar(&ddlFile, "ddl", "template/ddl.sql.tpl", "ddl template file name")
 	crudCmd.StringVar(&tplDir, "tplDir", "template", "sql template dir")
 
-	entiryCmd.StringVar(&tplDir, "tplDir", "template", "sql template dir")
-	entiryCmd.StringVar(&entiryFilename, "entiry", "repository.entity.go", "entity file")
+	entityCmd.StringVar(&tplDir, "tplDir", "template", "sql template dir")
+	entityCmd.StringVar(&entityFilename, "entity", "repository.entity.go", "entity file")
 	testing.Init()
 
 	if len(os.Args) < 3 {
@@ -61,8 +61,8 @@ func main() {
 		}
 
 	case "entity":
-		entiryCmd.Parse(args)
-		err = runCmdEntity(tplDir, entiryFilename)
+		entityCmd.Parse(args)
+		err = runCmdEntity(tplDir, entityFilename)
 		if err != nil {
 			panic(err)
 		}
@@ -145,7 +145,7 @@ func runCmdCrud(ddlFile string, dstDir string) (err error) {
 	return
 }
 
-func runCmdEntity(sqlTplDir string, entiryDir string) (err error) {
+func runCmdEntity(sqlTplDir string, entityDir string) (err error) {
 	repo := gqt.NewRepository()
 	errChain := errorformatter.NewErrorChain()
 	var entityMap map[string]string
@@ -161,7 +161,7 @@ func runCmdEntity(sqlTplDir string, entiryDir string) (err error) {
 	}
 	for name, entity := range entityMap {
 		snakeName := strcase.ToSnake(name)
-		filename := fmt.Sprintf("%s/%s.entity.go", entiryDir, snakeName)
+		filename := fmt.Sprintf("%s/%s.entity.go", entityDir, snakeName)
 		err = saveFile(filename, entity)
 		if err != nil {
 			return
@@ -240,11 +240,14 @@ func GenerateCrud(rep *gqt.Repository) (tplMap map[string]string, err error) {
 	if err != nil {
 		return
 	}
+	tplMap = make(map[string]string)
 	for _, table := range tableList {
-		tplMap, err = gqttool.Crud(table)
+		oneTableTplList, err := gqttool.Crud(table)
 		if err != nil {
-			return
+			return nil, err
 		}
+		tableTpl := strings.Join(oneTableTplList, "\n")
+		tplMap[table.TableName] = tableTpl
 	}
 
 	return
@@ -292,7 +295,7 @@ Example:
   gqttool model template/ddl.sql.tpl -model repository.model.go
 
 `)
-	os.Exit(1)
+	os.Exit(0)
 }
 
 func helpCrud() {
@@ -313,28 +316,28 @@ Example:
   gqttool crud template/ddl.sql.tpl -tplDir template
 
 `)
-	os.Exit(1)
+	os.Exit(0)
 }
 
 func helpEntity() {
 	fmt.Fprint(os.Stderr, `gqttool entity is  generation sql template inpur args entity
 
 Usage:
-  gqttool entiry  -tplDir sqlTplDir -entiry entiryFilename
+  gqttool entity  -tplDir sqlTplDir -entity entityFilename
   
 
 Flags:
  -tplDir 
 		sqlTpl file dir
  -entity 
-		sqlTpl  entiry file name
+		sqlTpl  entity file name
 
 Example:
 
   gqttool entity -tplDir template -entity repository.entity.go
 
 `)
-	os.Exit(1)
+	os.Exit(0)
 }
 
 func help() {
@@ -343,15 +346,15 @@ func help() {
 Usage:
   gqttool model  -ddl ddlFilename -model modelFilename
   gqttool crud  -ddl ddlFilename -tplDir sqlTplSaveDir
-  gqttool entiry  -tplDir sqlTplDir -entiry entiryFilename
+  gqttool entity  -tplDir sqlTplDir -entity entityFilename
   
 Commands:
   model
   		Generate go struct from  mysql ddl
   crud
         Generate crud sql.tpl from mysql ddl
-  entiry
-  		Generate sql.tpl input entiry from mysql sqlTplDir
+  entity
+  		Generate sql.tpl input entity from mysql sqlTplDir
 
 Flags:
   -ddl
@@ -368,5 +371,5 @@ Example:
   gqttool model template/ddl.sql.tpl -model repository.model.go
 
 `)
-	os.Exit(1)
+	os.Exit(0)
 }
