@@ -28,7 +28,7 @@ func RepositoryEntity(table *Table, sqlTpl string) (entityStruct string, err err
 	return
 }
 
-func ParseDefine(content []byte) {
+/* func ParseDefine(content []byte) {
 	s := content
 	leftDelim := []byte("{{")
 	rightDelim := []byte("}}")
@@ -43,7 +43,7 @@ func ParseDefine(content []byte) {
 
 	}
 }
-
+*/
 type EntityTplData struct {
 	StructName string
 	Attributes Variables
