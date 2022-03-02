@@ -2,15 +2,24 @@ package gqttool
 
 import (
 	"bytes"
+	"fmt"
 	"sort"
 	"strings"
 	"text/template"
+
+	"github.com/pkg/errors"
 )
 
 //RepositoryEntity 根据数据表ddl和sql tpl 生成 sql tpl 调用的输入、输出实体
-func RepositoryEntity(table *Table, sqlTpl string) (entityStruct string, err error) {
+func RepositoryEntity(sqlTpl string, table *Table) (entityStruct string, err error) {
 	variableMap := ParsSqlTplVariable(sqlTpl)
-	entityTplData, err := GetEntityData(table, variableMap)
+	definName, err := GetDefineName(sqlTpl)
+	if err != nil {
+		return
+	}
+
+	structName := ToCamel(fmt.Sprintf("%s%s%s", table.TableNameCamel, strings.ToUpper(definName[0:1]), definName[1:]))
+	entityTplData, err := GetEntityData(table, variableMap, structName)
 	if err != nil {
 		return
 	}
@@ -28,30 +37,36 @@ func RepositoryEntity(table *Table, sqlTpl string) (entityStruct string, err err
 	return
 }
 
-/* func ParseDefine(content []byte) {
-	s := content
-	leftDelim := []byte("{{")
-	rightDelim := []byte("}}")
-	defineBegin := false
-	defineSelfEnd := false
-	defineEnd := false
-	leftDelimCount := 0
-	rightDelimCount := 0
-	index := bytes.Index(s, leftDelim)
-	define := "" //找到define 关键字
-	if index > -1 {
-
+func ParseDefine(content string) (defineList []string) {
+	delim := "{{define "
+	delimLen := len(delim)
+	for {
+		index := strings.Index(content, delim)
+		if index >= 0 {
+			pos := delimLen + index
+			nextIndex := strings.Index(content[pos:], delim)
+			if nextIndex >= 0 {
+				sepPos := pos + nextIndex
+				oneDefine := content[:sepPos]
+				defineList = append(defineList, oneDefine)
+				content = content[sepPos:]
+			} else {
+				defineList = append(defineList, content)
+				break
+			}
+		}
 	}
+	return
 }
-*/
+
 type EntityTplData struct {
 	StructName string
 	Attributes Variables
 }
 
-func GetEntityData(table *Table, variableMap map[string]*Variable) (entityTplData *EntityTplData, err error) {
+func GetEntityData(table *Table, variableMap map[string]*Variable, structName string) (entityTplData *EntityTplData, err error) {
 	entityTplData = &EntityTplData{
-		StructName: table.TableNameCamel,
+		StructName: structName,
 		Attributes: make(Variables, 0),
 	}
 	tableColumnMap := make(map[string]*Column)
@@ -211,6 +226,30 @@ func parsePrefixVariable(item []byte, variableStart byte) (variable Variable, po
 		Name:       string(variableNameByte),
 		Type:       "interface{}",
 		AllowEmpty: true,
+	}
+	return
+}
+
+func GetDefineName(sqlTpl string) (defineName string, err error) {
+	delim := []byte("{{define \"")
+	sqlTplByte := []byte(sqlTpl)
+	index := bytes.Index(sqlTplByte, delim)
+	nameByte := make([]byte, 0)
+	if index >= 0 {
+		index += len(delim)
+		for i := index; i < len(sqlTplByte); i++ {
+			c := sqlTplByte[i]
+			if c != '"' {
+				nameByte = append(nameByte, sqlTplByte[i])
+			} else {
+				break
+			}
+
+		}
+	}
+	defineName = string(nameByte)
+	if defineName == "" {
+		err = errors.Errorf("define name is empty")
 	}
 	return
 }
