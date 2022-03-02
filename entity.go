@@ -3,23 +3,33 @@ package gqttool
 import (
 	"bytes"
 	"fmt"
+	"os"
+	"path/filepath"
 	"sort"
 	"strings"
 	"text/template"
 
 	"github.com/pkg/errors"
+	"github.com/suifengpiao14/gqt/v2"
 )
 
-//RepositoryEntity 根据数据表ddl和sql tpl 生成 sql tpl 调用的输入、输出实体
-func RepositoryEntity(sqlTpl string, table *Table) (entityStruct string, err error) {
-	variableMap := ParsSqlTplVariable(sqlTpl)
-	definName, err := GetDefineName(sqlTpl)
-	if err != nil {
-		return
-	}
+type EntityElement struct {
+	Tables      []*Table
+	Name        string
+	VariableMap map[string]*Variable
+}
 
-	structName := ToCamel(fmt.Sprintf("%s%s%s", table.TableNameCamel, strings.ToUpper(definName[0:1]), definName[1:]))
-	entityTplData, err := GetEntityData(table, variableMap, structName)
+//RepositoryEntity 根据数据表ddl和sql tpl 生成 sql tpl 调用的输入、输出实体
+func RepositoryEntity(sqlTplDefine *SQLTPLDefine, table *Table) (entityStruct string, err error) {
+	variableMap := ParsSqlTplVariable(sqlTplDefine.TPL)
+
+	structName := sqlTplDefine.FullNameCamel
+	entityElement := &EntityElement{
+		Tables:      []*Table{table},
+		VariableMap: variableMap,
+		Name:        structName,
+	}
+	entityTplData, err := FormatEntityData(entityElement)
 	if err != nil {
 		return
 	}
@@ -34,6 +44,49 @@ func RepositoryEntity(sqlTpl string, table *Table) (entityStruct string, err err
 		return
 	}
 	entityStruct = buf.String()
+	return
+}
+
+func ParseSQLTPLTableName() (tableList []string) {}
+
+type SQLTPLDefine struct {
+	Name          string
+	FullNameCamel string
+	Namespace     string
+	TPL           string
+}
+
+func ParseDirSqlTplDefine(sqlTplDir string) (sqlTplDefineList []*SQLTPLDefine, err error) {
+	pattern := fmt.Sprintf("%s/*%s", strings.TrimRight(sqlTplDir, "/"), gqt.Suffix)
+	allFileList, err := filepath.Glob(pattern)
+	if err != nil {
+		return
+	}
+	for _, filename := range allFileList {
+		if strings.HasSuffix(filename, "ddl.sql.tpl") { //skep ddl file
+			continue
+		}
+		b, err := os.ReadFile(filename)
+		if err != nil {
+			return nil, err
+		}
+		sqlTplList := ParseDefine(string(b))
+		for _, sqlTpl := range sqlTplList {
+			name, err := GetDefineName(sqlTpl)
+			if err != nil {
+				return nil, err
+			}
+			namespace := gqt.FileName2Namespace(filename, sqlTplDir, gqt.Suffix)
+			sqlTplDefine := &SQLTPLDefine{
+				Name:          name,
+				FullNameCamel: fmt.Sprintf("%s%s", ToCamel(namespace), ToCamel(name)),
+				Namespace:     namespace,
+				TPL:           sqlTpl,
+			}
+			sqlTplDefineList = append(sqlTplDefineList, sqlTplDefine)
+		}
+
+	}
 	return
 }
 
@@ -64,17 +117,20 @@ type EntityTplData struct {
 	Attributes Variables
 }
 
-func GetEntityData(table *Table, variableMap map[string]*Variable, structName string) (entityTplData *EntityTplData, err error) {
+func FormatEntityData(entityElement *EntityElement) (entityTplData *EntityTplData, err error) {
 	entityTplData = &EntityTplData{
-		StructName: structName,
+		StructName: entityElement.Name,
 		Attributes: make(Variables, 0),
 	}
 	tableColumnMap := make(map[string]*Column)
-	for _, column := range table.Columns {
-		tableColumnMap[column.CamelName] = column
+	for _, table := range entityElement.Tables {
+		for _, column := range table.Columns { //todo 多表字段相同，类型不同时，只会取列表中最后一个
+			tableColumnMap[column.CamelName] = column
+		}
+
 	}
 
-	for name, variable := range variableMap { // 使用数据库字段定义校正变量类型
+	for name, variable := range entityElement.VariableMap { // 使用数据库字段定义校正变量类型
 		tableColumn, ok := tableColumnMap[name]
 		if ok {
 			if err != nil {

@@ -156,14 +156,14 @@ func runCmdEntity(sqlTplDir string, entityFilename string) (err error) {
 	repo := gqt.NewRepository()
 	errChain := errorformatter.NewErrorChain()
 	var entityList = make([]string, 0)
-	var sqlTplList = make([]string, 0)
+	var sqlTplDefineList = make([]*gqttool.SQLTPLDefine, 0)
 	errChain.SetError(repo.AddByDir(sqlTplDir, gqt.TemplatefuncMap)).
 		Run(func() (err error) {
-			sqlTplList, err = getAllSqlTpl(sqlTplDir)
+			sqlTplDefineList, err = gqttool.ParseDirSqlTplDefine(sqlTplDir)
 			return
 		}).
 		Run(func() (err error) {
-			entityList, err = GenerateEntity(repo, sqlTplList)
+			entityList, err = GenerateEntity(repo, sqlTplDefineList)
 			return
 		})
 
@@ -182,27 +182,6 @@ func runCmdEntity(sqlTplDir string, entityFilename string) (err error) {
 	err = saveFile(entityFilename, content)
 	if err != nil {
 		return
-	}
-	return
-}
-
-func getAllSqlTpl(sqlTplDir string) (sqlTplList []string, err error) {
-	suffix := ".sql.tpl"
-	pattern := fmt.Sprintf("%s/*%s", strings.TrimRight(sqlTplDir, "/"), suffix)
-	allFileList, err := filepath.Glob(pattern)
-	if err != nil {
-		return
-	}
-	for _, filename := range allFileList {
-		if strings.HasSuffix(filename, "ddl.sql.tpl") { //skep ddl file
-			continue
-		}
-		b, err := os.ReadFile(filename)
-		if err != nil {
-			return nil, err
-		}
-		defineList := gqttool.ParseDefine(string(b))
-		sqlTplList = append(sqlTplList, defineList...)
 	}
 	return
 }
@@ -245,7 +224,7 @@ func IsExist(path string) bool {
 	return true
 }
 
-func GenerateEntity(rep *gqt.Repository, sqlTplList []string) (entityList []string, err error) {
+func GenerateEntity(rep *gqt.Repository, sqlTplDefineList []*gqttool.SQLTPLDefine) (entityList []string, err error) {
 	entityList = make([]string, 0)
 	ddlList, err := getDDLFromRepository(rep)
 	if err != nil {
@@ -256,14 +235,12 @@ func GenerateEntity(rep *gqt.Repository, sqlTplList []string) (entityList []stri
 		return
 	}
 
-	for _, sqlTpl := range sqlTplList {
-		for _, table := range tableList { //todo 此处应该解析sqlTpl 涉及的表，然后传入这些表ddl就行
-			entityStruct, err := gqttool.RepositoryEntity(sqlTpl, table)
-			if err != nil {
-				return nil, err
-			}
-			entityList = append(entityList, entityStruct)
+	for _, sqlDefineTpl := range sqlTplDefineList {
+		entityStruct, err := gqttool.RepositoryEntity(sqlDefineTpl, tableList)
+		if err != nil {
+			return nil, err
 		}
+		entityList = append(entityList, entityStruct)
 
 	}
 
