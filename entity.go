@@ -9,6 +9,7 @@ import (
 	"strings"
 	"text/template"
 
+	"github.com/alecthomas/participle/v2"
 	"github.com/pkg/errors"
 	"github.com/suifengpiao14/gqt/v2"
 )
@@ -20,12 +21,12 @@ type EntityElement struct {
 }
 
 //RepositoryEntity 根据数据表ddl和sql tpl 生成 sql tpl 调用的输入、输出实体
-func RepositoryEntity(sqlTplDefine *SQLTPLDefine, table *Table) (entityStruct string, err error) {
+func RepositoryEntity(sqlTplDefine *SQLTPLDefine, tableList []*Table) (entityStruct string, err error) {
 	variableMap := ParsSqlTplVariable(sqlTplDefine.TPL)
 
 	structName := sqlTplDefine.FullNameCamel
 	entityElement := &EntityElement{
-		Tables:      []*Table{table},
+		Tables:      tableList,
 		VariableMap: variableMap,
 		Name:        structName,
 	}
@@ -47,7 +48,30 @@ func RepositoryEntity(sqlTplDefine *SQLTPLDefine, table *Table) (entityStruct st
 	return
 }
 
-func ParseSQLTPLTableName() (tableList []string) {}
+type TalbeNameVariable struct {
+	Update string `parser:"(?=...)'update ' @String ' '"`
+	From   string `parser:"| (?=...)'from ' @Ident ' '"`
+}
+
+func ParseSQLTPLTableName(sqlTpl string) (tableList []string, err error) {
+	parser, err := participle.Build(&TalbeNameVariable{})
+	if err != nil {
+		return
+	}
+	ast := &TalbeNameVariable{}
+	err = parser.ParseString("", sqlTpl, ast)
+	if err != nil {
+		return
+	}
+	if ast.From != "" {
+		tableList = append(tableList, ast.From)
+	}
+	if ast.Update != "" {
+		tableList = append(tableList, ast.Update)
+	}
+	return
+
+}
 
 type SQLTPLDefine struct {
 	Name          string

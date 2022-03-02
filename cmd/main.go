@@ -234,9 +234,25 @@ func GenerateEntity(rep *gqt.Repository, sqlTplDefineList []*gqttool.SQLTPLDefin
 	if err != nil {
 		return
 	}
+	tableMap := make(map[string]*gqttool.Table)
+	for _, table := range tableList {
+		tableMap[table.TableName] = table
+	}
 
 	for _, sqlDefineTpl := range sqlTplDefineList {
-		entityStruct, err := gqttool.RepositoryEntity(sqlDefineTpl, tableList)
+		tableNameList, err := gqttool.ParseSQLTPLTableName(sqlDefineTpl.TPL)
+		if err != nil {
+			return nil, err
+		}
+		relationTableList := make([]*gqttool.Table, 0)
+		for _, tableName := range tableNameList {
+			table, ok := tableMap[tableName]
+			if ok {
+				relationTableList = append(relationTableList, table)
+			}
+		}
+
+		entityStruct, err := gqttool.RepositoryEntity(sqlDefineTpl, relationTableList)
 		if err != nil {
 			return nil, err
 		}

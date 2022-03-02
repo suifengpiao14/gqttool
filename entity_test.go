@@ -70,6 +70,17 @@ func TestParseDefine(t *testing.T) {
 
 }
 
+func TestParseSQLTPLTableName(t *testing.T) {
+	sqlTpl := `
+aa 	update a 
+	`
+	tableNameList, err := ParseSQLTPLTableName(sqlTpl)
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println(tableNameList)
+}
+
 func TestRepositoryEntity(t *testing.T) {
 	ddlSqlTpl := ddlSqlTplData()
 	ddlList := []string{ddlSqlTpl.DDL}
@@ -77,8 +88,13 @@ func TestRepositoryEntity(t *testing.T) {
 	if err != nil {
 		panic(err)
 	}
-	table := tableList[0]
-	entityStruct, err := RepositoryEntity(ddlSqlTpl.SQLTpl, table)
+	sqlTplDefine := &SQLTPLDefine{
+		TPL:           ddlSqlTpl.SQLTpl,
+		Name:          "test",
+		Namespace:     "ddl",
+		FullNameCamel: "DDLTest",
+	}
+	entityStruct, err := RepositoryEntity(sqlTplDefine, tableList)
 	if err != nil {
 		panic(err)
 	}
