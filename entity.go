@@ -18,7 +18,7 @@ type EntityElement struct {
 	Tables      []*Table
 	Name        string
 	VariableMap map[string]*Variable
-	DefineName  string
+	FullName    string
 }
 
 //RepositoryEntity 根据数据表ddl和sql tpl 生成 sql tpl 调用的输入、输出实体
@@ -30,7 +30,7 @@ func RepositoryEntity(sqlTplDefine *SQLTPLDefine, tableList []*Table) (entityStr
 		Tables:      tableList,
 		VariableMap: variableMap,
 		Name:        structName,
-		DefineName:  sqlTplDefine.Name,
+		FullName:    fmt.Sprintf("%s.%s", sqlTplDefine.Namespace, sqlTplDefine.Name),
 	}
 	entityTplData, err := FormatEntityData(entityElement)
 	if err != nil {
@@ -159,14 +159,14 @@ func ParseDefine(content string) (defineList []string) {
 
 type EntityTplData struct {
 	StructName string
-	DefineName string
+	FullName   string
 	Attributes Variables
 }
 
 func FormatEntityData(entityElement *EntityElement) (entityTplData *EntityTplData, err error) {
 	entityTplData = &EntityTplData{
 		StructName: entityElement.Name,
-		DefineName: entityElement.DefineName,
+		FullName:   entityElement.FullName,
 		Attributes: make(Variables, 0),
 	}
 	tableColumnMap := make(map[string]*Column)
@@ -198,8 +198,8 @@ func EntityTpl() (tpl string) {
 			{{end}}
 		}
 
-		func (s *{{.StructName}}) DefineName() string{
-			return "{{.DefineName}}"
+		func (s *{{.StructName}}) TplName() string{
+			return "{{.FullName}}"
 		}
 
 	`

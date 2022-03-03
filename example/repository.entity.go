@@ -4,16 +4,16 @@ type APIDel struct {
 	APIID string
 }
 
-func (s *APIDel) DefineName() string {
-	return "Del"
+func (s *APIDel) TplName() string {
+	return "api.Del"
 }
 
 type APIGetByAPIID struct {
 	APIID string
 }
 
-func (s *APIGetByAPIID) DefineName() string {
-	return "GetByAPIID"
+func (s *APIGetByAPIID) TplName() string {
+	return "api.GetByAPIID"
 }
 
 type APIInsert struct {
@@ -34,8 +34,8 @@ type APIInsert struct {
 	URI string
 }
 
-func (s *APIInsert) DefineName() string {
-	return "Insert"
+func (s *APIInsert) TplName() string {
+	return "api.Insert"
 }
 
 type APIPaginate struct {
@@ -44,15 +44,15 @@ type APIPaginate struct {
 	Offset int
 }
 
-func (s *APIPaginate) DefineName() string {
-	return "Paginate"
+func (s *APIPaginate) TplName() string {
+	return "api.Paginate"
 }
 
 type APITotal struct {
 }
 
-func (s *APITotal) DefineName() string {
-	return "Total"
+func (s *APITotal) TplName() string {
+	return "api.Total"
 }
 
 type APIUpdate struct {
@@ -73,24 +73,24 @@ type APIUpdate struct {
 	URI string
 }
 
-func (s *APIUpdate) DefineName() string {
-	return "Update"
+func (s *APIUpdate) TplName() string {
+	return "api.Update"
 }
 
 type ExampleDel struct {
 	ExampleID string
 }
 
-func (s *ExampleDel) DefineName() string {
-	return "Del"
+func (s *ExampleDel) TplName() string {
+	return "example.Del"
 }
 
 type ExampleGetByExampleID struct {
 	ExampleID string
 }
 
-func (s *ExampleGetByExampleID) DefineName() string {
-	return "GetByExampleID"
+func (s *ExampleGetByExampleID) TplName() string {
+	return "example.GetByExampleID"
 }
 
 type ExampleInsert struct {
@@ -111,8 +111,8 @@ type ExampleInsert struct {
 	Title string
 }
 
-func (s *ExampleInsert) DefineName() string {
-	return "Insert"
+func (s *ExampleInsert) TplName() string {
+	return "example.Insert"
 }
 
 type ExamplePaginate struct {
@@ -121,15 +121,15 @@ type ExamplePaginate struct {
 	Offset int
 }
 
-func (s *ExamplePaginate) DefineName() string {
-	return "Paginate"
+func (s *ExamplePaginate) TplName() string {
+	return "example.Paginate"
 }
 
 type ExampleTotal struct {
 }
 
-func (s *ExampleTotal) DefineName() string {
-	return "Total"
+func (s *ExampleTotal) TplName() string {
+	return "example.Total"
 }
 
 type ExampleUpdate struct {
@@ -150,24 +150,24 @@ type ExampleUpdate struct {
 	Title string
 }
 
-func (s *ExampleUpdate) DefineName() string {
-	return "Update"
+func (s *ExampleUpdate) TplName() string {
+	return "example.Update"
 }
 
 type MarkdownDel struct {
 	MarkdownID string
 }
 
-func (s *MarkdownDel) DefineName() string {
-	return "Del"
+func (s *MarkdownDel) TplName() string {
+	return "markdown.Del"
 }
 
 type MarkdownGetByMarkdownID struct {
 	MarkdownID string
 }
 
-func (s *MarkdownGetByMarkdownID) DefineName() string {
-	return "GetByMarkdownID"
+func (s *MarkdownGetByMarkdownID) TplName() string {
+	return "markdown.GetByMarkdownID"
 }
 
 type MarkdownInsert struct {
@@ -190,8 +190,8 @@ type MarkdownInsert struct {
 	Title string
 }
 
-func (s *MarkdownInsert) DefineName() string {
-	return "Insert"
+func (s *MarkdownInsert) TplName() string {
+	return "markdown.Insert"
 }
 
 type MarkdownPaginate struct {
@@ -200,15 +200,15 @@ type MarkdownPaginate struct {
 	Offset int
 }
 
-func (s *MarkdownPaginate) DefineName() string {
-	return "Paginate"
+func (s *MarkdownPaginate) TplName() string {
+	return "markdown.Paginate"
 }
 
 type MarkdownTotal struct {
 }
 
-func (s *MarkdownTotal) DefineName() string {
-	return "Total"
+func (s *MarkdownTotal) TplName() string {
+	return "markdown.Total"
 }
 
 type MarkdownUpdate struct {
@@ -231,24 +231,24 @@ type MarkdownUpdate struct {
 	Title string
 }
 
-func (s *MarkdownUpdate) DefineName() string {
-	return "Update"
+func (s *MarkdownUpdate) TplName() string {
+	return "markdown.Update"
 }
 
 type ParameterDel struct {
 	ParameterID string
 }
 
-func (s *ParameterDel) DefineName() string {
-	return "Del"
+func (s *ParameterDel) TplName() string {
+	return "parameter.Del"
 }
 
 type ParameterGetByParameterID struct {
 	ParameterID string
 }
 
-func (s *ParameterGetByParameterID) DefineName() string {
-	return "GetByParameterID"
+func (s *ParameterGetByParameterID) TplName() string {
+	return "parameter.GetByParameterID"
 }
 
 type ParameterInsert struct {
@@ -293,8 +293,8 @@ type ParameterInsert struct {
 	ValidateSchemaID string
 }
 
-func (s *ParameterInsert) DefineName() string {
-	return "Insert"
+func (s *ParameterInsert) TplName() string {
+	return "parameter.Insert"
 }
 
 type ParameterPaginate struct {
@@ -303,15 +303,15 @@ type ParameterPaginate struct {
 	Offset int
 }
 
-func (s *ParameterPaginate) DefineName() string {
-	return "Paginate"
+func (s *ParameterPaginate) TplName() string {
+	return "parameter.Paginate"
 }
 
 type ParameterTotal struct {
 }
 
-func (s *ParameterTotal) DefineName() string {
-	return "Total"
+func (s *ParameterTotal) TplName() string {
+	return "parameter.Total"
 }
 
 type ParameterUpdate struct {
@@ -356,24 +356,24 @@ type ParameterUpdate struct {
 	ValidateSchemaID string
 }
 
-func (s *ParameterUpdate) DefineName() string {
-	return "Update"
+func (s *ParameterUpdate) TplName() string {
+	return "parameter.Update"
 }
 
 type ServerDel struct {
 	ServerID string
 }
 
-func (s *ServerDel) DefineName() string {
-	return "Del"
+func (s *ServerDel) TplName() string {
+	return "server.Del"
 }
 
 type ServerGetByServerID struct {
 	ServerID string
 }
 
-func (s *ServerGetByServerID) DefineName() string {
-	return "GetByServerID"
+func (s *ServerGetByServerID) TplName() string {
+	return "server.GetByServerID"
 }
 
 type ServerInsert struct {
@@ -390,8 +390,8 @@ type ServerInsert struct {
 	URL string
 }
 
-func (s *ServerInsert) DefineName() string {
-	return "Insert"
+func (s *ServerInsert) TplName() string {
+	return "server.Insert"
 }
 
 type ServerPaginate struct {
@@ -400,15 +400,15 @@ type ServerPaginate struct {
 	Offset int
 }
 
-func (s *ServerPaginate) DefineName() string {
-	return "Paginate"
+func (s *ServerPaginate) TplName() string {
+	return "server.Paginate"
 }
 
 type ServerTotal struct {
 }
 
-func (s *ServerTotal) DefineName() string {
-	return "Total"
+func (s *ServerTotal) TplName() string {
+	return "server.Total"
 }
 
 type ServerUpdate struct {
@@ -425,24 +425,24 @@ type ServerUpdate struct {
 	URL string
 }
 
-func (s *ServerUpdate) DefineName() string {
-	return "Update"
+func (s *ServerUpdate) TplName() string {
+	return "server.Update"
 }
 
 type ServiceDel struct {
 	ServiceID string
 }
 
-func (s *ServiceDel) DefineName() string {
-	return "del"
+func (s *ServiceDel) TplName() string {
+	return "service.del"
 }
 
 type ServiceGetByServiceID struct {
 	ServiceID string
 }
 
-func (s *ServiceGetByServiceID) DefineName() string {
-	return "getByServiceId"
+func (s *ServiceGetByServiceID) TplName() string {
+	return "service.getByServiceId"
 }
 
 type ServiceInsert struct {
@@ -465,8 +465,8 @@ type ServiceInsert struct {
 	Version string
 }
 
-func (s *ServiceInsert) DefineName() string {
-	return "insert"
+func (s *ServiceInsert) TplName() string {
+	return "service.insert"
 }
 
 type ServiceList struct {
@@ -477,16 +477,16 @@ type ServiceList struct {
 	Title string
 }
 
-func (s *ServiceList) DefineName() string {
-	return "list"
+func (s *ServiceList) TplName() string {
+	return "service.list"
 }
 
 type ServiceTotal struct {
 	Title string
 }
 
-func (s *ServiceTotal) DefineName() string {
-	return "total"
+func (s *ServiceTotal) TplName() string {
+	return "service.total"
 }
 
 type ServiceUpdate struct {
@@ -509,24 +509,24 @@ type ServiceUpdate struct {
 	Version string
 }
 
-func (s *ServiceUpdate) DefineName() string {
-	return "update"
+func (s *ServiceUpdate) TplName() string {
+	return "service.update"
 }
 
 type ValidateSchemaDel struct {
 	ValidateSchemaID string
 }
 
-func (s *ValidateSchemaDel) DefineName() string {
-	return "Del"
+func (s *ValidateSchemaDel) TplName() string {
+	return "validate_schema.Del"
 }
 
 type ValidateSchemaGetByValidateSchemaID struct {
 	ValidateSchemaID string
 }
 
-func (s *ValidateSchemaGetByValidateSchemaID) DefineName() string {
-	return "GetByValidateSchemaID"
+func (s *ValidateSchemaGetByValidateSchemaID) TplName() string {
+	return "validate_schema.GetByValidateSchemaID"
 }
 
 type ValidateSchemaInsert struct {
@@ -615,8 +615,8 @@ type ValidateSchemaInsert struct {
 	XML string
 }
 
-func (s *ValidateSchemaInsert) DefineName() string {
-	return "Insert"
+func (s *ValidateSchemaInsert) TplName() string {
+	return "validate_schema.Insert"
 }
 
 type ValidateSchemaPaginate struct {
@@ -625,15 +625,15 @@ type ValidateSchemaPaginate struct {
 	Offset int
 }
 
-func (s *ValidateSchemaPaginate) DefineName() string {
-	return "Paginate"
+func (s *ValidateSchemaPaginate) TplName() string {
+	return "validate_schema.Paginate"
 }
 
 type ValidateSchemaTotal struct {
 }
 
-func (s *ValidateSchemaTotal) DefineName() string {
-	return "Total"
+func (s *ValidateSchemaTotal) TplName() string {
+	return "validate_schema.Total"
 }
 
 type ValidateSchemaUpdate struct {
@@ -722,6 +722,6 @@ type ValidateSchemaUpdate struct {
 	XML string
 }
 
-func (s *ValidateSchemaUpdate) DefineName() string {
-	return "Update"
+func (s *ValidateSchemaUpdate) TplName() string {
+	return "validate_schema.Update"
 }
