@@ -71,9 +71,7 @@ func TestParseDefine(t *testing.T) {
 }
 
 func TestParseSQLTPLTableName(t *testing.T) {
-	sqlTpl := `
-aa 	update a 
-	`
+	sqlTpl := " aa  update `a` b	"
 	tableNameList, err := ParseSQLTPLTableName(sqlTpl)
 	if err != nil {
 		panic(err)

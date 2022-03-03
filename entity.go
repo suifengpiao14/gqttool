@@ -5,11 +5,11 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"regexp"
 	"sort"
 	"strings"
 	"text/template"
 
-	"github.com/alecthomas/participle/v2"
 	"github.com/pkg/errors"
 	"github.com/suifengpiao14/gqt/v2"
 )
@@ -54,23 +54,42 @@ type TalbeNameVariable struct {
 }
 
 func ParseSQLTPLTableName(sqlTpl string) (tableList []string, err error) {
-	parser, err := participle.Build(&TalbeNameVariable{})
+
+	updateDelim := "update `?(\\w+)`?"
+	updateMatchArr, err := regexpMatch(sqlTpl, updateDelim)
 	if err != nil {
 		return
 	}
-	ast := &TalbeNameVariable{}
-	err = parser.ParseString("", sqlTpl, ast)
+	selectDelim := "from `?(\\w+)`?"
+	fromMatchArr, err := regexpMatch(sqlTpl, selectDelim)
 	if err != nil {
 		return
 	}
-	if ast.From != "" {
-		tableList = append(tableList, ast.From)
+	insertDelim := "into `?(\\w+)`?"
+	insertMatchArr, err := regexpMatch(sqlTpl, insertDelim)
+	if err != nil {
+		return
 	}
-	if ast.Update != "" {
-		tableList = append(tableList, ast.Update)
+
+	tableList = append(tableList, updateMatchArr...)
+	tableList = append(tableList, fromMatchArr...)
+	tableList = append(tableList, insertMatchArr...)
+	return
+}
+
+func regexpMatch(s string, delim string) (matcheList []string, err error) {
+	reg := regexp.MustCompile(delim)
+	if reg == nil {
+		err = errors.Errorf("regexp.MustCompile %s is nil", delim)
+		return
+	}
+	matchArr := reg.FindAllStringSubmatch(s, -1)
+	if matchArr != nil {
+		for _, matchs := range matchArr {
+			matcheList = append(matcheList, matchs[1:]...) // index 0 为匹配对象
+		}
 	}
 	return
-
 }
 
 type SQLTPLDefine struct {
@@ -157,9 +176,6 @@ func FormatEntityData(entityElement *EntityElement) (entityTplData *EntityTplDat
 	for name, variable := range entityElement.VariableMap { // 使用数据库字段定义校正变量类型
 		tableColumn, ok := tableColumnMap[name]
 		if ok {
-			if err != nil {
-				return nil, err
-			}
 			variable.Type = tableColumn.Type
 			entityTplData.Attributes = append(entityTplData.Attributes, variable)
 			continue
