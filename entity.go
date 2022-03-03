@@ -198,8 +198,11 @@ func EntityTpl() (tpl string) {
 			{{end}}
 		}
 
-		func (s *{{.StructName}}) TplName() string{
+		func (t *{{.StructName}}) TplName() string{
 			return "{{.FullName}}"
+		}
+		func (t *{{.StructName}}) TplInput() interface{}{
+			return t
 		}
 
 	`
