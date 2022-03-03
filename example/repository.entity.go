@@ -5,6 +5,11 @@ package example
 				APIID string 
 			
 		}
+
+		func (s *APIDel) DefineName() string{
+			return "Del"
+		}
+
 	
 
 		type APIGetByAPIID struct{
@@ -12,6 +17,11 @@ package example
 				APIID string 
 			
 		}
+
+		func (s *APIGetByAPIID) DefineName() string{
+			return "GetByAPIID"
+		}
+
 	
 
 		type APIInsert struct{
@@ -33,6 +43,11 @@ package example
 				URI string 
 			
 		}
+
+		func (s *APIInsert) DefineName() string{
+			return "Insert"
+		}
+
 	
 
 		type APIPaginate struct{
@@ -42,11 +57,21 @@ package example
 				Offset int 
 			
 		}
+
+		func (s *APIPaginate) DefineName() string{
+			return "Paginate"
+		}
+
 	
 
 		type APITotal struct{
 			
 		}
+
+		func (s *APITotal) DefineName() string{
+			return "Total"
+		}
+
 	
 
 		type APIUpdate struct{
@@ -68,6 +93,11 @@ package example
 				URI string 
 			
 		}
+
+		func (s *APIUpdate) DefineName() string{
+			return "Update"
+		}
+
 	
 
 		type ExampleDel struct{
@@ -75,6 +105,11 @@ package example
 				ExampleID string 
 			
 		}
+
+		func (s *ExampleDel) DefineName() string{
+			return "Del"
+		}
+
 	
 
 		type ExampleGetByExampleID struct{
@@ -82,6 +117,11 @@ package example
 				ExampleID string 
 			
 		}
+
+		func (s *ExampleGetByExampleID) DefineName() string{
+			return "GetByExampleID"
+		}
+
 	
 
 		type ExampleInsert struct{
@@ -103,6 +143,11 @@ package example
 				Title string 
 			
 		}
+
+		func (s *ExampleInsert) DefineName() string{
+			return "Insert"
+		}
+
 	
 
 		type ExamplePaginate struct{
@@ -112,11 +157,21 @@ package example
 				Offset int 
 			
 		}
+
+		func (s *ExamplePaginate) DefineName() string{
+			return "Paginate"
+		}
+
 	
 
 		type ExampleTotal struct{
 			
 		}
+
+		func (s *ExampleTotal) DefineName() string{
+			return "Total"
+		}
+
 	
 
 		type ExampleUpdate struct{
@@ -138,6 +193,11 @@ package example
 				Title string 
 			
 		}
+
+		func (s *ExampleUpdate) DefineName() string{
+			return "Update"
+		}
+
 	
 
 		type MarkdownDel struct{
@@ -145,6 +205,11 @@ package example
 				MarkdownID string 
 			
 		}
+
+		func (s *MarkdownDel) DefineName() string{
+			return "Del"
+		}
+
 	
 
 		type MarkdownGetByMarkdownID struct{
@@ -152,6 +217,11 @@ package example
 				MarkdownID string 
 			
 		}
+
+		func (s *MarkdownGetByMarkdownID) DefineName() string{
+			return "GetByMarkdownID"
+		}
+
 	
 
 		type MarkdownInsert struct{
@@ -175,6 +245,11 @@ package example
 				Title string 
 			
 		}
+
+		func (s *MarkdownInsert) DefineName() string{
+			return "Insert"
+		}
+
 	
 
 		type MarkdownPaginate struct{
@@ -184,11 +259,21 @@ package example
 				Offset int 
 			
 		}
+
+		func (s *MarkdownPaginate) DefineName() string{
+			return "Paginate"
+		}
+
 	
 
 		type MarkdownTotal struct{
 			
 		}
+
+		func (s *MarkdownTotal) DefineName() string{
+			return "Total"
+		}
+
 	
 
 		type MarkdownUpdate struct{
@@ -212,6 +297,11 @@ package example
 				Title string 
 			
 		}
+
+		func (s *MarkdownUpdate) DefineName() string{
+			return "Update"
+		}
+
 	
 
 		type ParameterDel struct{
@@ -219,6 +309,11 @@ package example
 				ParameterID string 
 			
 		}
+
+		func (s *ParameterDel) DefineName() string{
+			return "Del"
+		}
+
 	
 
 		type ParameterGetByParameterID struct{
@@ -226,6 +321,11 @@ package example
 				ParameterID string 
 			
 		}
+
+		func (s *ParameterGetByParameterID) DefineName() string{
+			return "GetByParameterID"
+		}
+
 	
 
 		type ParameterInsert struct{
@@ -271,6 +371,11 @@ package example
 				ValidateSchemaID string 
 			
 		}
+
+		func (s *ParameterInsert) DefineName() string{
+			return "Insert"
+		}
+
 	
 
 		type ParameterPaginate struct{
@@ -280,11 +385,21 @@ package example
 				Offset int 
 			
 		}
+
+		func (s *ParameterPaginate) DefineName() string{
+			return "Paginate"
+		}
+
 	
 
 		type ParameterTotal struct{
 			
 		}
+
+		func (s *ParameterTotal) DefineName() string{
+			return "Total"
+		}
+
 	
 
 		type ParameterUpdate struct{
@@ -330,6 +445,11 @@ package example
 				ValidateSchemaID string 
 			
 		}
+
+		func (s *ParameterUpdate) DefineName() string{
+			return "Update"
+		}
+
 	
 
 		type ServerDel struct{
@@ -337,6 +457,11 @@ package example
 				ServerID string 
 			
 		}
+
+		func (s *ServerDel) DefineName() string{
+			return "Del"
+		}
+
 	
 
 		type ServerGetByServerID struct{
@@ -344,6 +469,11 @@ package example
 				ServerID string 
 			
 		}
+
+		func (s *ServerGetByServerID) DefineName() string{
+			return "GetByServerID"
+		}
+
 	
 
 		type ServerInsert struct{
@@ -361,6 +491,11 @@ package example
 				URL string 
 			
 		}
+
+		func (s *ServerInsert) DefineName() string{
+			return "Insert"
+		}
+
 	
 
 		type ServerPaginate struct{
@@ -370,11 +505,21 @@ package example
 				Offset int 
 			
 		}
+
+		func (s *ServerPaginate) DefineName() string{
+			return "Paginate"
+		}
+
 	
 
 		type ServerTotal struct{
 			
 		}
+
+		func (s *ServerTotal) DefineName() string{
+			return "Total"
+		}
+
 	
 
 		type ServerUpdate struct{
@@ -392,6 +537,11 @@ package example
 				URL string 
 			
 		}
+
+		func (s *ServerUpdate) DefineName() string{
+			return "Update"
+		}
+
 	
 
 		type ServiceDel struct{
@@ -399,6 +549,11 @@ package example
 				ServiceID string 
 			
 		}
+
+		func (s *ServiceDel) DefineName() string{
+			return "del"
+		}
+
 	
 
 		type ServiceGetByServiceID struct{
@@ -406,6 +561,11 @@ package example
 				ServiceID string 
 			
 		}
+
+		func (s *ServiceGetByServiceID) DefineName() string{
+			return "getByServiceId"
+		}
+
 	
 
 		type ServiceInsert struct{
@@ -429,6 +589,11 @@ package example
 				Version string 
 			
 		}
+
+		func (s *ServiceInsert) DefineName() string{
+			return "insert"
+		}
+
 	
 
 		type ServiceList struct{
@@ -440,6 +605,11 @@ package example
 				Title string 
 			
 		}
+
+		func (s *ServiceList) DefineName() string{
+			return "list"
+		}
+
 	
 
 		type ServiceTotal struct{
@@ -447,6 +617,11 @@ package example
 				Title string 
 			
 		}
+
+		func (s *ServiceTotal) DefineName() string{
+			return "total"
+		}
+
 	
 
 		type ServiceUpdate struct{
@@ -470,6 +645,11 @@ package example
 				Version string 
 			
 		}
+
+		func (s *ServiceUpdate) DefineName() string{
+			return "update"
+		}
+
 	
 
 		type ValidateSchemaDel struct{
@@ -477,6 +657,11 @@ package example
 				ValidateSchemaID string 
 			
 		}
+
+		func (s *ValidateSchemaDel) DefineName() string{
+			return "Del"
+		}
+
 	
 
 		type ValidateSchemaGetByValidateSchemaID struct{
@@ -484,6 +669,11 @@ package example
 				ValidateSchemaID string 
 			
 		}
+
+		func (s *ValidateSchemaGetByValidateSchemaID) DefineName() string{
+			return "GetByValidateSchemaID"
+		}
+
 	
 
 		type ValidateSchemaInsert struct{
@@ -573,6 +763,11 @@ package example
 				XML string 
 			
 		}
+
+		func (s *ValidateSchemaInsert) DefineName() string{
+			return "Insert"
+		}
+
 	
 
 		type ValidateSchemaPaginate struct{
@@ -582,11 +777,21 @@ package example
 				Offset int 
 			
 		}
+
+		func (s *ValidateSchemaPaginate) DefineName() string{
+			return "Paginate"
+		}
+
 	
 
 		type ValidateSchemaTotal struct{
 			
 		}
+
+		func (s *ValidateSchemaTotal) DefineName() string{
+			return "Total"
+		}
+
 	
 
 		type ValidateSchemaUpdate struct{
@@ -676,4 +881,9 @@ package example
 				XML string 
 			
 		}
+
+		func (s *ValidateSchemaUpdate) DefineName() string{
+			return "Update"
+		}
+
 	
