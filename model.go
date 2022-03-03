@@ -86,6 +86,7 @@ type Column struct {
 	Comment   string
 	Tag       string
 	Nullable  bool
+	Enums     []string
 }
 
 type Table struct {
@@ -100,6 +101,7 @@ type Table struct {
 	UpdateAtColumn  string
 	UpdateAtCamel   string
 	Columns         []*Column
+	EnumsConst      map[string]string
 }
 
 func GenerateModel(tableList []*Table) (modelMap map[string]string, err error) {
@@ -155,6 +157,7 @@ func GenerateTable(ddlList []string) (tables []*Table, err error) {
 			TableName:      tableName,
 			TableNameCamel: ToCamel(tableName),
 			Columns:        make([]*Column, 0),
+			EnumsConst:     make(map[string]string),
 		}
 		for _, indice := range tableDef.Indices {
 			if indice.Name == "PRIMARY" {
@@ -180,6 +183,7 @@ func GenerateTable(ddlList []string) (tables []*Table, err error) {
 				table.DeleteAtColumn = columnDef.Name
 				table.DeleteAtCamel = ToCamel(columnDef.Name)
 			}
+
 			columnPt := &Column{
 				CamelName: ToCamel(columnDef.Name),
 				Name:      columnDef.Name,
@@ -187,7 +191,17 @@ func GenerateTable(ddlList []string) (tables []*Table, err error) {
 				Comment:   columnDef.Comment,
 				Nullable:  columnDef.Nullable,
 				Tag:       fmt.Sprintf("`json:\"%s\"`", ToLowerCamel(columnDef.Name)),
+				Enums:     columnDef.Elems,
 			}
+			if len(columnDef.Elems) > 0 {
+				prefix := fmt.Sprintf("%s_%s", tableName, columnPt.Name)
+				subEnumConst := enumsConst(prefix, columnDef.Elems)
+				for key, val := range subEnumConst {
+					table.EnumsConst[key] = val
+				}
+
+			}
+
 			table.Columns = append(table.Columns, columnPt)
 		}
 		tables = append(tables, table)
@@ -195,13 +209,31 @@ func GenerateTable(ddlList []string) (tables []*Table, err error) {
 	return
 }
 
+func enumsConst(prefix string, enums []string) (enumsConst map[string]string) {
+	enumsConst = make(map[string]string)
+	for _, enum := range enums {
+		name := fmt.Sprintf("%s_%s", prefix, enum)
+		name = strings.ToUpper(name)
+		enumsConst[name] = enum
+	}
+
+	return
+}
+
 func structTpl() string {
 	return `
-		type {{.TableNameCamel}} struct{
-			{{range .Columns }} 
-			// {{.Comment}}
-			{{.CamelName}} {{.Type}} {{if .Tag}} {{.Tag}} {{end}}
-			{{end}}
-		}
+	{{if .EnumsConst}}
+	const (
+		{{range $key, $value := .EnumsConst}}
+			{{$key}}="{{$value}}"
+		{{end}}
+		)
+	{{end}}
+	type {{.TableNameCamel}} struct{
+		{{range .Columns }} 
+		// {{.Comment}}
+		{{.CamelName}} {{.Type}} {{if .Tag}} {{.Tag}} {{end}}
+		{{end}}
+	}
 	`
 }
