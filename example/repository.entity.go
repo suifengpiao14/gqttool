@@ -7,9 +7,6 @@ type APIDel struct {
 func (t *APIDel) TplName() string {
 	return "api.Del"
 }
-func (t *APIDel) TplInput() interface{} {
-	return t
-}
 
 type APIGetByAPIID struct {
 	APIID string
@@ -17,9 +14,6 @@ type APIGetByAPIID struct {
 
 func (t *APIGetByAPIID) TplName() string {
 	return "api.GetByAPIID"
-}
-func (t *APIGetByAPIID) TplInput() interface{} {
-	return t
 }
 
 type APIInsert struct {
@@ -43,9 +37,6 @@ type APIInsert struct {
 func (t *APIInsert) TplName() string {
 	return "api.Insert"
 }
-func (t *APIInsert) TplInput() interface{} {
-	return t
-}
 
 type APIPaginate struct {
 	Limit int
@@ -56,18 +47,12 @@ type APIPaginate struct {
 func (t *APIPaginate) TplName() string {
 	return "api.Paginate"
 }
-func (t *APIPaginate) TplInput() interface{} {
-	return t
-}
 
 type APITotal struct {
 }
 
 func (t *APITotal) TplName() string {
 	return "api.Total"
-}
-func (t *APITotal) TplInput() interface{} {
-	return t
 }
 
 type APIUpdate struct {
@@ -91,9 +76,6 @@ type APIUpdate struct {
 func (t *APIUpdate) TplName() string {
 	return "api.Update"
 }
-func (t *APIUpdate) TplInput() interface{} {
-	return t
-}
 
 type ExampleDel struct {
 	ExampleID string
@@ -102,9 +84,6 @@ type ExampleDel struct {
 func (t *ExampleDel) TplName() string {
 	return "example.Del"
 }
-func (t *ExampleDel) TplInput() interface{} {
-	return t
-}
 
 type ExampleGetByExampleID struct {
 	ExampleID string
@@ -112,9 +91,6 @@ type ExampleGetByExampleID struct {
 
 func (t *ExampleGetByExampleID) TplName() string {
 	return "example.GetByExampleID"
-}
-func (t *ExampleGetByExampleID) TplInput() interface{} {
-	return t
 }
 
 type ExampleInsert struct {
@@ -138,9 +114,6 @@ type ExampleInsert struct {
 func (t *ExampleInsert) TplName() string {
 	return "example.Insert"
 }
-func (t *ExampleInsert) TplInput() interface{} {
-	return t
-}
 
 type ExamplePaginate struct {
 	Limit int
@@ -151,18 +124,12 @@ type ExamplePaginate struct {
 func (t *ExamplePaginate) TplName() string {
 	return "example.Paginate"
 }
-func (t *ExamplePaginate) TplInput() interface{} {
-	return t
-}
 
 type ExampleTotal struct {
 }
 
 func (t *ExampleTotal) TplName() string {
 	return "example.Total"
-}
-func (t *ExampleTotal) TplInput() interface{} {
-	return t
 }
 
 type ExampleUpdate struct {
@@ -186,9 +153,6 @@ type ExampleUpdate struct {
 func (t *ExampleUpdate) TplName() string {
 	return "example.Update"
 }
-func (t *ExampleUpdate) TplInput() interface{} {
-	return t
-}
 
 type MarkdownDel struct {
 	MarkdownID string
@@ -197,9 +161,6 @@ type MarkdownDel struct {
 func (t *MarkdownDel) TplName() string {
 	return "markdown.Del"
 }
-func (t *MarkdownDel) TplInput() interface{} {
-	return t
-}
 
 type MarkdownGetByMarkdownID struct {
 	MarkdownID string
@@ -207,9 +168,6 @@ type MarkdownGetByMarkdownID struct {
 
 func (t *MarkdownGetByMarkdownID) TplName() string {
 	return "markdown.GetByMarkdownID"
-}
-func (t *MarkdownGetByMarkdownID) TplInput() interface{} {
-	return t
 }
 
 type MarkdownInsert struct {
@@ -235,9 +193,6 @@ type MarkdownInsert struct {
 func (t *MarkdownInsert) TplName() string {
 	return "markdown.Insert"
 }
-func (t *MarkdownInsert) TplInput() interface{} {
-	return t
-}
 
 type MarkdownPaginate struct {
 	Limit int
@@ -248,18 +203,12 @@ type MarkdownPaginate struct {
 func (t *MarkdownPaginate) TplName() string {
 	return "markdown.Paginate"
 }
-func (t *MarkdownPaginate) TplInput() interface{} {
-	return t
-}
 
 type MarkdownTotal struct {
 }
 
 func (t *MarkdownTotal) TplName() string {
 	return "markdown.Total"
-}
-func (t *MarkdownTotal) TplInput() interface{} {
-	return t
 }
 
 type MarkdownUpdate struct {
@@ -285,9 +234,6 @@ type MarkdownUpdate struct {
 func (t *MarkdownUpdate) TplName() string {
 	return "markdown.Update"
 }
-func (t *MarkdownUpdate) TplInput() interface{} {
-	return t
-}
 
 type ParameterDel struct {
 	ParameterID string
@@ -296,9 +242,6 @@ type ParameterDel struct {
 func (t *ParameterDel) TplName() string {
 	return "parameter.Del"
 }
-func (t *ParameterDel) TplInput() interface{} {
-	return t
-}
 
 type ParameterGetByParameterID struct {
 	ParameterID string
@@ -306,9 +249,6 @@ type ParameterGetByParameterID struct {
 
 func (t *ParameterGetByParameterID) TplName() string {
 	return "parameter.GetByParameterID"
-}
-func (t *ParameterGetByParameterID) TplInput() interface{} {
-	return t
 }
 
 type ParameterInsert struct {
@@ -356,9 +296,6 @@ type ParameterInsert struct {
 func (t *ParameterInsert) TplName() string {
 	return "parameter.Insert"
 }
-func (t *ParameterInsert) TplInput() interface{} {
-	return t
-}
 
 type ParameterPaginate struct {
 	Limit int
@@ -369,18 +306,12 @@ type ParameterPaginate struct {
 func (t *ParameterPaginate) TplName() string {
 	return "parameter.Paginate"
 }
-func (t *ParameterPaginate) TplInput() interface{} {
-	return t
-}
 
 type ParameterTotal struct {
 }
 
 func (t *ParameterTotal) TplName() string {
 	return "parameter.Total"
-}
-func (t *ParameterTotal) TplInput() interface{} {
-	return t
 }
 
 type ParameterUpdate struct {
@@ -428,9 +359,6 @@ type ParameterUpdate struct {
 func (t *ParameterUpdate) TplName() string {
 	return "parameter.Update"
 }
-func (t *ParameterUpdate) TplInput() interface{} {
-	return t
-}
 
 type ServerDel struct {
 	ServerID string
@@ -439,9 +367,6 @@ type ServerDel struct {
 func (t *ServerDel) TplName() string {
 	return "server.Del"
 }
-func (t *ServerDel) TplInput() interface{} {
-	return t
-}
 
 type ServerGetByServerID struct {
 	ServerID string
@@ -449,9 +374,6 @@ type ServerGetByServerID struct {
 
 func (t *ServerGetByServerID) TplName() string {
 	return "server.GetByServerID"
-}
-func (t *ServerGetByServerID) TplInput() interface{} {
-	return t
 }
 
 type ServerInsert struct {
@@ -471,9 +393,6 @@ type ServerInsert struct {
 func (t *ServerInsert) TplName() string {
 	return "server.Insert"
 }
-func (t *ServerInsert) TplInput() interface{} {
-	return t
-}
 
 type ServerPaginate struct {
 	Limit int
@@ -484,18 +403,12 @@ type ServerPaginate struct {
 func (t *ServerPaginate) TplName() string {
 	return "server.Paginate"
 }
-func (t *ServerPaginate) TplInput() interface{} {
-	return t
-}
 
 type ServerTotal struct {
 }
 
 func (t *ServerTotal) TplName() string {
 	return "server.Total"
-}
-func (t *ServerTotal) TplInput() interface{} {
-	return t
 }
 
 type ServerUpdate struct {
@@ -515,9 +428,6 @@ type ServerUpdate struct {
 func (t *ServerUpdate) TplName() string {
 	return "server.Update"
 }
-func (t *ServerUpdate) TplInput() interface{} {
-	return t
-}
 
 type ServiceDel struct {
 	ServiceID string
@@ -526,9 +436,6 @@ type ServiceDel struct {
 func (t *ServiceDel) TplName() string {
 	return "service.del"
 }
-func (t *ServiceDel) TplInput() interface{} {
-	return t
-}
 
 type ServiceGetByServiceID struct {
 	ServiceID string
@@ -536,9 +443,6 @@ type ServiceGetByServiceID struct {
 
 func (t *ServiceGetByServiceID) TplName() string {
 	return "service.getByServiceId"
-}
-func (t *ServiceGetByServiceID) TplInput() interface{} {
-	return t
 }
 
 type ServiceInsert struct {
@@ -564,9 +468,6 @@ type ServiceInsert struct {
 func (t *ServiceInsert) TplName() string {
 	return "service.insert"
 }
-func (t *ServiceInsert) TplInput() interface{} {
-	return t
-}
 
 type ServiceList struct {
 	Limit int
@@ -579,9 +480,6 @@ type ServiceList struct {
 func (t *ServiceList) TplName() string {
 	return "service.list"
 }
-func (t *ServiceList) TplInput() interface{} {
-	return t
-}
 
 type ServiceTotal struct {
 	Title string
@@ -589,9 +487,6 @@ type ServiceTotal struct {
 
 func (t *ServiceTotal) TplName() string {
 	return "service.total"
-}
-func (t *ServiceTotal) TplInput() interface{} {
-	return t
 }
 
 type ServiceUpdate struct {
@@ -617,9 +512,6 @@ type ServiceUpdate struct {
 func (t *ServiceUpdate) TplName() string {
 	return "service.update"
 }
-func (t *ServiceUpdate) TplInput() interface{} {
-	return t
-}
 
 type ValidateSchemaDel struct {
 	ValidateSchemaID string
@@ -628,9 +520,6 @@ type ValidateSchemaDel struct {
 func (t *ValidateSchemaDel) TplName() string {
 	return "validate_schema.Del"
 }
-func (t *ValidateSchemaDel) TplInput() interface{} {
-	return t
-}
 
 type ValidateSchemaGetByValidateSchemaID struct {
 	ValidateSchemaID string
@@ -638,9 +527,6 @@ type ValidateSchemaGetByValidateSchemaID struct {
 
 func (t *ValidateSchemaGetByValidateSchemaID) TplName() string {
 	return "validate_schema.GetByValidateSchemaID"
-}
-func (t *ValidateSchemaGetByValidateSchemaID) TplInput() interface{} {
-	return t
 }
 
 type ValidateSchemaInsert struct {
@@ -732,9 +618,6 @@ type ValidateSchemaInsert struct {
 func (t *ValidateSchemaInsert) TplName() string {
 	return "validate_schema.Insert"
 }
-func (t *ValidateSchemaInsert) TplInput() interface{} {
-	return t
-}
 
 type ValidateSchemaPaginate struct {
 	Limit int
@@ -745,18 +628,12 @@ type ValidateSchemaPaginate struct {
 func (t *ValidateSchemaPaginate) TplName() string {
 	return "validate_schema.Paginate"
 }
-func (t *ValidateSchemaPaginate) TplInput() interface{} {
-	return t
-}
 
 type ValidateSchemaTotal struct {
 }
 
 func (t *ValidateSchemaTotal) TplName() string {
 	return "validate_schema.Total"
-}
-func (t *ValidateSchemaTotal) TplInput() interface{} {
-	return t
 }
 
 type ValidateSchemaUpdate struct {
@@ -847,7 +724,4 @@ type ValidateSchemaUpdate struct {
 
 func (t *ValidateSchemaUpdate) TplName() string {
 	return "validate_schema.Update"
-}
-func (t *ValidateSchemaUpdate) TplInput() interface{} {
-	return t
 }

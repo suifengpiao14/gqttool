@@ -201,9 +201,6 @@ func EntityTpl() (tpl string) {
 		func (t *{{.StructName}}) TplName() string{
 			return "{{.FullName}}"
 		}
-		func (t *{{.StructName}}) TplInput() interface{}{
-			return t
-		}
 
 	`
 	return
