@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	"github.com/suifengpiao14/gqt/v2"
+	"github.com/suifengpiao14/gqttool"
 )
 
 func TestRunCmdModel(t *testing.T) {
@@ -15,6 +16,19 @@ func TestRunCmdModel(t *testing.T) {
 		panic(err)
 	}
 
+}
+
+func TestGeneratePackageName(t *testing.T) {
+	dst := ""
+	dst = "."
+	dst = ".."
+	dst = "../../"
+	dst = "../example"
+	packageName, err := gqttool.GeneratePackageName(dst)
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println(packageName)
 }
 
 func TestRunCmdEntity(*testing.T) {

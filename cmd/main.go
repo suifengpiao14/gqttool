@@ -7,7 +7,6 @@ import (
 	"io/fs"
 	"os"
 	"path"
-	"path/filepath"
 	"sort"
 	"strings"
 	"testing"
@@ -73,14 +72,7 @@ func main() {
 	}
 }
 
-func generatePackageName(dstDir string) (packageName string) {
-	basename := path.Base(dstDir)
-	packageName = strings.ToLower(strcase.ToLowerCamel(basename))
-	return
-
-}
-
-func runCmdModel(ddlFile string, dstDir string) (err error) {
+func runCmdModel(ddlFile string, modelFile string) (err error) {
 	repo := gqt.NewRepository()
 	errChain := errorformatter.NewErrorChain()
 	var content string
@@ -99,7 +91,10 @@ func runCmdModel(ddlFile string, dstDir string) (err error) {
 		return
 	}
 	contentArr := make([]string, 0)
-	packageName := generatePackageName(dstDir)
+	packageName, err := gqttool.GeneratePackageName(path.Dir(modelFile))
+	if err != nil {
+		return
+	}
 	packageLine := fmt.Sprintf("package %s", packageName)
 	contentArr = append(contentArr, packageLine)
 	tableList := make([]string, 0)
@@ -114,8 +109,7 @@ func runCmdModel(ddlFile string, dstDir string) (err error) {
 	}
 
 	content = strings.Join(contentArr, "\n")
-	filename := fmt.Sprintf("%s/model.go", dstDir)
-	err = saveFile(filename, content)
+	err = saveFile(modelFile, content)
 	if err != nil {
 		return
 	}
@@ -174,7 +168,10 @@ func runCmdEntity(sqlTplDir string, entityFilename string) (err error) {
 	sort.Strings(entityList)
 
 	contentArr := make([]string, 0)
-	packageName := generatePackageName(filepath.Dir(sqlTplDir))
+	packageName, err := gqttool.GeneratePackageName(path.Dir(entityFilename))
+	if err != nil {
+		return
+	}
 	packageLine := fmt.Sprintf("package %s", packageName)
 	contentArr = append(contentArr, packageLine)
 	contentArr = append(contentArr, entityList...)

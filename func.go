@@ -1,6 +1,14 @@
 package gqttool
 
 import (
+	"fmt"
+	"os"
+	"path"
+	"path/filepath"
+	"runtime"
+	"strings"
+
+	"github.com/iancoleman/strcase"
 	"goa.design/goa/v3/codegen"
 )
 
@@ -15,4 +23,29 @@ func ToLowerCamel(name string) string {
 
 func SnakeCase(name string) string {
 	return codegen.SnakeCase(name)
+}
+
+func GeneratePackageName(dstDir string) (packageName string, err error) {
+	if runtime.GOOS == "windows" { // drop driver name
+		index := strings.Index(dstDir, ":")
+		if index >= 0 {
+			dstDir = dstDir[index+1:]
+		}
+		dstDir = strings.ReplaceAll(dstDir, "\\", "/")
+	}
+	absoluteDir := dstDir
+	if dstDir[0:1] != "/" {
+		absoluteDir, err = filepath.Abs(fmt.Sprintf("%s/%s", filepath.Dir(os.Args[0]), dstDir))
+		if err != nil {
+			return "", err
+		}
+	}
+	if runtime.GOOS == "windows" {
+		absoluteDir = strings.ReplaceAll(absoluteDir, "\\", "/")
+	}
+
+	basename := path.Base(absoluteDir)
+	packageName = strings.ToLower(strcase.ToLowerCamel(basename))
+	return
+
 }

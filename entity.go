@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"fmt"
 	"os"
-	"path/filepath"
 	"regexp"
 	"sort"
 	"strings"
@@ -102,8 +101,7 @@ type SQLTPLDefine struct {
 }
 
 func ParseDirSqlTplDefine(sqlTplDir string) (sqlTplDefineList []*SQLTPLDefine, err error) {
-	pattern := fmt.Sprintf("%s/*%s", strings.TrimRight(sqlTplDir, "/"), gqt.Suffix)
-	allFileList, err := filepath.Glob(pattern)
+	allFileList, err := gqt.GetTplFilesByDir(sqlTplDir)
 	if err != nil {
 		return
 	}
