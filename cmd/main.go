@@ -23,6 +23,7 @@ func main() {
 		modelFilename  string
 		tplDir         string
 		entityFilename string
+		force          bool
 		err            error
 	)
 	modelCmd := flag.NewFlagSet("model", flag.ExitOnError)
@@ -31,12 +32,15 @@ func main() {
 	crudCmd.Usage = helpCrud
 	entityCmd := flag.NewFlagSet("entity", flag.ExitOnError)
 	entityCmd.Usage = helpEntity
+	modelCmd.BoolVar(&force, "force", false, "overwrite exist file")
 	modelCmd.StringVar(&ddlFile, "ddl", "template/ddl.sql.tpl", "ddl template file name")
 	modelCmd.StringVar(&modelFilename, "model", "repository.model.go", "ddl template file name")
 
+	crudCmd.BoolVar(&force, "f", false, "overwrite exist file")
 	crudCmd.StringVar(&ddlFile, "ddl", "template/ddl.sql.tpl", "ddl template file name")
 	crudCmd.StringVar(&tplDir, "tplDir", "template", "sql template dir")
 
+	entityCmd.BoolVar(&force, "f", false, "overwrite exist file")
 	entityCmd.StringVar(&tplDir, "tplDir", "template", "sql template dir")
 	entityCmd.StringVar(&entityFilename, "entity", "repository.entity.go", "entity file")
 	testing.Init()
@@ -48,21 +52,21 @@ func main() {
 	switch os.Args[1] {
 	case "model":
 		modelCmd.Parse(args)
-		err = runCmdModel(ddlFile, modelFilename)
+		err = runCmdModel(ddlFile, modelFilename, force)
 		if err != nil {
 			panic(err)
 		}
 
 	case "crud":
 		crudCmd.Parse(args)
-		err = runCmdCrud(ddlFile, tplDir)
+		err = runCmdCrud(ddlFile, tplDir, force)
 		if err != nil {
 			panic(err)
 		}
 
 	case "entity":
 		entityCmd.Parse(args)
-		err = runCmdEntity(tplDir, entityFilename)
+		err = runCmdEntity(tplDir, entityFilename, force)
 		if err != nil {
 			panic(err)
 		}
@@ -72,7 +76,7 @@ func main() {
 	}
 }
 
-func runCmdModel(ddlFile string, modelFile string) (err error) {
+func runCmdModel(ddlFile string, modelFile string, force bool) (err error) {
 	repo := gqt.NewRepository()
 	errChain := errorformatter.NewErrorChain()
 	var content string
@@ -109,14 +113,14 @@ func runCmdModel(ddlFile string, modelFile string) (err error) {
 	}
 
 	content = strings.Join(contentArr, "\n")
-	err = saveFile(modelFile, content)
+	err = saveFile(modelFile, content, force)
 	if err != nil {
 		return
 	}
 	return
 }
 
-func runCmdCrud(ddlFile string, dstDir string) (err error) {
+func runCmdCrud(ddlFile string, dstDir string, force bool) (err error) {
 	repo := gqt.NewRepository()
 	errChain := errorformatter.NewErrorChain()
 	var content string
@@ -138,7 +142,7 @@ func runCmdCrud(ddlFile string, dstDir string) (err error) {
 	for name, tpl := range tplMap {
 		snakeName := strcase.ToSnake(name)
 		filename := fmt.Sprintf("%s/%s.sql.tpl", dstDir, snakeName)
-		err = saveFile(filename, tpl)
+		err = saveFile(filename, tpl, force)
 		if err != nil {
 			return
 		}
@@ -146,7 +150,7 @@ func runCmdCrud(ddlFile string, dstDir string) (err error) {
 	return
 }
 
-func runCmdEntity(sqlTplDir string, entityFilename string) (err error) {
+func runCmdEntity(sqlTplDir string, entityFilename string, force bool) (err error) {
 	repo := gqt.NewRepository()
 	errChain := errorformatter.NewErrorChain()
 	var entityList = make([]string, 0)
@@ -176,7 +180,7 @@ func runCmdEntity(sqlTplDir string, entityFilename string) (err error) {
 	contentArr = append(contentArr, packageLine)
 	contentArr = append(contentArr, entityList...)
 	content := strings.Join(contentArr, "\n")
-	err = saveFile(entityFilename, content)
+	err = saveFile(entityFilename, content, force)
 	if err != nil {
 		return
 	}
@@ -197,9 +201,15 @@ func GetFileContent(file string) (content string, err error) {
 
 }
 
-func saveFile(filename string, content string) (err error) {
+func saveFile(filename string, content string, force bool) (err error) {
 	if IsExist(filename) {
-		return
+		if !force {
+			return
+		}
+		err = os.Remove(filename)
+		if err != nil {
+			return
+		}
 	}
 	f, err := os.Create(filename)
 	if err != nil {
@@ -310,9 +320,10 @@ func helpModel() {
 	fmt.Fprint(os.Stderr, `gqttool model is generate go struct from mysql ddl
 
 Usage:
-  gqttool model  -ddl ddlFilename -model modelFilename
+  gqttool model -force true -ddl ddlFilename -model modelFilename
 
 Flags:
+  -force overwrite exists file
   -ddl
         mysql ddl file path
 
@@ -321,7 +332,7 @@ Flags:
 
 Example:
 
-  gqttool model -ddl template/ddl.sql.tpl -model repository.model.go
+  gqttool model -force true -ddl template/ddl.sql.tpl -model repository.model.go
 
 `)
 	os.Exit(0)
@@ -331,9 +342,10 @@ func helpCrud() {
 	fmt.Fprint(os.Stderr, `gqttool crud is  generation crud sql from mysql ddl
 
 Usage:
-  gqttool crud  -ddl ddlFilename -tplDir sqlTplSaveDir
+  gqttool crud  -force true -ddl ddlFilename -tplDir sqlTplSaveDir
   
 Flags:
+  -force overwrite exists file
   -ddl
         mysql ddl filename
 
@@ -342,7 +354,7 @@ Flags:
 
 Example:
 
-  gqttool crud -ddl template/ddl.sql.tpl -tplDir template
+  gqttool crud -force true -ddl template/ddl.sql.tpl -tplDir template
 
 `)
 	os.Exit(0)
@@ -352,10 +364,11 @@ func helpEntity() {
 	fmt.Fprint(os.Stderr, `gqttool entity is  generation sql template inpur args entity
 
 Usage:
-  gqttool entity  -tplDir sqlTplDir -entity entityFilename
+  gqttool entity -force true  -tplDir sqlTplDir -entity entityFilename
   
 
 Flags:
+ -force overwrite exists file 
  -tplDir 
 		sqlTpl file dir
  -entity 
@@ -363,7 +376,7 @@ Flags:
 
 Example:
 
-  gqttool entity -tplDir template -entity repository.entity.go
+  gqttool entity -force true -tplDir template -entity repository.entity.go
 
 `)
 	os.Exit(0)
@@ -373,9 +386,9 @@ func help() {
 	fmt.Fprint(os.Stderr, `gqttool is the code generation tool for the gqt package.
 
 Usage:
-  gqttool model  -ddl ddlFilename -model modelFilename
-  gqttool crud  -ddl ddlFilename -tplDir sqlTplSaveDir
-  gqttool entity  -tplDir sqlTplDir -entity entityFilename
+  gqttool model  -force true -ddl ddlFilename -model modelFilename
+  gqttool crud -force true  -ddl ddlFilename -tplDir sqlTplSaveDir
+  gqttool entity -force true  -tplDir sqlTplDir -entity entityFilename
   
 Commands:
   model
@@ -386,6 +399,7 @@ Commands:
   		Generate sql.tpl input entity from mysql sqlTplDir
 
 Flags:
+  -force overwrite exists file
   -ddl
         mysql ddl filename
   -model
@@ -397,7 +411,7 @@ Flags:
 
 Example:
 
-  gqttool model -ddl template/ddl.sql.tpl -model repository.model.go
+  gqttool model -force true -ddl template/ddl.sql.tpl -model repository.model.go
 
 `)
 	os.Exit(0)

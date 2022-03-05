@@ -11,7 +11,7 @@ import (
 func TestRunCmdModel(t *testing.T) {
 	ddlFile := "../example/template/ddl.sql.tpl"
 	modelDir := "../example/"
-	err := runCmdModel(ddlFile, modelDir)
+	err := runCmdModel(ddlFile, modelDir, true)
 	if err != nil {
 		panic(err)
 	}
@@ -34,7 +34,7 @@ func TestGeneratePackageName(t *testing.T) {
 func TestRunCmdEntity(*testing.T) {
 	tplDir := "../example/template"
 	entity := "../example/repository.entity.go"
-	err := runCmdEntity(tplDir, entity)
+	err := runCmdEntity(tplDir, entity, true)
 	if err != nil {
 		panic(err)
 	}
