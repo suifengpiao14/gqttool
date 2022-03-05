@@ -57,8 +57,9 @@ func TplPaginate(table *Table) (tpl string) {
 		tpl = fmt.Sprintf("%s  and `%s` is null ", tpl, table.DeleteAtColumn)
 	}
 	if table.UpdateAtColumn != "" {
-		tpl = fmt.Sprintf(" %s order by `%s` desc  limit :Offset,:Limit ", tpl, table.UpdateAtColumn)
+		tpl = fmt.Sprintf(" %s order by `%s` desc ", tpl, table.UpdateAtColumn)
 	}
+	tpl = fmt.Sprintf(" %s limit :Offset,:Limit ", tpl)
 	tpl = tpl + ";\n{{end}}\n"
 	return
 }
