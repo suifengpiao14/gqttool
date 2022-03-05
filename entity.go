@@ -163,7 +163,7 @@ type EntityTplData struct {
 
 func FormatEntityData(entityElement *EntityElement) (entityTplData *EntityTplData, err error) {
 	entityTplData = &EntityTplData{
-		StructName: entityElement.Name,
+		StructName: fmt.Sprintf("%sEntity", entityElement.Name),
 		FullName:   entityElement.FullName,
 		Attributes: make(Variables, 0),
 	}
