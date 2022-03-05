@@ -36,11 +36,11 @@ func main() {
 	modelCmd.StringVar(&ddlFile, "ddl", "template/ddl.sql.tpl", "ddl template file name")
 	modelCmd.StringVar(&modelFilename, "model", "repository.model.go", "ddl template file name")
 
-	crudCmd.BoolVar(&force, "f", false, "overwrite exist file")
+	crudCmd.BoolVar(&force, "force", false, "overwrite exist file")
 	crudCmd.StringVar(&ddlFile, "ddl", "template/ddl.sql.tpl", "ddl template file name")
 	crudCmd.StringVar(&tplDir, "tplDir", "template", "sql template dir")
 
-	entityCmd.BoolVar(&force, "f", false, "overwrite exist file")
+	entityCmd.BoolVar(&force, "force", false, "overwrite exist file")
 	entityCmd.StringVar(&tplDir, "tplDir", "template", "sql template dir")
 	entityCmd.StringVar(&entityFilename, "entity", "repository.entity.go", "entity file")
 	testing.Init()

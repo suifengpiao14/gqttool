@@ -229,7 +229,7 @@ func structTpl() string {
 		{{end}}
 		)
 	{{end}}
-	type {{.TableNameCamel}} struct{
+	type {{.TableNameCamel}}Model struct{
 		{{range .Columns }} 
 		// {{.Comment}}
 		{{.CamelName}} {{.Type}} {{if .Tag}} {{.Tag}} {{end}}
