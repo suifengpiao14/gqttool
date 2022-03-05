@@ -317,11 +317,11 @@ Flags:
         mysql ddl file path
 
   -model
-        model file path
+        model filename
 
 Example:
 
-  gqttool model template/ddl.sql.tpl -model repository.model.go
+  gqttool model -ddl template/ddl.sql.tpl -model repository.model.go
 
 `)
 	os.Exit(0)
@@ -335,14 +335,14 @@ Usage:
   
 Flags:
   -ddl
-        mysql ddl file path
+        mysql ddl filename
 
   -tplDir
         save sqlTpl file path
 
 Example:
 
-  gqttool crud template/ddl.sql.tpl -tplDir template
+  gqttool crud -ddl template/ddl.sql.tpl -tplDir template
 
 `)
 	os.Exit(0)
@@ -359,7 +359,7 @@ Flags:
  -tplDir 
 		sqlTpl file dir
  -entity 
-		sqlTpl  entity file name
+		sqlTpl  entity filename
 
 Example:
 
@@ -387,17 +387,17 @@ Commands:
 
 Flags:
   -ddl
-        mysql ddl file path
+        mysql ddl filename
   -model
-        repository model file name
+        repository model filename
  -tplDir 
 		sqlTpl file dir
  -entity 
-		sqlTpl  argument entity file name
+		sqlTpl  argument entity filename
 
 Example:
 
-  gqttool model template/ddl.sql.tpl -model repository.model.go
+  gqttool model -ddl template/ddl.sql.tpl -model repository.model.go
 
 `)
 	os.Exit(0)
