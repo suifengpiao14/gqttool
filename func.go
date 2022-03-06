@@ -52,6 +52,7 @@ func GeneratePackageName(dstDir string) (packageName string, err error) {
 
 }
 
+// Model2Entity copy model to entity ,some times input used to insert and update ,in this case input mybe model, copy model value to insertEntity and updateEntity
 func Model2Entity(from interface{}, to gqt.TplEntity) {
 	err := copier.Copy(to, from)
 	if err != nil {
