@@ -9,6 +9,8 @@ import (
 	"strings"
 
 	"github.com/iancoleman/strcase"
+	"github.com/jinzhu/copier"
+	"github.com/suifengpiao14/gqt/v2"
 	"goa.design/goa/v3/codegen"
 )
 
@@ -48,4 +50,11 @@ func GeneratePackageName(dstDir string) (packageName string, err error) {
 	packageName = strings.ToLower(strcase.ToLowerCamel(basename))
 	return
 
+}
+
+func Model2Entity(from interface{}, to gqt.TplEntity) {
+	err := copier.Copy(to, from)
+	if err != nil {
+		panic(err)
+	}
 }

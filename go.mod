@@ -17,6 +17,7 @@ require (
 	github.com/cznic/mathutil v0.0.0-20181122101859-297441e03548 // indirect
 	github.com/dimfeld/httptreemux v5.0.1+incompatible // indirect
 	github.com/go-openapi/loads v0.19.0 // indirect
+	github.com/jinzhu/copier v0.3.5 // indirect
 	github.com/pingcap/errors v0.11.4 // indirect
 	github.com/pingcap/parser v3.1.2+incompatible // indirect
 	github.com/pingcap/tipb v0.0.0-20220303075026-f3286471a05a // indirect
