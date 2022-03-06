@@ -168,19 +168,28 @@ func FormatEntityData(entityElement *EntityElement) (entityTplData *EntityTplDat
 		Attributes: make(Variables, 0),
 	}
 	tableColumnMap := make(map[string]*Column)
+	columnNameMap := make(map[string]string)
 	for _, table := range entityElement.Tables {
 		for _, column := range table.Columns { //todo 多表字段相同，类型不同时，只会取列表中最后一个
 			tableColumnMap[column.CamelName] = column
+			lname := strings.ToLower(column.CamelName)
+			columnNameMap[lname] = column.CamelName // 后续用于检测模板变量拼写错误
 		}
 
 	}
 
 	for name, variable := range entityElement.VariableMap { // 使用数据库字段定义校正变量类型
+
 		tableColumn, ok := tableColumnMap[name]
 		if ok {
 			variable.Type = tableColumn.Type
 			entityTplData.Attributes = append(entityTplData.Attributes, variable)
 			continue
+		}
+		lname := strings.ToLower(name)
+		if columnName, ok := columnNameMap[lname]; ok { // 检测模板中大小写拼写错误
+			err = errors.Errorf("spelling mistake: have %s, want %s", name, columnName)
+			return
 		}
 		// 不属于数据表字段变量，直接添加
 		entityTplData.Attributes = append(entityTplData.Attributes, variable)
