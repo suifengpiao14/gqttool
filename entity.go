@@ -85,10 +85,8 @@ func regexpMatch(s string, delim string) (matcheList []string, err error) {
 		return
 	}
 	matchArr := reg.FindAllStringSubmatch(s, -1)
-	if matchArr != nil {
-		for _, matchs := range matchArr {
-			matcheList = append(matcheList, matchs[1:]...) // index 0 为匹配对象
-		}
+	for _, matchs := range matchArr {
+		matcheList = append(matcheList, matchs[1:]...) // index 0 为匹配对象
 	}
 	return
 }
