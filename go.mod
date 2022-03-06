@@ -9,7 +9,7 @@ require (
 	github.com/iancoleman/strcase v0.2.0
 	github.com/pkg/errors v0.9.1
 	github.com/suifengpiao14/errorformatter v0.0.0-20220214013820-e0177a90fb70
-	github.com/suifengpiao14/gqt/v2 v2.0.0-20220304083354-b4e2c1e8f38a
+	github.com/suifengpiao14/gqt/v2 v2.0.0-20220306035708-065c66a08c48
 )
 
 require (
@@ -24,6 +24,6 @@ require (
 	goa.design/goa/v3 v3.5.5
 	golang.org/x/net v0.0.0-20220225172249-27dd8689420f // indirect
 	golang.org/x/sys v0.0.0-20220227234510-4e6760a101f9 // indirect
-	google.golang.org/genproto v0.0.0-20220303160752-862486edd9cc // indirect
+	google.golang.org/genproto v0.0.0-20220304144024-325a89244dc8 // indirect
 	gorm.io/gorm v1.23.2 // indirect
 )

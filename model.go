@@ -235,5 +235,14 @@ func structTpl() string {
 		{{.CamelName}} {{.Type}} {{if .Tag}} {{.Tag}} {{end}}
 		{{end}}
 	}
+	func (t *{{.TableNameCamel}}Model) TableName()string{
+		return "{{.TableName}}"
+	}
+	func (t *{{.TableNameCamel}}Model) PrimaryKey()string{
+		return "{{.PrimaryKey}}"
+	}
+	func (t *{{.TableNameCamel}}Model) PrimaryKeyCamel()string{
+		return "{{.PrimaryKeyCamel}}"
+	}
 	`
 }

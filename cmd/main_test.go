@@ -42,7 +42,7 @@ func TestRunCmdEntity(*testing.T) {
 
 func TestGenerateModel(t *testing.T) {
 	repo := gqt.NewRepository()
-	err := repo.AddByDir("../example", gqt.TemplatefuncMap)
+	err := repo.AddByDir("../example/template", gqt.TemplatefuncMap)
 	if err != nil {
 		panic(err)
 	}
