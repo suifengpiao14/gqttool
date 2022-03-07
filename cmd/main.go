@@ -286,7 +286,12 @@ func GenerateCrud(rep *gqt.Repository) (tplMap map[string]string, err error) {
 			return nil, err
 		}
 		tableTpl := strings.Join(oneTableTplList, "\n")
-		tplMap[table.TableName] = tableTpl
+		tablePrefix := rep.GetConfig().TablePrefix
+		name := table.TableName
+		if tablePrefix != "" {
+			name = strings.TrimLeft(table.TableName, tablePrefix)
+		}
+		tplMap[name] = tableTpl
 	}
 
 	return
