@@ -141,7 +141,7 @@ func runCmdCrud(ddlFile string, dstDir string, force bool) (err error) {
 	}
 	for name, tpl := range tplMap {
 		snakeName := strcase.ToSnake(name)
-		filename := fmt.Sprintf("%s/%s.sql.tpl", dstDir, snakeName)
+		filename := fmt.Sprintf("%s/%s.auto.sql.tpl", dstDir, snakeName)
 		err = saveFile(filename, tpl, force)
 		if err != nil {
 			return
