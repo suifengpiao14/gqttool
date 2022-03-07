@@ -21,7 +21,11 @@ func Crud(table *Table) (tplList []string, err error) { // list 保证后面输�
 	return
 }
 
-func isIgnoreColumn(columnName string, table *Table) (yes bool) {
+func isIgnoreColumn(column *Column, table *Table) (yes bool) {
+	if column.AutoIncrement {
+		return true
+	}
+	columnName := column.Name
 	ignoreColumnMap := make(map[string]string)
 	ignoreColumnMap[table.CreatedAtColumn] = table.CreatedAtColumn
 	ignoreColumnMap[table.UpdateAtColumn] = table.UpdateAtColumn
@@ -69,7 +73,7 @@ func TplInsert(table *Table) (tpl string) {
 	columns := make([]string, 0)
 	values := make([]string, 0)
 	for _, column := range table.Columns {
-		if isIgnoreColumn(column.Name, table) {
+		if isIgnoreColumn(column, table) {
 			continue
 		}
 		columns = append(columns, Backquote(column.Name))
@@ -86,7 +90,7 @@ func TplUpdate(table *Table) (tpl string) {
 	blockName := "Update"
 	updataList := make([]string, 0)
 	for _, column := range table.Columns {
-		if isIgnoreColumn(column.Name, table) {
+		if isIgnoreColumn(column, table) {
 			continue
 		}
 		str := fmt.Sprintf("{{if .%s}} {{$preComma.PreComma}} `%s`=:%s {{end}} ", column.CamelName, column.Name, column.CamelName)

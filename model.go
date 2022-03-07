@@ -80,13 +80,14 @@ func mysql2GoType(mysqlType string, time2str bool) (goType string, err error) {
 }
 
 type Column struct {
-	CamelName string
-	Name      string
-	Type      string
-	Comment   string
-	Tag       string
-	Nullable  bool
-	Enums     []string
+	CamelName     string
+	Name          string
+	Type          string
+	Comment       string
+	Tag           string
+	Nullable      bool
+	Enums         []string
+	AutoIncrement bool
 }
 
 type Table struct {
@@ -185,13 +186,14 @@ func GenerateTable(ddlList []string) (tables []*Table, err error) {
 			}
 
 			columnPt := &Column{
-				CamelName: ToCamel(columnDef.Name),
-				Name:      columnDef.Name,
-				Type:      goType,
-				Comment:   columnDef.Comment,
-				Nullable:  columnDef.Nullable,
-				Tag:       fmt.Sprintf("`json:\"%s\"`", ToLowerCamel(columnDef.Name)),
-				Enums:     columnDef.Elems,
+				CamelName:     ToCamel(columnDef.Name),
+				Name:          columnDef.Name,
+				Type:          goType,
+				Comment:       columnDef.Comment,
+				Nullable:      columnDef.Nullable,
+				Tag:           fmt.Sprintf("`json:\"%s\"`", ToLowerCamel(columnDef.Name)),
+				Enums:         columnDef.Elems,
+				AutoIncrement: columnDef.AutoIncrement,
 			}
 			if len(columnDef.Elems) > 0 {
 				prefix := fmt.Sprintf("%s_%s", tableName, columnPt.Name)
