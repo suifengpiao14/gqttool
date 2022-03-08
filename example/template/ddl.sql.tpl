@@ -3,7 +3,7 @@ tablePrefix="t_"
 {{end}}
 
 {{define "metaTplDel"}}
-update `{{.TableName}}` set `deleted_at`={{`{{currentTime}}`}},`{{.PrimaryKey}}`=::OperatorID,`operator`=::Operator where `{{.PrimaryKey}}`=::{{.PrimaryKeyCamel}};
+update `{{.TableName}}` set `deleted_at`={{`{{currentTime}}`}},`operator_id`=::OperatorID,`operator`=::Operator where `{{.PrimaryKey}}`=::{{.PrimaryKeyCamel}};
 {{end}}
 
 {{define "ddlService"}}
