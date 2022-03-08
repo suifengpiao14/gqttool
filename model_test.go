@@ -3,11 +3,14 @@ package gqttool
 import (
 	"fmt"
 	"testing"
+
+	"github.com/suifengpiao14/gqt/v2"
 )
 
 func TestGenerateTable(t *testing.T) {
 	ddlList := GetDDL()
-	tableList, err := GenerateTable(ddlList)
+	cfg := &gqt.Config{}
+	tableList, err := GenerateTable(ddlList, cfg)
 	if err != nil {
 		panic(err)
 	}

@@ -7,6 +7,7 @@ import (
 	"text/template"
 
 	"github.com/pkg/errors"
+	"github.com/suifengpiao14/gqt/v2"
 
 	executor "github.com/bytewatch/ddl-executor"
 )
@@ -79,7 +80,13 @@ func mysql2GoType(mysqlType string, time2str bool) (goType string, err error) {
 
 }
 
+const (
+	DEFAULT_VALUE_CURRENT_TIMESTAMP = "current_timestamp"
+	DEFAULT_COLUMN_DELETED_AT       = "deleted_at" // 默认删除列名称
+)
+
 type Column struct {
+	prefix        string
 	CamelName     string
 	Name          string
 	Type          string
@@ -88,25 +95,93 @@ type Column struct {
 	Nullable      bool
 	Enums         []string
 	AutoIncrement bool
+	DefaultValue  string
+	OnCreate      bool // 根据数据表ddl及默认 值为current_timestap 判断
+	OnUpdate      bool // 根据数据表ddl 配置
+	OnDelete      bool // 手动设置
+}
+
+// IsDefaultValueCurrentTimestamp 判断默认值是否为自动填充时间
+func (c *Column) IsDefaultValueCurrentTimestamp() bool {
+	return strings.ToLower(c.DefaultValue) == DEFAULT_VALUE_CURRENT_TIMESTAMP
 }
 
 type Table struct {
-	TableName       string
-	TableNameCamel  string
-	PrimaryKey      string
-	PrimaryKeyCamel string
-	DeleteAtColumn  string
-	DeleteAtCamel   string
-	CreatedAtColumn string
-	CreatedAtCamel  string
-	UpdateAtColumn  string
-	UpdateAtCamel   string
-	Columns         []*Column
-	EnumsConst      map[string]string
+	TablePrefix  string
+	ColumnPrefix string
+	TableName    string
+	PrimaryKey   string
+	DeleteColumn string
+	Columns      []*Column
+	EnumsConst   map[string]string
 }
 
-func GenerateModel(tableList []*Table) (modelMap map[string]string, err error) {
-	modelMap = make(map[string]string)
+//CamelName 删除表前缀，转换成 camel 格式
+func (t *Table) TableNameCamel() (camelName string) {
+	name := t.TableName
+	if t.TablePrefix != "" {
+		name = strings.TrimLeft(name, t.TablePrefix)
+	}
+	camelName = ToCamel(name)
+	return
+}
+func (t *Table) PrimaryKeyCamel() (camelName string) {
+	primaryKey := t.PrimaryKey
+	if t.ColumnPrefix != "" {
+		primaryKey = strings.TrimLeft(primaryKey, t.TablePrefix)
+	}
+	camelName = ToCamel(primaryKey)
+	return
+}
+
+func (t *Table) CreatedAtColumn() (createdAtColumn *Column) {
+	for _, column := range t.Columns {
+		if column.OnCreate {
+			return column
+		}
+	}
+	return
+}
+
+// UpdateAtColumn 获取更新列
+func (t *Table) UpdatedAtColumn() (updatedAtColumn *Column) {
+	for _, column := range t.Columns {
+		if column.OnUpdate {
+			return column
+		}
+	}
+
+	return
+}
+
+// DeletedAtColumn 获取删除列
+func (t *Table) DeletedAtColumn() (deletedAtColumn *Column) {
+	for _, column := range t.Columns {
+		if column.OnDelete {
+			return column
+		}
+	}
+	return
+}
+
+type ModelStruct struct {
+	Name string
+	TPL  string
+}
+
+type ModelStructList []*ModelStruct
+
+func (v ModelStructList) Len() int { // 重写 Len() 方法
+	return len(v)
+}
+func (v ModelStructList) Swap(i, j int) { // 重写 Swap() 方法
+	v[i], v[j] = v[j], v[i]
+}
+func (v ModelStructList) Less(i, j int) bool { // 重写 Less() 方法， 从小到大排序
+	return v[i].Name < v[j].Name
+}
+func GenerateModel(tableList []*Table) (modelStructList []*ModelStruct, err error) {
+	modelStructList = make([]*ModelStruct, 0)
 	tableTpl := structTpl()
 	tl, err := template.New("").Parse(tableTpl)
 	if err != nil {
@@ -120,12 +195,16 @@ func GenerateModel(tableList []*Table) (modelMap map[string]string, err error) {
 		if err != nil {
 			return
 		}
-		modelMap[table.TableNameCamel] = buf.String()
+		modelStruct := &ModelStruct{
+			Name: ToCamel(table.TableName),
+			TPL:  buf.String(),
+		}
+		modelStructList = append(modelStructList, modelStruct)
 	}
 	return
 }
 
-func GenerateTable(ddlList []string) (tables []*Table, err error) {
+func GenerateTable(ddlList []string, tableCfg *gqt.Config) (tables []*Table, err error) {
 	tables = make([]*Table, 0)
 	conf := executor.NewDefaultConfig()
 	inst := executor.NewExecutor(conf)
@@ -155,15 +234,15 @@ func GenerateTable(ddlList []string) (tables []*Table, err error) {
 		}
 
 		table := &Table{
-			TableName:      tableName,
-			TableNameCamel: ToCamel(tableName),
-			Columns:        make([]*Column, 0),
-			EnumsConst:     make(map[string]string),
+			TablePrefix:  tableCfg.TablePrefix,
+			TableName:    tableName,
+			Columns:      make([]*Column, 0),
+			EnumsConst:   make(map[string]string),
+			DeleteColumn: tableCfg.DeletedAtColumn,
 		}
 		for _, indice := range tableDef.Indices {
 			if indice.Name == "PRIMARY" {
 				table.PrimaryKey = indice.Columns[0] // 暂时取第一个为主键，不支持多字段主键
-				table.PrimaryKeyCamel = ToCamel(table.PrimaryKey)
 			}
 		}
 		for _, columnDef := range tableDef.Columns {
@@ -172,17 +251,8 @@ func GenerateTable(ddlList []string) (tables []*Table, err error) {
 			if err != nil {
 				return nil, err
 			}
-			if columnDef.OnUpdate {
-				table.UpdateAtColumn = columnDef.Name
-				table.UpdateAtCamel = ToCamel(columnDef.Name)
-			}
-			if strings.Contains(columnDef.DefaultValue, "current_timestamp") && !columnDef.OnUpdate {
-				table.CreatedAtColumn = columnDef.Name
-				table.CreatedAtCamel = ToCamel(columnDef.Name)
-			}
 			if isTimeMysqlType(columnDef.Type) && strings.Contains(columnDef.Name, "deleted_at") {
-				table.DeleteAtColumn = columnDef.Name
-				table.DeleteAtCamel = ToCamel(columnDef.Name)
+				table.DeleteColumn = columnDef.Name
 			}
 
 			columnPt := &Column{
@@ -194,6 +264,8 @@ func GenerateTable(ddlList []string) (tables []*Table, err error) {
 				Tag:           fmt.Sprintf("`json:\"%s\"`", ToLowerCamel(columnDef.Name)),
 				Enums:         columnDef.Elems,
 				AutoIncrement: columnDef.AutoIncrement,
+				DefaultValue:  columnDef.DefaultValue,
+				OnUpdate:      columnDef.OnUpdate,
 			}
 			if len(columnDef.Elems) > 0 {
 				prefix := fmt.Sprintf("%s_%s", tableName, columnPt.Name)
@@ -201,7 +273,10 @@ func GenerateTable(ddlList []string) (tables []*Table, err error) {
 				for key, val := range subEnumConst {
 					table.EnumsConst[key] = val
 				}
-
+			}
+			columnPt.OnCreate = columnPt.IsDefaultValueCurrentTimestamp() && !columnPt.OnUpdate    // 自动填充时间，但是更新时不变，认为是创建时间列
+			if table.DeleteColumn == columnPt.Name || columnPt.Name == DEFAULT_COLUMN_DELETED_AT { // 删除记录列，通过配置指定，或者列名称为 DEFAULT_COLUMN_DELETED_AT 的值
+				columnPt.OnDelete = true
 			}
 
 			table.Columns = append(table.Columns, columnPt)

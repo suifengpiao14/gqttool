@@ -3,19 +3,19 @@ package gqttool
 import (
 	"fmt"
 	"testing"
+
+	"github.com/suifengpiao14/gqt/v2"
 )
 
 func TestCrud(t *testing.T) {
 	ddlList := GetDDL()
-	tables, err := GenerateTable(ddlList)
+	tableCfg := &gqt.Config{}
+	tables, err := GenerateTable(ddlList, tableCfg)
 	if err != nil {
 		panic(err)
 	}
 	for _, table := range tables {
-		tplMap, err := Crud(table)
-		if err != nil {
-			panic(err)
-		}
+		tplMap := Crud(table)
 		fmt.Println(tplMap)
 	}
 

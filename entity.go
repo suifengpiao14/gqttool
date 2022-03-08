@@ -49,11 +49,6 @@ func RepositoryEntity(sqlTplDefine *SQLTPLDefine, tableList []*Table) (entityStr
 	return
 }
 
-type TalbeNameVariable struct {
-	Update string `parser:"(?=...)'update ' @String ' '"`
-	From   string `parser:"| (?=...)'from ' @Ident ' '"`
-}
-
 func ParseSQLTPLTableName(sqlTpl string) (tableList []string, err error) {
 
 	updateDelim := "update `?(\\w+)`?"
@@ -91,6 +86,25 @@ func regexpMatch(s string, delim string) (matcheList []string, err error) {
 	return
 }
 
+type SQLTplNamespace struct {
+	Namespace string
+	Defines   []*SQLTPLDefine
+}
+
+func (s *SQLTplNamespace) String() (out string) {
+	tplArr := make([]string, 0)
+	for _, define := range s.Defines {
+		tplArr = append(tplArr, define.TPL)
+	}
+	out = strings.Join(tplArr, "\n")
+	return
+}
+
+func (s *SQLTplNamespace) Filename() (out string) {
+	out = SnakeCase(s.Namespace)
+	return
+}
+
 type SQLTPLDefine struct {
 	Name          string
 	FullNameCamel string
@@ -103,8 +117,9 @@ func ParseDirSqlTplDefine(sqlTplDir string) (sqlTplDefineList []*SQLTPLDefine, e
 	if err != nil {
 		return
 	}
+	ddlSuffix := fmt.Sprintf("%s%s", gqt.DDLNamespaceSuffix, gqt.Suffix)
 	for _, filename := range allFileList {
-		if strings.HasSuffix(filename, "ddl.sql.tpl") { //skep ddl file
+		if strings.HasSuffix(filename, ddlSuffix) { //skep ddl file
 			continue
 		}
 		b, err := os.ReadFile(filename)
@@ -217,7 +232,6 @@ type Variable struct {
 	AllowEmpty bool
 }
 
-// 按照 Person.Age 从大到小排序
 type Variables []*Variable
 
 func (v Variables) Len() int { // 重写 Len() 方法

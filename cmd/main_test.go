@@ -39,6 +39,14 @@ func TestRunCmdEntity(*testing.T) {
 		panic(err)
 	}
 }
+func TestRunCmdCrud(*testing.T) {
+	ddlFile := "../example/template/ddl.sql.tpl"
+	dstDir := "../example/template"
+	err := runCmdCrud(ddlFile, dstDir, true)
+	if err != nil {
+		panic(err)
+	}
+}
 
 func TestGenerateModel(t *testing.T) {
 	repo := gqt.NewRepository()

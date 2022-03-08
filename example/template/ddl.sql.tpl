@@ -1,7 +1,9 @@
-
+{{define "config"}}
+tablePrefix="t_"
+{{end}}
 
 {{define "ddlService"}}
-   CREATE TABLE if not exists `service` (
+   CREATE TABLE if not exists `t_service` (
   `service_id` varchar(64) NOT NULL DEFAULT '' COMMENT '服务标识',
   `title` varchar(255) NOT NULL DEFAULT '' COMMENT '标题',
   `description` varchar(255) NOT NULL DEFAULT '' COMMENT '介绍',
@@ -20,7 +22,7 @@
 
 
 {{define "ddlApi"}}
-  CREATE TABLE  if not exists `api` (
+  CREATE TABLE  if not exists `t_api` (
   `api_id` varchar(64) NOT NULL DEFAULT '' COMMENT 'api 文档标识',
   `service_id` varchar(64) NOT NULL DEFAULT '' COMMENT '服务标识',
   `name` varchar(255) NOT NULL COMMENT '路由名称(英文)',
@@ -40,7 +42,7 @@
 
 
 {{define "ddlParameter"}}
-  CREATE TABLE  if not exists `parameter`  (
+  CREATE TABLE  if not exists `t_parameter`  (
   `parameter_id` varchar(64) NOT NULL DEFAULT '' COMMENT '参数标识',
   `service_id` varchar(64) NOT NULL DEFAULT '' COMMENT '服务标识',
   `api_id` varchar(64) NOT NULL DEFAULT '' COMMENT 'api 文档标识',
@@ -72,7 +74,7 @@
 
 
 {{define "ddlValidateSchema"}}
-  CREATE TABLE  if not exists `validate_schema` (
+  CREATE TABLE  if not exists `t_validate_schema` (
   `validate_schema_id` varchar(64) NOT NULL DEFAULT '' COMMENT 'api schema 标识',
   `service_id` varchar(64) NOT NULL DEFAULT '' COMMENT '所属服务标识',
   `description` varchar(255) NOT NULL DEFAULT '' COMMENT '描述',
@@ -126,7 +128,7 @@
 
 
 {{define "ddlExample"}}
-CREATE TABLE  if not exists `example`  (
+CREATE TABLE  if not exists `t_example`  (
   `example_id` varchar(64) NOT NULL DEFAULT '' COMMENT '测试用例标识',
   `service_id` varchar(64) NOT NULL DEFAULT '' COMMENT '服务标识',
   `api_id` varchar(64) NOT NULL DEFAULT '' COMMENT 'api 文档标识',
@@ -144,7 +146,7 @@ CREATE TABLE  if not exists `example`  (
 {{end}}
 
 {{define "ddlMarkdown"}}
-CREATE TABLE  if not exists `markdown`  (
+CREATE TABLE  if not exists `t_markdown`  (
   `markdown_id` varchar(64) NOT NULL DEFAULT '' COMMENT 'markdown 文档标识',
   `service_id` varchar(64) NOT NULL DEFAULT '' COMMENT '服务标识',
   `api_id` varchar(64) NOT NULL DEFAULT '' COMMENT 'api 文档标识',
@@ -164,7 +166,7 @@ CREATE TABLE  if not exists `markdown`  (
 {{end}}
 
 {{define "ddlServer"}}
-  CREATE TABLE  if not exists `server`  (
+  CREATE TABLE  if not exists `t_server`  (
   `server_id` varchar(64) NOT NULL DEFAULT '' COMMENT '服务标识',
   `service_id` varchar(64) NOT NULL DEFAULT '' COMMENT '服务标识',
   `url` varchar(255) NOT NULL DEFAULT '' COMMENT '服务器地址',

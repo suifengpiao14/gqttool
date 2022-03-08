@@ -9,67 +9,80 @@ func Backquote(s string) (out string) {
 	out = fmt.Sprintf("`%s`", s)
 	return
 }
-func Crud(table *Table) (tplList []string, err error) { // list 保证后面输出顺序
-	tplList = make([]string, 0)
-	tplList = append(tplList, TplGetByPrimaryKey(table))
-	tplList = append(tplList, TplTotal(table))
-	tplList = append(tplList, TplPaginate(table))
-	tplList = append(tplList, TplInsert(table))
-	tplList = append(tplList, TplUpdate(table))
-	tplList = append(tplList, TplDel(table))
+func Crud(table *Table) (sqlTplDefines []*SQLTPLDefine) { // list 保证后面输出顺序
+	sqlTplDefines = make([]*SQLTPLDefine, 0)
+	sqlTplDefines = append(sqlTplDefines, TplGetByPrimaryKey(table))
+	sqlTplDefines = append(sqlTplDefines, TplTotal(table))
+	sqlTplDefines = append(sqlTplDefines, TplPaginate(table))
+	sqlTplDefines = append(sqlTplDefines, TplInsert(table))
+	sqlTplDefines = append(sqlTplDefines, TplUpdate(table))
+	sqlTplDefines = append(sqlTplDefines, TplDel(table))
 
 	return
 }
 
 func isIgnoreColumn(column *Column, table *Table) (yes bool) {
-	if column.AutoIncrement {
+	if column.AutoIncrement { // 自增列,忽略
 		return true
 	}
 	columnName := column.Name
+	if column.IsDefaultValueCurrentTimestamp() { // 自动填充时间的列,忽略
+		return true
+	}
+
 	ignoreColumnMap := make(map[string]string)
-	ignoreColumnMap[table.CreatedAtColumn] = table.CreatedAtColumn
-	ignoreColumnMap[table.UpdateAtColumn] = table.UpdateAtColumn
-	ignoreColumnMap[table.DeleteAtColumn] = table.DeleteAtColumn
+	ignoreColumnMap[table.DeleteColumn] = table.DeleteColumn
 	_, yes = ignoreColumnMap[columnName]
 	return
 }
 
-func TplGetByPrimaryKey(table *Table) (tpl string) {
-	blockName := fmt.Sprintf("GetBy%s", table.PrimaryKeyCamel)
-	tpl = fmt.Sprintf("{{define \"%s\"}}\nselect * from `%s`  where `%s`=:%s", blockName, table.TableName, table.PrimaryKey, table.PrimaryKeyCamel)
-	if table.DeleteAtColumn != "" {
-		tpl = fmt.Sprintf("%s  and `%s` is null", tpl, table.DeleteAtColumn)
+func TplGetByPrimaryKey(table *Table) (sqlTplDefine *SQLTPLDefine) {
+	sqlTplDefine = &SQLTPLDefine{}
+	primaryKeyCamel := table.PrimaryKeyCamel()
+	sqlTplDefine.Name = fmt.Sprintf("GetBy%s", primaryKeyCamel)
+	tpl := fmt.Sprintf("{{define \"%s\"}}\nselect * from `%s`  where `%s`=:%s", sqlTplDefine.Name, table.TableName, table.PrimaryKey, primaryKeyCamel)
+	if table.DeleteColumn != "" {
+		tpl = fmt.Sprintf("%s  and `%s` is null", tpl, table.DeleteColumn)
 	}
 	tpl = tpl + ";\n{{end}}\n"
+	sqlTplDefine.TPL = tpl
+
 	return
 }
 
-func TplTotal(table *Table) (tpl string) {
-	blockName := "Total"
-	tpl = fmt.Sprintf("{{define \"%s\"}}\nselect count(*) as `count` from `%s`  where 1=1 ", blockName, table.TableName)
-	if table.DeleteAtColumn != "" {
-		tpl = fmt.Sprintf("%s  and `%s` is null", tpl, table.DeleteAtColumn)
+func TplTotal(table *Table) (sqlTplDefine *SQLTPLDefine) {
+	sqlTplDefine = &SQLTPLDefine{}
+	sqlTplDefine.Name = "Total"
+	tpl := fmt.Sprintf("{{define \"%s\"}}\nselect count(*) as `count` from `%s`  where 1=1 ", sqlTplDefine.Name, table.TableName)
+	if table.DeleteColumn != "" {
+		tpl = fmt.Sprintf("%s  and `%s` is null", tpl, table.DeleteColumn)
 	}
 	tpl = tpl + ";\n{{end}}\n"
+	sqlTplDefine.TPL = tpl
 	return
 }
 
-func TplPaginate(table *Table) (tpl string) {
-	blockName := "Paginate"
-	tpl = fmt.Sprintf("{{define \"%s\"}}\nselect * from `%s`  where 1=1 ", blockName, table.TableName)
-	if table.DeleteAtColumn != "" {
-		tpl = fmt.Sprintf("%s  and `%s` is null ", tpl, table.DeleteAtColumn)
+func TplPaginate(table *Table) (sqlTplDefine *SQLTPLDefine) {
+	sqlTplDefine = &SQLTPLDefine{}
+	sqlTplDefine.Name = "Paginate"
+	tpl := fmt.Sprintf("{{define \"%s\"}}\nselect * from `%s`  where 1=1 ", sqlTplDefine.Name, table.TableName)
+	deletedAtColumn := table.DeletedAtColumn()
+	if deletedAtColumn != nil {
+		tpl = fmt.Sprintf("%s  and `%s` is null ", tpl, deletedAtColumn.Name)
 	}
-	if table.UpdateAtColumn != "" {
-		tpl = fmt.Sprintf(" %s order by `%s` desc ", tpl, table.UpdateAtColumn)
+	updatedAtColumn := table.UpdatedAtColumn()
+	if updatedAtColumn != nil {
+		tpl = fmt.Sprintf(" %s order by `%s` desc ", tpl, updatedAtColumn.Name)
 	}
 	tpl = fmt.Sprintf(" %s limit :Offset,:Limit ", tpl)
 	tpl = tpl + ";\n{{end}}\n"
+	sqlTplDefine.TPL = tpl
 	return
 }
 
-func TplInsert(table *Table) (tpl string) {
-	blockName := "Insert"
+func TplInsert(table *Table) (sqlTplDefine *SQLTPLDefine) {
+	sqlTplDefine = &SQLTPLDefine{}
+	sqlTplDefine.Name = "Insert"
 	columns := make([]string, 0)
 	values := make([]string, 0)
 	for _, column := range table.Columns {
@@ -82,12 +95,14 @@ func TplInsert(table *Table) (tpl string) {
 
 	columnStr := strings.Join(columns, ",")
 	valueStr := strings.Join(values, ",")
-	tpl = fmt.Sprintf("{{define \"%s\"}}\ninsert into `%s` (%s)values\n (%s);\n{{end}}\n", blockName, table.TableName, columnStr, valueStr)
+	tpl := fmt.Sprintf("{{define \"%s\"}}\ninsert into `%s` (%s)values\n (%s);\n{{end}}\n", sqlTplDefine.Name, table.TableName, columnStr, valueStr)
+	sqlTplDefine.TPL = tpl
 	return
 }
 
-func TplUpdate(table *Table) (tpl string) {
-	blockName := "Update"
+func TplUpdate(table *Table) (sqlTplDefine *SQLTPLDefine) {
+	sqlTplDefine = &SQLTPLDefine{}
+	sqlTplDefine.Name = "Update"
 	updataList := make([]string, 0)
 	for _, column := range table.Columns {
 		if isIgnoreColumn(column, table) {
@@ -97,12 +112,15 @@ func TplUpdate(table *Table) (tpl string) {
 		updataList = append(updataList, str)
 	}
 	updateTpl := strings.Join(updataList, "\n")
-	tpl = fmt.Sprintf("{{define \"%s\"}}\n{{$preComma:=newPreComma}}\n update `%s` set %s where `%s`=:%s;\n{{end}}\n", blockName, table.TableName, updateTpl, table.PrimaryKey, table.PrimaryKeyCamel)
+	tpl := fmt.Sprintf("{{define \"%s\"}}\n{{$preComma:=newPreComma}}\n update `%s` set %s where `%s`=:%s;\n{{end}}\n", sqlTplDefine.Name, table.TableName, updateTpl, table.PrimaryKey, table.PrimaryKeyCamel())
+	sqlTplDefine.TPL = tpl
 	return
 }
 
-func TplDel(table *Table) (tpl string) {
-	blockName := "Del"
-	tpl = fmt.Sprintf("{{define \"%s\"}}\nupdate `%s` set `%s`={{currentTime}} where `%s`=:%s;\n{{end}}\n", blockName, table.TableName, table.DeleteAtColumn, table.PrimaryKey, table.PrimaryKeyCamel)
+func TplDel(table *Table) (sqlTplDefine *SQLTPLDefine) {
+	sqlTplDefine = &SQLTPLDefine{}
+	sqlTplDefine.Name = "Del"
+	tpl := fmt.Sprintf("{{define \"%s\"}}\nupdate `%s` set `%s`={{currentTime}} where `%s`=:%s;\n{{end}}\n", sqlTplDefine.Name, table.TableName, table.DeleteColumn, table.PrimaryKey, table.PrimaryKeyCamel())
+	sqlTplDefine.TPL = tpl
 	return
 }

@@ -1,7 +1,7 @@
 package example
 
 	
-	type API struct{
+	type APIModel struct{
 		 
 		// api 文档标识
 		APIID string  `json:"apiID"` 
@@ -37,10 +37,19 @@ package example
 		DeletedAt string  `json:"deletedAt"` 
 		
 	}
+	func (t *APIModel) TableName()string{
+		return "t_api"
+	}
+	func (t *APIModel) PrimaryKey()string{
+		return "api_id"
+	}
+	func (t *APIModel) PrimaryKeyCamel()string{
+		return "APIID"
+	}
 	
 
 	
-	type Example struct{
+	type ExampleModel struct{
 		 
 		// 测试用例标识
 		ExampleID string  `json:"exampleID"` 
@@ -76,10 +85,19 @@ package example
 		DeletedAt string  `json:"deletedAt"` 
 		
 	}
+	func (t *ExampleModel) TableName()string{
+		return "t_example"
+	}
+	func (t *ExampleModel) PrimaryKey()string{
+		return "example_id"
+	}
+	func (t *ExampleModel) PrimaryKeyCamel()string{
+		return "ExampleID"
+	}
 	
 
 	
-	type Markdown struct{
+	type MarkdownModel struct{
 		 
 		// markdown 文档标识
 		MarkdownID string  `json:"markdownID"` 
@@ -103,7 +121,7 @@ package example
 		Content string  `json:"content"` 
 		 
 		// 作者ID
-		OwnerID int64  `json:"ownerID"` 
+		OwnerID int  `json:"ownerID"` 
 		 
 		// 作者名称
 		OwnerName string  `json:"ownerName"` 
@@ -118,66 +136,75 @@ package example
 		DeletedAt string  `json:"deletedAt"` 
 		
 	}
+	func (t *MarkdownModel) TableName()string{
+		return "t_markdown"
+	}
+	func (t *MarkdownModel) PrimaryKey()string{
+		return "markdown_id"
+	}
+	func (t *MarkdownModel) PrimaryKeyCamel()string{
+		return "MarkdownID"
+	}
 	
 
 	
 	const (
 		
-			PARAMETER_ALLOW_EMPTY_VALUE_FALSE="false"
+			T_PARAMETER_ALLOW_EMPTY_VALUE_FALSE="false"
 		
-			PARAMETER_ALLOW_EMPTY_VALUE_TRUE="true"
+			T_PARAMETER_ALLOW_EMPTY_VALUE_TRUE="true"
 		
-			PARAMETER_ALLOW_RESERVED_FALSE="false"
+			T_PARAMETER_ALLOW_RESERVED_FALSE="false"
 		
-			PARAMETER_ALLOW_RESERVED_TRUE="true"
+			T_PARAMETER_ALLOW_RESERVED_TRUE="true"
 		
-			PARAMETER_DEPRECATED_FALSE="false"
+			T_PARAMETER_DEPRECATED_FALSE="false"
 		
-			PARAMETER_DEPRECATED_TRUE="true"
+			T_PARAMETER_DEPRECATED_TRUE="true"
 		
-			PARAMETER_EXPLODE_FALSE="false"
+			T_PARAMETER_EXPLODE_FALSE="false"
 		
-			PARAMETER_EXPLODE_TRUE="true"
+			T_PARAMETER_EXPLODE_TRUE="true"
 		
-			PARAMETER_METHOD_DELETE="delete"
+			T_PARAMETER_METHOD_DELETE="delete"
 		
-			PARAMETER_METHOD_GET="get"
+			T_PARAMETER_METHOD_GET="get"
 		
-			PARAMETER_METHOD_HEAD="head"
+			T_PARAMETER_METHOD_HEAD="head"
 		
-			PARAMETER_METHOD_POST="post"
+			T_PARAMETER_METHOD_POST="post"
 		
-			PARAMETER_METHOD_PUT="put"
+			T_PARAMETER_METHOD_PUT="put"
 		
-			PARAMETER_POSITION_=""
+			T_PARAMETER_POSITION_=""
 		
-			PARAMETER_POSITION_BODY="body"
+			T_PARAMETER_POSITION_BODY="body"
 		
-			PARAMETER_POSITION_COOKIE="cookie"
+			T_PARAMETER_POSITION_COOKIE="cookie"
 		
-			PARAMETER_POSITION_HEAD="head"
+			T_PARAMETER_POSITION_HEAD="head"
 		
-			PARAMETER_POSITION_PATH="path"
+			T_PARAMETER_POSITION_PATH="path"
 		
-			PARAMETER_POSITION_QUERY="query"
+			T_PARAMETER_POSITION_QUERY="query"
 		
-			PARAMETER_REQUIRED_FALSE="false"
+			T_PARAMETER_REQUIRED_FALSE="false"
 		
-			PARAMETER_REQUIRED_TRUE="true"
+			T_PARAMETER_REQUIRED_TRUE="true"
 		
-			PARAMETER_TYPE_ARRAY="array"
+			T_PARAMETER_TYPE_ARRAY="array"
 		
-			PARAMETER_TYPE_INT="int"
+			T_PARAMETER_TYPE_INT="int"
 		
-			PARAMETER_TYPE_NUMBER="number"
+			T_PARAMETER_TYPE_NUMBER="number"
 		
-			PARAMETER_TYPE_OBJECT="object"
+			T_PARAMETER_TYPE_OBJECT="object"
 		
-			PARAMETER_TYPE_STRING="string"
+			T_PARAMETER_TYPE_STRING="string"
 		
 		)
 	
-	type Parameter struct{
+	type ParameterModel struct{
 		 
 		// 参数标识
 		ParameterID string  `json:"parameterID"` 
@@ -249,10 +276,19 @@ package example
 		DeletedAt string  `json:"deletedAt"` 
 		
 	}
+	func (t *ParameterModel) TableName()string{
+		return "t_parameter"
+	}
+	func (t *ParameterModel) PrimaryKey()string{
+		return "parameter_id"
+	}
+	func (t *ParameterModel) PrimaryKeyCamel()string{
+		return "ParameterID"
+	}
 	
 
 	
-	type Server struct{
+	type ServerModel struct{
 		 
 		// 服务标识
 		ServerID string  `json:"serverID"` 
@@ -282,10 +318,19 @@ package example
 		DeletedAt string  `json:"deletedAt"` 
 		
 	}
+	func (t *ServerModel) TableName()string{
+		return "t_server"
+	}
+	func (t *ServerModel) PrimaryKey()string{
+		return "server_id"
+	}
+	func (t *ServerModel) PrimaryKeyCamel()string{
+		return "ServerID"
+	}
 	
 
 	
-	type Service struct{
+	type ServiceModel struct{
 		 
 		// 服务标识
 		ServiceID string  `json:"serviceID"` 
@@ -324,62 +369,71 @@ package example
 		DeletedAt string  `json:"deletedAt"` 
 		
 	}
+	func (t *ServiceModel) TableName()string{
+		return "t_service"
+	}
+	func (t *ServiceModel) PrimaryKey()string{
+		return "service_id"
+	}
+	func (t *ServiceModel) PrimaryKeyCamel()string{
+		return "ServiceID"
+	}
 	
 
 	
 	const (
 		
-			VALIDATE_SCHEMA_ALLOW_EMPTY_VALUE_FALSE="false"
+			T_VALIDATE_SCHEMA_ALLOW_EMPTY_VALUE_FALSE="false"
 		
-			VALIDATE_SCHEMA_ALLOW_EMPTY_VALUE_TRUE="true"
+			T_VALIDATE_SCHEMA_ALLOW_EMPTY_VALUE_TRUE="true"
 		
-			VALIDATE_SCHEMA_ALLOW_RESERVED_FALSE="false"
+			T_VALIDATE_SCHEMA_ALLOW_RESERVED_FALSE="false"
 		
-			VALIDATE_SCHEMA_ALLOW_RESERVED_TRUE="true"
+			T_VALIDATE_SCHEMA_ALLOW_RESERVED_TRUE="true"
 		
-			VALIDATE_SCHEMA_DEPRECATED_FALSE="false"
+			T_VALIDATE_SCHEMA_DEPRECATED_FALSE="false"
 		
-			VALIDATE_SCHEMA_DEPRECATED_TRUE="true"
+			T_VALIDATE_SCHEMA_DEPRECATED_TRUE="true"
 		
-			VALIDATE_SCHEMA_EXCLUSIVE_MAXIMUM_FALSE="false"
+			T_VALIDATE_SCHEMA_EXCLUSIVE_MAXIMUM_FALSE="false"
 		
-			VALIDATE_SCHEMA_EXCLUSIVE_MAXIMUM_TRUE="true"
+			T_VALIDATE_SCHEMA_EXCLUSIVE_MAXIMUM_TRUE="true"
 		
-			VALIDATE_SCHEMA_EXCLUSIVE_MINIMUM_FALSE="false"
+			T_VALIDATE_SCHEMA_EXCLUSIVE_MINIMUM_FALSE="false"
 		
-			VALIDATE_SCHEMA_EXCLUSIVE_MINIMUM_TRUE="true"
+			T_VALIDATE_SCHEMA_EXCLUSIVE_MINIMUM_TRUE="true"
 		
-			VALIDATE_SCHEMA_NULLABLE_FALSE="false"
+			T_VALIDATE_SCHEMA_NULLABLE_FALSE="false"
 		
-			VALIDATE_SCHEMA_NULLABLE_TRUE="true"
+			T_VALIDATE_SCHEMA_NULLABLE_TRUE="true"
 		
-			VALIDATE_SCHEMA_READ_ONLY_FALSE="false"
+			T_VALIDATE_SCHEMA_READ_ONLY_FALSE="false"
 		
-			VALIDATE_SCHEMA_READ_ONLY_TRUE="true"
+			T_VALIDATE_SCHEMA_READ_ONLY_TRUE="true"
 		
-			VALIDATE_SCHEMA_REQUIRED_FALSE="false"
+			T_VALIDATE_SCHEMA_REQUIRED_FALSE="false"
 		
-			VALIDATE_SCHEMA_REQUIRED_TRUE="true"
+			T_VALIDATE_SCHEMA_REQUIRED_TRUE="true"
 		
-			VALIDATE_SCHEMA_TYPE_ARRAY="array"
+			T_VALIDATE_SCHEMA_TYPE_ARRAY="array"
 		
-			VALIDATE_SCHEMA_TYPE_INTEGER="integer"
+			T_VALIDATE_SCHEMA_TYPE_INTEGER="integer"
 		
-			VALIDATE_SCHEMA_TYPE_OBJECT="object"
+			T_VALIDATE_SCHEMA_TYPE_OBJECT="object"
 		
-			VALIDATE_SCHEMA_TYPE_STRING="string"
+			T_VALIDATE_SCHEMA_TYPE_STRING="string"
 		
-			VALIDATE_SCHEMA_UNIQUE_ITEMS_FALSE="false"
+			T_VALIDATE_SCHEMA_UNIQUE_ITEMS_FALSE="false"
 		
-			VALIDATE_SCHEMA_UNIQUE_ITEMS_TRUE="true"
+			T_VALIDATE_SCHEMA_UNIQUE_ITEMS_TRUE="true"
 		
-			VALIDATE_SCHEMA_WRITE_ONLY_FALSE="false"
+			T_VALIDATE_SCHEMA_WRITE_ONLY_FALSE="false"
 		
-			VALIDATE_SCHEMA_WRITE_ONLY_TRUE="true"
+			T_VALIDATE_SCHEMA_WRITE_ONLY_TRUE="true"
 		
 		)
 	
-	type ValidateSchema struct{
+	type ValidateSchemaModel struct{
 		 
 		// api schema 标识
 		ValidateSchemaID string  `json:"validateSchemaID"` 
@@ -424,43 +478,43 @@ package example
 		Nullable string  `json:"nullable"` 
 		 
 		// 倍数
-		MultipleOf int64  `json:"multipleOf"` 
+		MultipleOf int  `json:"multipleOf"` 
 		 
 		// 最大值
-		Maxnum int64  `json:"maxnum"` 
+		Maxnum int  `json:"maxnum"` 
 		 
 		// 是否不包含最大项
 		ExclusiveMaximum string  `json:"exclusiveMaximum"` 
 		 
 		// 最小值
-		Minimum int64  `json:"minimum"` 
+		Minimum int  `json:"minimum"` 
 		 
 		// 是否不包含最小项
 		ExclusiveMinimum string  `json:"exclusiveMinimum"` 
 		 
 		// 最大长度
-		MaxLength int64  `json:"maxLength"` 
+		MaxLength int  `json:"maxLength"` 
 		 
 		// 最小长度
-		MinLength int64  `json:"minLength"` 
+		MinLength int  `json:"minLength"` 
 		 
 		// 正则表达式
 		Pattern string  `json:"pattern"` 
 		 
 		// 最大项数
-		MaxItems int64  `json:"maxItems"` 
+		MaxItems int  `json:"maxItems"` 
 		 
 		// 最小项数
-		MinItems int64  `json:"minItems"` 
+		MinItems int  `json:"minItems"` 
 		 
 		// 所有项是否需要唯一
 		UniqueItems string  `json:"uniqueItems"` 
 		 
 		// 最多属性项
-		MaxProperties int64  `json:"maxProperties"` 
+		MaxProperties int  `json:"maxProperties"` 
 		 
 		// 最少属性项
-		MinProperties int64  `json:"minProperties"` 
+		MinProperties int  `json:"minProperties"` 
 		 
 		// 所有
 		AllOf string  `json:"allOf"` 
@@ -516,5 +570,14 @@ package example
 		// 简介
 		Summary string  `json:"summary"` 
 		
+	}
+	func (t *ValidateSchemaModel) TableName()string{
+		return "t_validate_schema"
+	}
+	func (t *ValidateSchemaModel) PrimaryKey()string{
+		return "validate_schema_id"
+	}
+	func (t *ValidateSchemaModel) PrimaryKeyCamel()string{
+		return "ValidateSchemaID"
 	}
 	
