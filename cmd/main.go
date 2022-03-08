@@ -229,7 +229,7 @@ func GenerateEntity(rep *gqt.Repository, sqlTplDefineList []*gqttool.SQLTPLDefin
 	if err != nil {
 		return
 	}
-	tableCfg, err := rep.GetConfig()
+	tableCfg, err := gqttool.GetRepositoryConfig(rep)
 	if err != nil {
 		return
 	}
@@ -275,7 +275,7 @@ func GenerateCrud(rep *gqt.Repository) (sqlTplNamespaceList []*gqttool.SQLTplNam
 	if err != nil {
 		return
 	}
-	repCfg, err := rep.GetConfig()
+	repCfg, err := gqttool.GetRepositoryConfig(rep)
 	if err != nil {
 		return nil, err
 	}
@@ -292,7 +292,10 @@ func GenerateCrud(rep *gqt.Repository) (sqlTplNamespaceList []*gqttool.SQLTplNam
 	for _, table := range tableList {
 		sqlTplNamespace := &gqttool.SQLTplNamespace{}
 		sqlTplNamespace.Namespace = table.TableNameCamel()
-		sqlTplDefineList := gqttool.Crud(table)
+		sqlTplDefineList, err := gqttool.Crud(table, rep)
+		if err != nil {
+			return nil, err
+		}
 		sqlTplNamespace.Defines = append(sqlTplNamespace.Defines, sqlTplDefineList...)
 		sqlTplNamespaceList = append(sqlTplNamespaceList, sqlTplNamespace)
 	}
@@ -304,7 +307,7 @@ func GenerateTableModel(rep *gqt.Repository) (modelStructList []*gqttool.ModelSt
 	if err != nil {
 		return
 	}
-	repCfg, err := rep.GetConfig()
+	repCfg, err := gqttool.GetRepositoryConfig(rep)
 	if err != nil {
 		return
 	}

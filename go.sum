@@ -1,6 +1,5 @@
 cloud.google.com/go v0.26.0/go.mod h1:aQUYkXzVsufM+DwF1aE+0xfcU+56JwCaLick0ClmMTw=
 cloud.google.com/go v0.34.0/go.mod h1:aQUYkXzVsufM+DwF1aE+0xfcU+56JwCaLick0ClmMTw=
-github.com/BurntSushi/toml v0.3.1 h1:WXkYYl6Yr3qBf1K79EBnL4mak0OimBfB0XUf9Vl28OQ=
 github.com/BurntSushi/toml v0.3.1/go.mod h1:xHWCNGjB5oqiDr8zfno3MHue2Ht5sIBksp03qcyfWMU=
 github.com/BurntSushi/toml v1.0.0 h1:dtDWrepsVPfW9H/4y7dDgFc2MBUSeJhlaDtK13CxFlU=
 github.com/BurntSushi/toml v1.0.0/go.mod h1:CxXYINrC8qIiEnFrOxCa7Jy5BFHlXnUU2pbicEuybxQ=
@@ -246,10 +245,6 @@ github.com/suifengpiao14/ddl-executor v0.0.0-20220226101520-ad1851f61cf7 h1:dzrP
 github.com/suifengpiao14/ddl-executor v0.0.0-20220226101520-ad1851f61cf7/go.mod h1:uEecs69IKjDiKwEczboNG1qOzoFeenUEEKYPjOGgfHI=
 github.com/suifengpiao14/errorformatter v0.0.0-20220214013820-e0177a90fb70 h1:dFguNu7VIZMpcsAybswvo4TVN+uKCmtadpoyZf0WNiE=
 github.com/suifengpiao14/errorformatter v0.0.0-20220214013820-e0177a90fb70/go.mod h1:d4GXPUb6d5XkO5+uuiLsw85g+S/fyv/JsbHtGIptZGY=
-github.com/suifengpiao14/gqt/v2 v2.0.0-20220306110814-7b5efd3ef284 h1:svHAynuptIe6vex3SLFT0FAHz4ZVF1zbsQnfWpxyiWg=
-github.com/suifengpiao14/gqt/v2 v2.0.0-20220306110814-7b5efd3ef284/go.mod h1:v7zsMmuAmhR19dVqaUnhOCPPGSKGOLVRMluxD4Ubz4Y=
-github.com/suifengpiao14/gqt/v2 v2.0.0-20220307154746-c08028c059d4 h1:OLcBSxT2tAfbXNVKH2h6fOMssDwSEvjgFP6ql/rZmIA=
-github.com/suifengpiao14/gqt/v2 v2.0.0-20220307154746-c08028c059d4/go.mod h1:+qT6n/eV3ytgWqZLLB/YOLZkumki20JvViYAyQIWlps=
 github.com/suifengpiao14/gqt/v2 v2.0.0-20220308030727-4de9532777a4 h1:XRAFLV67O9JZEsU102LNs00JEnLDUuGcDtFyAwmw7UU=
 github.com/suifengpiao14/gqt/v2 v2.0.0-20220308030727-4de9532777a4/go.mod h1:+qT6n/eV3ytgWqZLLB/YOLZkumki20JvViYAyQIWlps=
 github.com/tiancaiamao/appdash v0.0.0-20181126055449-889f96f722a2/go.mod h1:2PfKggNGDuadAa0LElHrByyrz4JPZ9fFx6Gs7nx7ZZU=
@@ -415,7 +410,6 @@ gopkg.in/yaml.v2 v2.4.0/go.mod h1:RDklbk79AGWmwhnvt/jBztapEOGDOx6ZbXqjP6csGnQ=
 gopkg.in/yaml.v3 v3.0.0-20200313102051-9f266ea9e77c/go.mod h1:K4uyk7z7BCEPqu6E+C64Yfv1cQ7kz7rIZviUmN+EgEM=
 gopkg.in/yaml.v3 v3.0.0-20200615113413-eeeca48fe776 h1:tQIYjPdBoyREyB9XMu+nnTclpTYkz2zFM+lzLJFO4gQ=
 gopkg.in/yaml.v3 v3.0.0-20200615113413-eeeca48fe776/go.mod h1:K4uyk7z7BCEPqu6E+C64Yfv1cQ7kz7rIZviUmN+EgEM=
-gorm.io/gorm v1.22.5/go.mod h1:l2lP/RyAtc1ynaTjFksBde/O8v9oOGIApu2/xRitmZk=
 gorm.io/gorm v1.23.2 h1:xmq9QRMWL8HTJyhAUBXy8FqIIQCYESeKfJL4DoGKiWQ=
 gorm.io/gorm v1.23.2/go.mod h1:l2lP/RyAtc1ynaTjFksBde/O8v9oOGIApu2/xRitmZk=
 honnef.co/go/tools v0.0.0-20180728063816-88497007e858/go.mod h1:rf3lG4BRIbNafJWhAfAdb/ePZxsR/4RtNHQocxwk9r4=

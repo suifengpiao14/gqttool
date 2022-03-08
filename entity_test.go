@@ -3,8 +3,6 @@ package gqttool
 import (
 	"fmt"
 	"testing"
-
-	"github.com/suifengpiao14/gqt/v2"
 )
 
 func TestParsSqlTplVariable(t *testing.T) {
@@ -84,7 +82,7 @@ func TestParseSQLTPLTableName(t *testing.T) {
 func TestRepositoryEntity(t *testing.T) {
 	ddlSqlTpl := ddlSqlTplData()
 	ddlList := []string{ddlSqlTpl.DDL}
-	cfg := &gqt.Config{}
+	cfg := &RepositoryConfig{}
 	tableList, err := GenerateTable(ddlList, cfg)
 	if err != nil {
 		panic(err)

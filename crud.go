@@ -3,21 +3,57 @@ package gqttool
 import (
 	"fmt"
 	"strings"
+
+	"github.com/suifengpiao14/gqt/v2"
 )
 
 func Backquote(s string) (out string) {
 	out = fmt.Sprintf("`%s`", s)
 	return
 }
-func Crud(table *Table) (sqlTplDefines []*SQLTPLDefine) { // list 保证后面输出顺序
+
+var MetaTplDel = "metaTplDel"
+
+func Crud(table *Table, repo *gqt.Repository) (sqlTplDefines []*SQLTPLDefine, err error) { // list 保证后面输出顺序
+	delSqlTplDefine, err := GetMetaTpl(MetaTplDel, table, repo)
+	if err != nil {
+		return
+	}
 	sqlTplDefines = make([]*SQLTPLDefine, 0)
 	sqlTplDefines = append(sqlTplDefines, TplGetByPrimaryKey(table))
 	sqlTplDefines = append(sqlTplDefines, TplTotal(table))
 	sqlTplDefines = append(sqlTplDefines, TplPaginate(table))
 	sqlTplDefines = append(sqlTplDefines, TplInsert(table))
 	sqlTplDefines = append(sqlTplDefines, TplUpdate(table))
-	sqlTplDefines = append(sqlTplDefines, TplDel(table))
+	if delSqlTplDefine == nil {
+		delSqlTplDefine = TplDel(table)
+	}
+	sqlTplDefines = append(sqlTplDefines, delSqlTplDefine)
 
+	return
+}
+
+func GetMetaTpl(metaTplName string, table *Table, repo *gqt.Repository) (sqlTplDefine *SQLTPLDefine, err error) {
+	ddlNamespace, tmpErr := repo.GetDDLNamespace()
+	if tmpErr != nil { // 不存在忽略
+		return
+	}
+	metaTplMap, err := repo.GetMetaTpl(table)
+	if err != nil {
+		return
+	}
+	fullname := fmt.Sprintf("%s.%s", ddlNamespace, metaTplName)
+	metatpl, ok := metaTplMap[fullname]
+	if !ok {
+		return
+	}
+
+	sqlTplDefine = &SQLTPLDefine{
+		Name:          metaTplName,
+		FullNameCamel: fmt.Sprintf("%s%s", ToCamel(ddlNamespace), ToCamel(metaTplName)),
+		Namespace:     ddlNamespace,
+		TPL:           metatpl,
+	}
 	return
 }
 

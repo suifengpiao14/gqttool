@@ -9,14 +9,24 @@ import (
 
 func TestCrud(t *testing.T) {
 	ddlList := GetDDL()
-	tableCfg := &gqt.Config{}
+	tableCfg := &RepositoryConfig{}
+	repo := gqt.NewRepository()
+	err := repo.AddByDir("example", gqt.TemplatefuncMap)
+	if err != nil {
+		panic(err)
+	}
 	tables, err := GenerateTable(ddlList, tableCfg)
 	if err != nil {
 		panic(err)
 	}
 	for _, table := range tables {
-		tplMap := Crud(table)
-		fmt.Println(tplMap)
+		tplDefineList, err := Crud(table, repo)
+		if err != nil {
+			panic(err)
+		}
+		for _, tplDefine := range tplDefineList {
+			fmt.Println(tplDefine.TPL)
+		}
 	}
 
 }

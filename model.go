@@ -6,6 +6,7 @@ import (
 	"strings"
 	"text/template"
 
+	"github.com/BurntSushi/toml"
 	"github.com/pkg/errors"
 	"github.com/suifengpiao14/gqt/v2"
 
@@ -103,7 +104,7 @@ type Column struct {
 
 // IsDefaultValueCurrentTimestamp 判断默认值是否为自动填充时间
 func (c *Column) IsDefaultValueCurrentTimestamp() bool {
-	return strings.ToLower(c.DefaultValue) == DEFAULT_VALUE_CURRENT_TIMESTAMP
+	return strings.Contains(strings.ToLower(c.DefaultValue), DEFAULT_VALUE_CURRENT_TIMESTAMP) // 测试发现有 current_timestamp() 情况
 }
 
 type Table struct {
@@ -118,11 +119,15 @@ type Table struct {
 
 //CamelName 删除表前缀，转换成 camel 格式
 func (t *Table) TableNameCamel() (camelName string) {
-	name := t.TableName
+	name := t.TableNameTrimPrefix()
+	camelName = ToCamel(name)
+	return
+}
+func (t *Table) TableNameTrimPrefix() (name string) {
+	name = t.TableName
 	if t.TablePrefix != "" {
 		name = strings.TrimLeft(name, t.TablePrefix)
 	}
-	camelName = ToCamel(name)
 	return
 }
 func (t *Table) PrimaryKeyCamel() (camelName string) {
@@ -204,7 +209,7 @@ func GenerateModel(tableList []*Table) (modelStructList []*ModelStruct, err erro
 	return
 }
 
-func GenerateTable(ddlList []string, tableCfg *gqt.Config) (tables []*Table, err error) {
+func GenerateTable(ddlList []string, tableCfg *RepositoryConfig) (tables []*Table, err error) {
 	tables = make([]*Table, 0)
 	conf := executor.NewDefaultConfig()
 	inst := executor.NewExecutor(conf)
@@ -268,7 +273,7 @@ func GenerateTable(ddlList []string, tableCfg *gqt.Config) (tables []*Table, err
 				OnUpdate:      columnDef.OnUpdate,
 			}
 			if len(columnDef.Elems) > 0 {
-				prefix := fmt.Sprintf("%s_%s", tableName, columnPt.Name)
+				prefix := fmt.Sprintf("%s_%s", table.TableNameTrimPrefix(), columnPt.Name)
 				subEnumConst := enumsConst(prefix, columnDef.Elems)
 				for key, val := range subEnumConst {
 					table.EnumsConst[key] = val
@@ -294,6 +299,34 @@ func enumsConst(prefix string, enums []string) (enumsConst map[string]string) {
 		enumsConst[name] = enum
 	}
 
+	return
+}
+
+type RepositoryConfig struct {
+	TablePrefix     string `toml:"tablePrefix"`
+	ColumnPrefix    string `toml:"columnPrefix"`
+	DeletedAtColumn string `toml:"deletedAtColumn"`
+	DelTPL          string `toml:"delTpl"`
+}
+
+func GetRepositoryConfig(r *gqt.Repository) (config *RepositoryConfig, err error) {
+	config = &RepositoryConfig{}
+	ddlNamespace, err := r.GetDDLNamespace()
+	if err != nil {
+		return
+	}
+	fullname := fmt.Sprintf("%s.%s", ddlNamespace, "config")
+	tomlStr, err := r.Parse(fullname, nil)
+	if err != nil {
+		return
+	}
+	if tomlStr == "" {
+		return
+	}
+	_, err = toml.Decode(tomlStr, config)
+	if err != nil {
+		return
+	}
 	return
 }
 
