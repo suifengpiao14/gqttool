@@ -16,9 +16,9 @@ type RepositoryMeta struct {
 }
 
 type Config struct {
-	TablePrefix     string `toml:"tablePrefix"`
-	ColumnPrefix    string `toml:"columnPrefix"`
-	DeletedAtColumn string `toml:"deletedAtColumn"`
+	TablePrefix     string `json:"tablePrefix"`
+	ColumnPrefix    string `json:"columnPrefix"`
+	DeletedAtColumn string `json:"deletedAtColumn"`
 }
 
 var MetaSuffix = ".meta.tpl"
