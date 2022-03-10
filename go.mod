@@ -13,8 +13,7 @@ require (
 )
 
 require (
-	github.com/BurntSushi/toml v1.0.0
-	github.com/cespare/xxhash v1.1.0 // indirect
+	github.com/BurntSushi/toml v1.0.0 // indirect
 	github.com/cznic/mathutil v0.0.0-20181122101859-297441e03548 // indirect
 	github.com/pingcap/errors v0.11.4 // indirect
 	github.com/pingcap/parser v3.1.2+incompatible // indirect
@@ -24,7 +23,5 @@ require (
 	github.com/sirupsen/logrus v1.8.1 // indirect
 	github.com/yusufpapurcu/wmi v1.2.2 // indirect
 	goa.design/goa/v3 v3.6.1
-	golang.org/x/net v0.0.0-20220225172249-27dd8689420f // indirect
-	google.golang.org/genproto v0.0.0-20220304144024-325a89244dc8 // indirect
 	gorm.io/gorm v1.23.2 // indirect
 )
