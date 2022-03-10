@@ -156,7 +156,7 @@ func TplUpdate(table *Table) (sqlTplDefine *SQLTPLDefine) {
 func TplDel(table *Table) (sqlTplDefine *SQLTPLDefine) {
 	sqlTplDefine = &SQLTPLDefine{}
 	sqlTplDefine.Name = "Del"
-	tpl := fmt.Sprintf("{{define \"%s\"}}\nupdate `%s` set `%s`={{currentTime}} where `%s`=:%s;\n{{end}}\n", sqlTplDefine.Name, table.TableName, table.DeleteColumn, table.PrimaryKey, table.PrimaryKeyCamel())
+	tpl := fmt.Sprintf("{{define \"%s\"}}\nupdate `%s` set `%s`={{currentTime .}} where `%s`=:%s;\n{{end}}\n", sqlTplDefine.Name, table.TableName, table.DeleteColumn, table.PrimaryKey, table.PrimaryKeyCamel())
 	sqlTplDefine.TPL = tpl
 	return
 }
