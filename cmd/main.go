@@ -76,7 +76,7 @@ func main() {
 }
 
 func runCmdModel(ddlFile string, modelFile string, force bool) (err error) {
-	repo := gqt.NewRepository()
+	repo := gqttool.NewRepositoryMeta()
 	errChain := errorformatter.NewErrorChain()
 	var content string
 	var modelStructList gqttool.ModelStructList
@@ -114,7 +114,7 @@ func runCmdModel(ddlFile string, modelFile string, force bool) (err error) {
 }
 
 func runCmdCrud(ddlFile string, dstDir string, force bool) (err error) {
-	repo := gqt.NewRepository()
+	repo := gqttool.NewRepositoryMeta()
 	errChain := errorformatter.NewErrorChain()
 	var content string
 	var sqlTplNamespaceList []*gqttool.SQLTplNamespace
@@ -143,7 +143,7 @@ func runCmdCrud(ddlFile string, dstDir string, force bool) (err error) {
 }
 
 func runCmdEntity(sqlTplDir string, entityFilename string, force bool) (err error) {
-	repo := gqt.NewRepository()
+	repo := gqttool.NewRepositoryMeta()
 	errChain := errorformatter.NewErrorChain()
 	var entityList = make([]string, 0)
 	var sqlTplDefineList = make([]*gqttool.SQLTPLDefine, 0)
@@ -223,19 +223,19 @@ func IsExist(path string) bool {
 	return true
 }
 
-func GenerateEntity(rep *gqt.Repository, sqlTplDefineList []*gqttool.SQLTPLDefine) (entityList []string, err error) {
+func GenerateEntity(rep *gqttool.RepositoryMeta, sqlTplDefineList []*gqttool.SQLTPLDefine) (entityList []string, err error) {
 	entityList = make([]string, 0)
-	ddlMap, err := rep.GetDDLSQL()
+	ddlDefineList, err := rep.GetDDLDefineResult()
 	if err != nil {
 		return
 	}
-	tableCfg, err := gqttool.GetRepositoryConfig(rep)
+	tableCfg, err := rep.GetConfig()
 	if err != nil {
 		return
 	}
 	ddlList := make([]string, 0)
-	for _, ddl := range ddlMap {
-		ddlList = append(ddlList, ddl)
+	for _, ddlDefine := range ddlDefineList {
+		ddlList = append(ddlList, ddlDefine.Output)
 	}
 	tableList, err := gqttool.GenerateTable(ddlList, tableCfg)
 	if err != nil {
@@ -270,18 +270,18 @@ func GenerateEntity(rep *gqt.Repository, sqlTplDefineList []*gqttool.SQLTPLDefin
 	return
 }
 
-func GenerateCrud(rep *gqt.Repository) (sqlTplNamespaceList []*gqttool.SQLTplNamespace, err error) {
-	ddlMap, err := rep.GetDDLSQL()
+func GenerateCrud(rep *gqttool.RepositoryMeta) (sqlTplNamespaceList []*gqttool.SQLTplNamespace, err error) {
+	ddlDefineList, err := rep.GetDDLDefineResult()
 	if err != nil {
 		return
 	}
-	repCfg, err := gqttool.GetRepositoryConfig(rep)
+	repCfg, err := rep.GetConfig()
 	if err != nil {
 		return nil, err
 	}
 	ddlList := make([]string, 0)
-	for _, ddl := range ddlMap {
-		ddlList = append(ddlList, ddl)
+	for _, ddlDefine := range ddlDefineList {
+		ddlList = append(ddlList, ddlDefine.Output)
 	}
 	tableList, err := gqttool.GenerateTable(ddlList, repCfg)
 	if err != nil {
@@ -302,18 +302,18 @@ func GenerateCrud(rep *gqt.Repository) (sqlTplNamespaceList []*gqttool.SQLTplNam
 
 	return
 }
-func GenerateTableModel(rep *gqt.Repository) (modelStructList []*gqttool.ModelStruct, err error) {
-	ddlMap, err := rep.GetDDLSQL()
+func GenerateTableModel(rep *gqttool.RepositoryMeta) (modelStructList []*gqttool.ModelStruct, err error) {
+	ddlDefineList, err := rep.GetDDLDefineResult()
 	if err != nil {
 		return
 	}
-	repCfg, err := gqttool.GetRepositoryConfig(rep)
+	repCfg, err := rep.GetConfig()
 	if err != nil {
 		return
 	}
 	ddlList := make([]string, 0)
-	for _, ddl := range ddlMap {
-		ddlList = append(ddlList, ddl)
+	for _, ddlDefine := range ddlDefineList {
+		ddlList = append(ddlList, ddlDefine.Output)
 	}
 	tableList, err := gqttool.GenerateTable(ddlList, repCfg)
 	if err != nil {

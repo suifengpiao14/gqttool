@@ -11,6 +11,7 @@ import (
 
 	"github.com/pkg/errors"
 	"github.com/suifengpiao14/gqt/v2"
+	gqtpkg "github.com/suifengpiao14/gqt/v2/pkg"
 )
 
 type EntityElement struct {
@@ -113,15 +114,11 @@ type SQLTPLDefine struct {
 }
 
 func ParseDirSqlTplDefine(sqlTplDir string) (sqlTplDefineList []*SQLTPLDefine, err error) {
-	allFileList, err := gqt.GetTplFilesByDir(sqlTplDir)
+	allFileList, err := gqtpkg.GetTplFilesByDir(sqlTplDir, gqt.SQLSuffix)
 	if err != nil {
 		return
 	}
-	ddlSuffix := fmt.Sprintf("%s%s", gqt.DDLNamespaceSuffix, gqt.Suffix)
 	for _, filename := range allFileList {
-		if strings.HasSuffix(filename, ddlSuffix) { //skep ddl file
-			continue
-		}
 		b, err := os.ReadFile(filename)
 		if err != nil {
 			return nil, err
@@ -132,7 +129,7 @@ func ParseDirSqlTplDefine(sqlTplDir string) (sqlTplDefineList []*SQLTPLDefine, e
 			if err != nil {
 				return nil, err
 			}
-			namespace := gqt.FileName2Namespace(filename, sqlTplDir, gqt.Suffix)
+			namespace := gqtpkg.FileName2Namespace(filename, sqlTplDir, gqt.SQLSuffix)
 			sqlTplDefine := &SQLTPLDefine{
 				Name:          name,
 				FullNameCamel: fmt.Sprintf("%s%s", ToCamel(namespace), ToCamel(name)),
@@ -141,7 +138,6 @@ func ParseDirSqlTplDefine(sqlTplDir string) (sqlTplDefineList []*SQLTPLDefine, e
 			}
 			sqlTplDefineList = append(sqlTplDefineList, sqlTplDefine)
 		}
-
 	}
 	return
 }

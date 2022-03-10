@@ -6,9 +6,7 @@ import (
 	"strings"
 	"text/template"
 
-	"github.com/BurntSushi/toml"
 	"github.com/pkg/errors"
-	"github.com/suifengpiao14/gqt/v2"
 
 	executor "github.com/bytewatch/ddl-executor"
 )
@@ -209,7 +207,7 @@ func GenerateModel(tableList []*Table) (modelStructList []*ModelStruct, err erro
 	return
 }
 
-func GenerateTable(ddlList []string, tableCfg *RepositoryConfig) (tables []*Table, err error) {
+func GenerateTable(ddlList []string, tableCfg *Config) (tables []*Table, err error) {
 	tables = make([]*Table, 0)
 	conf := executor.NewDefaultConfig()
 	inst := executor.NewExecutor(conf)
@@ -299,34 +297,6 @@ func enumsConst(prefix string, enums []string) (enumsConst map[string]string) {
 		enumsConst[name] = enum
 	}
 
-	return
-}
-
-type RepositoryConfig struct {
-	TablePrefix     string `toml:"tablePrefix"`
-	ColumnPrefix    string `toml:"columnPrefix"`
-	DeletedAtColumn string `toml:"deletedAtColumn"`
-	DelTPL          string `toml:"delTpl"`
-}
-
-func GetRepositoryConfig(r *gqt.Repository) (config *RepositoryConfig, err error) {
-	config = &RepositoryConfig{}
-	ddlNamespace, err := r.GetDDLNamespace()
-	if err != nil {
-		return
-	}
-	fullname := fmt.Sprintf("%s.%s", ddlNamespace, "config")
-	tomlStr, err := r.Parse(fullname, nil)
-	if err != nil {
-		return
-	}
-	if tomlStr == "" {
-		return
-	}
-	_, err = toml.Decode(tomlStr, config)
-	if err != nil {
-		return
-	}
 	return
 }
 

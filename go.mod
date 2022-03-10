@@ -9,11 +9,12 @@ require (
 	github.com/iancoleman/strcase v0.2.0
 	github.com/pkg/errors v0.9.1
 	github.com/suifengpiao14/errorformatter v0.0.0-20220214013820-e0177a90fb70
-	github.com/suifengpiao14/gqt/v2 v2.0.0-20220308030727-4de9532777a4
+	github.com/suifengpiao14/gqt/v2 v2.0.0-20220309115021-5364d939050b
 )
 
 require (
 	github.com/BurntSushi/toml v1.0.0
+	github.com/cespare/xxhash v1.1.0 // indirect
 	github.com/cznic/mathutil v0.0.0-20181122101859-297441e03548 // indirect
 	github.com/pingcap/errors v0.11.4 // indirect
 	github.com/pingcap/parser v3.1.2+incompatible // indirect
@@ -22,8 +23,8 @@ require (
 	github.com/shirou/gopsutil v3.21.11+incompatible // indirect
 	github.com/sirupsen/logrus v1.8.1 // indirect
 	github.com/yusufpapurcu/wmi v1.2.2 // indirect
-	goa.design/goa/v3 v3.5.5
+	goa.design/goa/v3 v3.6.1
 	golang.org/x/net v0.0.0-20220225172249-27dd8689420f // indirect
-	golang.org/x/sys v0.0.0-20220227234510-4e6760a101f9 // indirect
 	google.golang.org/genproto v0.0.0-20220304144024-325a89244dc8 // indirect
+	gorm.io/gorm v1.23.2 // indirect
 )

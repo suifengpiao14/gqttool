@@ -7,7 +7,7 @@ import (
 
 func TestGenerateTable(t *testing.T) {
 	ddlList := GetDDL()
-	cfg := &RepositoryConfig{}
+	cfg := &Config{}
 	tableList, err := GenerateTable(ddlList, cfg)
 	if err != nil {
 		panic(err)

@@ -82,7 +82,7 @@ func TestParseSQLTPLTableName(t *testing.T) {
 func TestRepositoryEntity(t *testing.T) {
 	ddlSqlTpl := ddlSqlTplData()
 	ddlList := []string{ddlSqlTpl.DDL}
-	cfg := &RepositoryConfig{}
+	cfg := &Config{}
 	tableList, err := GenerateTable(ddlList, cfg)
 	if err != nil {
 		panic(err)

@@ -9,8 +9,8 @@ import (
 
 func TestCrud(t *testing.T) {
 	ddlList := GetDDL()
-	tableCfg := &RepositoryConfig{}
-	repo := gqt.NewRepository()
+	tableCfg := &Config{}
+	repo := NewRepositoryMeta()
 	err := repo.AddByDir("example", gqt.TemplatefuncMap)
 	if err != nil {
 		panic(err)

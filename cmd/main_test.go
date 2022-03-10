@@ -49,7 +49,7 @@ func TestRunCmdCrud(*testing.T) {
 }
 
 func TestGenerateModel(t *testing.T) {
-	repo := gqt.NewRepository()
+	repo := gqttool.NewRepositoryMeta()
 	err := repo.AddByDir("../example/template", gqt.TemplatefuncMap)
 	if err != nil {
 		panic(err)
