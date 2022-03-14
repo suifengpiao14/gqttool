@@ -9,20 +9,20 @@ import (
 	"strings"
 
 	"github.com/iancoleman/strcase"
-	"goa.design/goa/v3/codegen"
+	"github.com/suifengpiao14/gqt/v2/gqttpl"
 )
 
 // 封装 goa.design/goa/v3/codegen 方便后续可定制
 func ToCamel(name string) string {
-	return codegen.CamelCase(name, true, true)
+	return gqttpl.ToCamel(name)
 }
 
 func ToLowerCamel(name string) string {
-	return codegen.CamelCase(name, false, true)
+	return gqttpl.ToLowerCamel(name)
 }
 
 func SnakeCase(name string) string {
-	return codegen.SnakeCase(name)
+	return gqttpl.SnakeCase(name)
 }
 
 func GeneratePackageName(dstDir string) (packageName string, err error) {

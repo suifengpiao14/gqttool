@@ -22,9 +22,9 @@ type EntityElement struct {
 
 //RepositoryEntity 根据数据表ddl和sql tpl 生成 sql tpl 调用的输入、输出实体
 func RepositoryEntity(sqlTplDefine *gqttpl.TPLDefine, tableList []*Table) (entityStruct string, err error) {
-	variableMap := ParsSqlTplVariable(sqlTplDefine.Output)
+	variableMap := ParsSqlTplVariable(sqlTplDefine.Output, sqlTplDefine.Namespace)
 
-	structName := sqlTplDefine.Fullname()
+	structName := sqlTplDefine.FullnameCamel()
 	entityElement := &EntityElement{
 		Tables:      tableList,
 		VariableMap: variableMap,
@@ -202,7 +202,12 @@ func EntityTpl() (tpl string) {
 	tpl = `
 		type {{.StructName}} struct{
 			{{range .Attributes }}
-				{{.Name}} {{.Type}} 
+				{{if  .IsSubDefine}}
+					*{{.Name}}
+				{{else}}
+					{{.Name}} {{.Type}} 
+				{{end}}
+				
 			{{end}}
 		}
 
@@ -215,9 +220,17 @@ func EntityTpl() (tpl string) {
 }
 
 type Variable struct {
-	Name       string
-	Type       string
-	AllowEmpty bool
+	Namespace   string
+	Name        string
+	IsSubDefine bool
+	Type        string
+	AllowEmpty  bool
+}
+
+func (v *Variable) FullnameCamel() (fullnameCamel string) {
+	fullname := fmt.Sprintf("%s_%s", strings.ReplaceAll(v.Namespace, ".", "_"), v.Name)
+	fullnameCamel = ToCamel(fullname)
+	return
 }
 
 type Variables []*Variable
@@ -232,7 +245,7 @@ func (v Variables) Less(i, j int) bool { // 重写 Less() 方法， 从小到大
 	return v[i].Name < v[j].Name
 }
 
-func ParsSqlTplVariable(sqlTpl string) (variableMap map[string]*Variable) {
+func ParsSqlTplVariable(sqlTpl string, namespace string) (variableMap map[string]*Variable) {
 	variableMap = make(map[string]*Variable)
 	byteArr := []byte(sqlTpl)
 	leftDelim := byte('{')
@@ -262,7 +275,9 @@ func ParsSqlTplVariable(sqlTpl string) (variableMap map[string]*Variable) {
 	for _, item := range itemArr {
 		variable, _ := parsePrefixVariable(item, byte('.'))
 		if variable.Name != "" {
+			variable.Namespace = namespace
 			variableMap[variable.Name] = &variable
+
 		}
 
 	}
@@ -276,6 +291,7 @@ func ParsSqlTplVariable(sqlTpl string) (variableMap map[string]*Variable) {
 			break
 		}
 		variableMap[variable.Name] = &variable
+		variable.Namespace = namespace
 		pos += len(variable.Name)
 		byteArr = byteArr[pos:]
 	}
@@ -283,6 +299,20 @@ func ParsSqlTplVariable(sqlTpl string) (variableMap map[string]*Variable) {
 	for name, variable := range limitVariabeMap {
 		variableMap[name] = variable
 	}
+	// parse sub define variable
+	templateNameList := GetTemplateNames(sqlTpl)
+	for _, templateName := range templateNameList {
+		templateName = ToCamel(templateName)
+		variable := &Variable{
+			Namespace:   namespace,
+			Name:        templateName,
+			Type:        "interface{}",
+			IsSubDefine: true,
+			AllowEmpty:  false,
+		}
+		variableMap[templateName] = variable
+	}
+
 	return
 }
 
@@ -362,6 +392,19 @@ func GetDefineName(sqlTpl string) (defineName string, err error) {
 	defineName = string(nameByte)
 	if defineName == "" {
 		err = errors.Errorf("define name is empty")
+	}
+	return
+}
+
+func GetTemplateNames(sqlTpl string) (templateNameList []string) {
+	templateNameList = make([]string, 0)
+	reg := regexp.MustCompile(`\{\{template\W+"(\w+)"`)
+	if reg == nil {
+		panic("regexp err")
+	}
+	matches := reg.FindAllStringSubmatch(sqlTpl, -1)
+	for _, match := range matches {
+		templateNameList = append(templateNameList, match[1])
 	}
 	return
 }

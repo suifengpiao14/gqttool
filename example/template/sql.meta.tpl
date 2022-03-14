@@ -2,6 +2,8 @@
 [[tplGetByPrimaryKey .]]
 
 [[tplPaginateWhere .]]
+
+
 [[tplPaginateTotal .]]
 [[tplPaginate .]]
 

@@ -7,6 +7,12 @@ import (
 	"github.com/suifengpiao14/gqt/v2/gqttpl"
 )
 
+func TestGetTemplateNames(t *testing.T) {
+	sqtTpl := "select count(*) as `count` from `t_example`  where 1=1 {{template \"PaginateWhere\" \".\"}} {{template \"aab\" \".\"}} ;"
+	nameList := GetTemplateNames(sqtTpl)
+	fmt.Println(nameList)
+}
+
 func TestParsSqlTplVariable(t *testing.T) {
 	sqlTpl := `
 {{$preComma:=newPreComma}}
@@ -22,7 +28,7 @@ func TestParsSqlTplVariable(t *testing.T) {
 	 {{if .Variables}} {{in . .List}} {{end}}
        where {{func .Func}} service_id=:ServiceID limit :Offset,:limit;
   `
-	veriableList := ParsSqlTplVariable(sqlTpl)
+	veriableList := ParsSqlTplVariable(sqlTpl, "a")
 	fmt.Println(veriableList)
 }
 
