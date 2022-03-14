@@ -1,34 +1,35 @@
 package gqttool
 
 import (
-	"encoding/json"
 	"fmt"
 	"strings"
 	"text/template"
 
+	"github.com/BurntSushi/toml"
 	"github.com/pkg/errors"
-	"github.com/suifengpiao14/gqt/v2/pkg"
-	gqtpkg "github.com/suifengpiao14/gqt/v2/pkg"
+	"github.com/suifengpiao14/gqt/v2"
+	"github.com/suifengpiao14/gqt/v2/gqttpl"
 )
 
 type RepositoryMeta struct {
 	templates map[string]*template.Template // namespace: template
 }
 
-type Config struct {
+type DatabaseConfig struct {
 	TablePrefix     string `json:"tablePrefix"`
 	ColumnPrefix    string `json:"columnPrefix"`
 	DeletedAtColumn string `json:"deletedAtColumn"`
 }
 
-var MetaSuffix = ".meta.tpl"
-var DDLSuffix = ".ddl.tpl"
-var LeftDelim = "[["
-var RightDelim = "]]"
+var MetaNameSpaceSuffix = gqttpl.MetaNamespaceSuffix
+var MetaLeftDelim = "[["
+var MetaRightDelim = "]]"
+
+var DDLNamespaceSuffix = gqttpl.DDLNamespaceSuffix
+var ConfigNamespaceSuffix = gqttpl.ConfigNamespaceSuffix
 
 // ddl namespace sufix . define name prefix
-var DDLNamespaceSuffix = "ddl"
-var ConfigName = "config"
+var DatabaseConfigName = "database"
 
 func NewRepositoryMeta() *RepositoryMeta {
 	return &RepositoryMeta{
@@ -37,22 +38,30 @@ func NewRepositoryMeta() *RepositoryMeta {
 }
 
 func (r *RepositoryMeta) AddByDir(root string, funcMap template.FuncMap) (err error) {
-	r.templates, err = pkg.AddTemplateByDir(root, MetaSuffix, funcMap, LeftDelim, RightDelim)
+	r.templates, err = gqttpl.AddTemplateByDir(root, MetaNameSpaceSuffix, funcMap, MetaLeftDelim, MetaRightDelim)
 	if err != nil {
 		return
 	}
-	ddlTemplates, err := pkg.AddTemplateByDir(root, DDLSuffix, funcMap, LeftDelim, RightDelim)
+	ddlTemplates, err := gqttpl.AddTemplateByDir(root, DDLNamespaceSuffix, funcMap, gqt.LeftDelim, gqt.RightDelim)
 	if err != nil {
 		return
 	}
+
 	for fullname, tpl := range ddlTemplates {
+		r.templates[fullname] = tpl
+	}
+	configTemplates, err := gqttpl.AddTemplateByDir(root, ConfigNamespaceSuffix, funcMap, gqt.LeftDelim, gqt.RightDelim)
+	if err != nil {
+		return
+	}
+	for fullname, tpl := range configTemplates {
 		r.templates[fullname] = tpl
 	}
 	return
 }
 
 func (r *RepositoryMeta) AddByNamespace(namespace string, content string, funcMap template.FuncMap) (err error) {
-	t, err := pkg.AddTemplateByStr(namespace, content, funcMap, LeftDelim, RightDelim)
+	t, err := gqttpl.AddTemplateByStr(namespace, content, funcMap, MetaLeftDelim, MetaRightDelim)
 	if err != nil {
 		err = errors.WithStack(err)
 		return err
@@ -62,69 +71,57 @@ func (r *RepositoryMeta) AddByNamespace(namespace string, content string, funcMa
 }
 
 // GetByNamespace get all template under namespace
-func (r *RepositoryMeta) GetByNamespace(namespace string, data interface{}) (defineResultList []*gqtpkg.DefineResult, err error) {
-	defineResultList, err = gqtpkg.ExecuteNamespaceTemplate(r.templates, namespace, data)
+func (r *RepositoryMeta) GetByNamespace(namespace string, data interface{}) (defineResultList []*gqttpl.TPLDefine, err error) {
+	defineResultList, err = gqttpl.ExecuteNamespaceTemplate(r.templates, namespace, data)
 	if err != nil {
 		return nil, err
 	}
 	return
 }
 
-func (r *RepositoryMeta) GetDefine(fullname string, data interface{}) (defineResult *gqtpkg.DefineResult, err error) {
-	defineResult, err = pkg.ExecuteTemplate(r.templates, fullname, data)
+func (r *RepositoryMeta) GetTPLDefine(fullname string, data interface{}) (tplDefine *gqttpl.TPLDefine, err error) {
+	tplDefine, err = gqttpl.ExecuteTemplate(r.templates, fullname, data)
 	if err != nil {
 		return nil, err
 	}
 	return
 }
 
-func (r *RepositoryMeta) GetDDLNamespace() (ddlNamespace string, err error) {
-	for namespace := range r.templates {
-		if strings.HasSuffix(namespace, DDLNamespaceSuffix) {
-			ddlNamespace = namespace
+func (r *RepositoryMeta) GetNamespaceBySufix(suffix string) (namespace string, err error) {
+	for nsp := range r.templates {
+		if strings.HasSuffix(nsp, suffix) {
+			namespace = nsp
 			break
 		}
 	}
-	if ddlNamespace == "" {
-		err = errors.Errorf("not find ddl namespace with sufix %s,you can set gqttool.DDLNamespaceSuffix to change sufix", DDLNamespaceSuffix)
+	if namespace == "" {
+		err = errors.Errorf("not find  namespace with sufix %s", suffix)
 		return
 	}
 	return
 }
-func (r *RepositoryMeta) GetConfig() (cfg *Config, err error) {
-	cfg = &Config{}
-	var configDefineResult *gqtpkg.DefineResult
-	for namespace, tp := range r.templates {
-		if strings.HasSuffix(namespace, DDLNamespaceSuffix) {
-			continue
-		}
-		if configDefineResult != nil {
-			break
-		}
-		subTpList := tp.Templates()
-		for _, subTp := range subTpList {
-			name := subTp.Name()
-			if name == ConfigName {
-				fullname := fmt.Sprintf("%s.%s", namespace, name)
-				configDefineResult, err = gqtpkg.ExecuteTemplate(r.templates, fullname, nil)
-				break
-			}
-		}
+
+func (r *RepositoryMeta) GetDatabaseConfig() (cfg *DatabaseConfig, err error) {
+	cfg = &DatabaseConfig{}
+	namespace, err := r.GetNamespaceBySufix(ConfigNamespaceSuffix)
+	if err != nil {
+		return
 	}
 
-	if configDefineResult != nil {
-		var b = []byte(configDefineResult.Output)
-		err = json.Unmarshal(b, cfg)
-		if err != nil {
-			return
-		}
+	fullname := fmt.Sprintf("%s.%s", namespace, DatabaseConfigName)
+	tplDefine, err := r.GetTPLDefine(fullname, nil)
+	if err != nil {
+		return
 	}
-
+	_, err = toml.Decode(tplDefine.Output, cfg)
+	if err != nil {
+		return
+	}
 	return
 }
 
-func (r *RepositoryMeta) GetDDLDefineResult() (defineResultList []*gqtpkg.DefineResult, err error) {
-	ddlNamespace, err := r.GetDDLNamespace()
+func (r *RepositoryMeta) GetDDLTPLDefine() (defineResultList []*gqttpl.TPLDefine, err error) {
+	ddlNamespace, err := r.GetNamespaceBySufix(DDLNamespaceSuffix)
 	if err != nil {
 		return
 	}
@@ -133,7 +130,7 @@ func (r *RepositoryMeta) GetDDLDefineResult() (defineResultList []*gqtpkg.Define
 		return
 	}
 	for _, defineResult := range defineResultList {
-		defineResult.Output = pkg.StandardizeSpaces(defineResult.Output)
+		defineResult.Output = gqttpl.StandardizeSpaces(defineResult.Output)
 	}
 	return
 }

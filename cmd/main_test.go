@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/suifengpiao14/gqt/v2"
 	"github.com/suifengpiao14/gqttool"
 )
 
@@ -40,9 +39,8 @@ func TestRunCmdEntity(*testing.T) {
 	}
 }
 func TestRunCmdCrud(*testing.T) {
-	ddlFile := "../example/template/ddl.sql.tpl"
-	dstDir := "../example/template"
-	err := runCmdCrud(ddlFile, dstDir, true)
+	tplDir := "../example/template"
+	err := runCmdCrud(tplDir, true)
 	if err != nil {
 		panic(err)
 	}
@@ -50,7 +48,7 @@ func TestRunCmdCrud(*testing.T) {
 
 func TestGenerateModel(t *testing.T) {
 	repo := gqttool.NewRepositoryMeta()
-	err := repo.AddByDir("../example/template", gqt.TemplatefuncMap)
+	err := repo.AddByDir("../example/template", gqttool.MetaTemplatefuncMap)
 	if err != nil {
 		panic(err)
 	}
@@ -58,5 +56,8 @@ func TestGenerateModel(t *testing.T) {
 	if err != nil {
 		panic(err)
 	}
-	fmt.Println(tableModelList)
+	for _, tableModel := range tableModelList {
+		fmt.Printf("%#v", tableModel)
+	}
+
 }

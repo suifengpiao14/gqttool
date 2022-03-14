@@ -3,15 +3,13 @@ package gqttool
 import (
 	"fmt"
 	"testing"
-
-	"github.com/suifengpiao14/gqt/v2"
 )
 
 func TestCrud(t *testing.T) {
 	ddlList := GetDDL()
-	tableCfg := &Config{}
+	tableCfg := &DatabaseConfig{}
 	repo := NewRepositoryMeta()
-	err := repo.AddByDir("example", gqt.TemplatefuncMap)
+	err := repo.AddByDir("example", MetaTemplatefuncMap)
 	if err != nil {
 		panic(err)
 	}
@@ -20,12 +18,12 @@ func TestCrud(t *testing.T) {
 		panic(err)
 	}
 	for _, table := range tables {
-		tplDefineList, err := Crud(table, repo)
+		tplDefineList, err := GenerateSQLTpl(table, repo)
 		if err != nil {
 			panic(err)
 		}
 		for _, tplDefine := range tplDefineList {
-			fmt.Println(tplDefine.TPL)
+			fmt.Println(tplDefine.Output)
 		}
 	}
 

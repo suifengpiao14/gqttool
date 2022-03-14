@@ -1,13 +1,3 @@
-{{define "config"}}
-tablePrefix="t_"
-{{end}}
-
-{{define "metaTplDel"}}
-{{`{{define "Del"}}`}}
-update `{{.TableName}}` set `deleted_at`={{`{{currentTime}}`}},`operator_id`=::OperatorID,`operator`=::Operator where `{{.PrimaryKey}}`=::{{.PrimaryKeyCamel}};
-{{`{{end}}`}}
-{{end}}
-
 {{define "ddlService"}}
    CREATE TABLE if not exists `t_service` (
   `service_id` varchar(64) NOT NULL DEFAULT '' COMMENT '服务标识',

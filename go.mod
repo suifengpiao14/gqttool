@@ -28,3 +28,5 @@ require (
 
 )
 replace gorm.io/gorm => gorm.io/gorm v1.22.4
+
+replace github.com/suifengpiao14/gqt/v2 => /Users/admin/Documents/go/gqt

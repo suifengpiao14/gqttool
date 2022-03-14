@@ -12,7 +12,7 @@ import (
 	"testing"
 
 	"github.com/suifengpiao14/errorformatter"
-	"github.com/suifengpiao14/gqt/v2"
+	"github.com/suifengpiao14/gqt/v2/gqttpl"
 	"github.com/suifengpiao14/gqttool"
 )
 
@@ -58,7 +58,7 @@ func main() {
 
 	case "crud":
 		crudCmd.Parse(args)
-		err = runCmdCrud(ddlFile, tplDir, force)
+		err = runCmdCrud(tplDir, force)
 		if err != nil {
 			panic(err)
 		}
@@ -84,7 +84,7 @@ func runCmdModel(ddlFile string, modelFile string, force bool) (err error) {
 		content, err = GetFileContent(ddlFile)
 		return
 	}).
-		SetError(repo.AddByNamespace("ddl", content, gqt.TemplatefuncMap)).
+		SetError(repo.AddByNamespace("ddl", content, gqttool.MetaTemplatefuncMap)).
 		Run(func() (err error) {
 			modelStructList, err = GenerateTableModel(repo)
 			return
@@ -113,16 +113,11 @@ func runCmdModel(ddlFile string, modelFile string, force bool) (err error) {
 	return
 }
 
-func runCmdCrud(ddlFile string, dstDir string, force bool) (err error) {
+func runCmdCrud(tplDir string, force bool) (err error) {
 	repo := gqttool.NewRepositoryMeta()
 	errChain := errorformatter.NewErrorChain()
-	var content string
 	var sqlTplNamespaceList []*gqttool.SQLTplNamespace
-	errChain.Run(func() (err error) {
-		content, err = GetFileContent(ddlFile)
-		return
-	}).
-		SetError(repo.AddByNamespace("ddl", content, gqt.TemplatefuncMap)).
+	errChain.SetError(repo.AddByDir(tplDir, gqttool.MetaTemplatefuncMap)).
 		Run(func() (err error) {
 			sqlTplNamespaceList, err = GenerateCrud(repo)
 			return
@@ -133,7 +128,7 @@ func runCmdCrud(ddlFile string, dstDir string, force bool) (err error) {
 		return
 	}
 	for _, sqlTplNamespace := range sqlTplNamespaceList {
-		filename := fmt.Sprintf("%s/%s.auto.sql.tpl", dstDir, sqlTplNamespace.Filename())
+		filename := fmt.Sprintf("%s/%s.auto.sql.tpl", tplDir, sqlTplNamespace.Filename())
 		err = saveFile(filename, sqlTplNamespace.String(), force)
 		if err != nil {
 			return
@@ -146,8 +141,8 @@ func runCmdEntity(sqlTplDir string, entityFilename string, force bool) (err erro
 	repo := gqttool.NewRepositoryMeta()
 	errChain := errorformatter.NewErrorChain()
 	var entityList = make([]string, 0)
-	var sqlTplDefineList = make([]*gqttool.SQLTPLDefine, 0)
-	errChain.SetError(repo.AddByDir(sqlTplDir, gqt.TemplatefuncMap)).
+	var sqlTplDefineList = make([]*gqttpl.TPLDefine, 0)
+	errChain.SetError(repo.AddByDir(sqlTplDir, gqttool.MetaTemplatefuncMap)).
 		Run(func() (err error) {
 			sqlTplDefineList, err = gqttool.ParseDirSqlTplDefine(sqlTplDir)
 			return
@@ -223,13 +218,13 @@ func IsExist(path string) bool {
 	return true
 }
 
-func GenerateEntity(rep *gqttool.RepositoryMeta, sqlTplDefineList []*gqttool.SQLTPLDefine) (entityList []string, err error) {
+func GenerateEntity(rep *gqttool.RepositoryMeta, sqlTplDefineList []*gqttpl.TPLDefine) (entityList []string, err error) {
 	entityList = make([]string, 0)
-	ddlDefineList, err := rep.GetDDLDefineResult()
+	ddlDefineList, err := rep.GetDDLTPLDefine()
 	if err != nil {
 		return
 	}
-	tableCfg, err := rep.GetConfig()
+	tableCfg, err := rep.GetDatabaseConfig()
 	if err != nil {
 		return
 	}
@@ -247,7 +242,7 @@ func GenerateEntity(rep *gqttool.RepositoryMeta, sqlTplDefineList []*gqttool.SQL
 	}
 
 	for _, sqlDefineTpl := range sqlTplDefineList {
-		tableNameList, err := gqttool.ParseSQLTPLTableName(sqlDefineTpl.TPL)
+		tableNameList, err := gqttool.ParseSQLTPLTableName(sqlDefineTpl.Output)
 		if err != nil {
 			return nil, err
 		}
@@ -271,11 +266,11 @@ func GenerateEntity(rep *gqttool.RepositoryMeta, sqlTplDefineList []*gqttool.SQL
 }
 
 func GenerateCrud(rep *gqttool.RepositoryMeta) (sqlTplNamespaceList []*gqttool.SQLTplNamespace, err error) {
-	ddlDefineList, err := rep.GetDDLDefineResult()
+	ddlDefineList, err := rep.GetDDLTPLDefine()
 	if err != nil {
 		return
 	}
-	repCfg, err := rep.GetConfig()
+	repCfg, err := rep.GetDatabaseConfig()
 	if err != nil {
 		return nil, err
 	}
@@ -292,7 +287,7 @@ func GenerateCrud(rep *gqttool.RepositoryMeta) (sqlTplNamespaceList []*gqttool.S
 	for _, table := range tableList {
 		sqlTplNamespace := &gqttool.SQLTplNamespace{}
 		sqlTplNamespace.Namespace = table.TableNameCamel()
-		sqlTplDefineList, err := gqttool.Crud(table, rep)
+		sqlTplDefineList, err := gqttool.GenerateSQLTpl(table, rep)
 		if err != nil {
 			return nil, err
 		}
@@ -303,11 +298,11 @@ func GenerateCrud(rep *gqttool.RepositoryMeta) (sqlTplNamespaceList []*gqttool.S
 	return
 }
 func GenerateTableModel(rep *gqttool.RepositoryMeta) (modelStructList []*gqttool.ModelStruct, err error) {
-	ddlDefineList, err := rep.GetDDLDefineResult()
+	ddlDefineList, err := rep.GetDDLTPLDefine()
 	if err != nil {
 		return
 	}
-	repCfg, err := rep.GetConfig()
+	repCfg, err := rep.GetDatabaseConfig()
 	if err != nil {
 		return
 	}

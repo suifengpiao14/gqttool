@@ -199,7 +199,7 @@ func GenerateModel(tableList []*Table) (modelStructList []*ModelStruct, err erro
 			return
 		}
 		modelStruct := &ModelStruct{
-			Name: ToCamel(table.TableName),
+			Name: table.TableNameCamel(),
 			TPL:  buf.String(),
 		}
 		modelStructList = append(modelStructList, modelStruct)
@@ -207,7 +207,7 @@ func GenerateModel(tableList []*Table) (modelStructList []*ModelStruct, err erro
 	return
 }
 
-func GenerateTable(ddlList []string, tableCfg *Config) (tables []*Table, err error) {
+func GenerateTable(ddlList []string, tableCfg *DatabaseConfig) (tables []*Table, err error) {
 	tables = make([]*Table, 0)
 	conf := executor.NewDefaultConfig()
 	inst := executor.NewExecutor(conf)

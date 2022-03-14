@@ -10,8 +10,7 @@ import (
 	"text/template"
 
 	"github.com/pkg/errors"
-	"github.com/suifengpiao14/gqt/v2"
-	gqtpkg "github.com/suifengpiao14/gqt/v2/pkg"
+	"github.com/suifengpiao14/gqt/v2/gqttpl"
 )
 
 type EntityElement struct {
@@ -22,10 +21,10 @@ type EntityElement struct {
 }
 
 //RepositoryEntity 根据数据表ddl和sql tpl 生成 sql tpl 调用的输入、输出实体
-func RepositoryEntity(sqlTplDefine *SQLTPLDefine, tableList []*Table) (entityStruct string, err error) {
-	variableMap := ParsSqlTplVariable(sqlTplDefine.TPL)
+func RepositoryEntity(sqlTplDefine *gqttpl.TPLDefine, tableList []*Table) (entityStruct string, err error) {
+	variableMap := ParsSqlTplVariable(sqlTplDefine.Output)
 
-	structName := sqlTplDefine.FullNameCamel
+	structName := sqlTplDefine.Fullname()
 	entityElement := &EntityElement{
 		Tables:      tableList,
 		VariableMap: variableMap,
@@ -89,13 +88,13 @@ func regexpMatch(s string, delim string) (matcheList []string, err error) {
 
 type SQLTplNamespace struct {
 	Namespace string
-	Defines   []*SQLTPLDefine
+	Defines   []*gqttpl.TPLDefine
 }
 
 func (s *SQLTplNamespace) String() (out string) {
 	tplArr := make([]string, 0)
 	for _, define := range s.Defines {
-		tplArr = append(tplArr, define.TPL)
+		tplArr = append(tplArr, define.Output)
 	}
 	out = strings.Join(tplArr, "\n")
 	return
@@ -106,15 +105,8 @@ func (s *SQLTplNamespace) Filename() (out string) {
 	return
 }
 
-type SQLTPLDefine struct {
-	Name          string
-	FullNameCamel string
-	Namespace     string
-	TPL           string
-}
-
-func ParseDirSqlTplDefine(sqlTplDir string) (sqlTplDefineList []*SQLTPLDefine, err error) {
-	allFileList, err := gqtpkg.GetTplFilesByDir(sqlTplDir, gqt.SQLSuffix)
+func ParseDirSqlTplDefine(sqlTplDir string) (sqlTplDefineList []*gqttpl.TPLDefine, err error) {
+	allFileList, err := gqttpl.GetTplFilesByDir(sqlTplDir, gqttpl.SQLNamespaceSuffix)
 	if err != nil {
 		return
 	}
@@ -129,12 +121,12 @@ func ParseDirSqlTplDefine(sqlTplDir string) (sqlTplDefineList []*SQLTPLDefine, e
 			if err != nil {
 				return nil, err
 			}
-			namespace := gqtpkg.FileName2Namespace(filename, sqlTplDir, gqt.SQLSuffix)
-			sqlTplDefine := &SQLTPLDefine{
-				Name:          name,
-				FullNameCamel: fmt.Sprintf("%s%s", ToCamel(namespace), ToCamel(name)),
-				Namespace:     namespace,
-				TPL:           sqlTpl,
+			namespace := gqttpl.FileName2Namespace(filename, sqlTplDir)
+			sqlTplDefine := &gqttpl.TPLDefine{
+				Name:      name,
+				Namespace: namespace,
+				Output:    sqlTpl,
+				Input:     nil,
 			}
 			sqlTplDefineList = append(sqlTplDefineList, sqlTplDefine)
 		}
