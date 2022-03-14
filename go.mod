@@ -9,7 +9,7 @@ require (
 	github.com/iancoleman/strcase v0.2.0
 	github.com/pkg/errors v0.9.1
 	github.com/suifengpiao14/errorformatter v0.0.0-20220214013820-e0177a90fb70
-	github.com/suifengpiao14/gqt/v2 v2.0.0-20220309115021-5364d939050b
+	github.com/suifengpiao14/gqt/v2 v2.0.0-20220310010605-da066a3ac487
 )
 
 require (
@@ -22,6 +22,9 @@ require (
 	github.com/shirou/gopsutil v3.21.11+incompatible // indirect
 	github.com/sirupsen/logrus v1.8.1 // indirect
 	github.com/yusufpapurcu/wmi v1.2.2 // indirect
-	goa.design/goa/v3 v3.6.1
-	gorm.io/gorm v1.23.2 // indirect
+	goa.design/goa/v3 v3.6.2
+	golang.org/x/sys v0.0.0-20220310020820-b874c991c1a5 // indirect
+	gorm.io/gorm v1.22.4 // indirect
+
 )
+replace gorm.io/gorm => gorm.io/gorm v1.22.4
