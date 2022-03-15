@@ -187,6 +187,31 @@ func FormatEntityData(entityElement *EntityElement) (entityTplData *EntityTplDat
 			entityTplData.Attributes = append(entityTplData.Attributes, variable)
 			continue
 		}
+
+		// 处理 表字段 +List 后缀类型
+		listSuffix := "List"
+		basename := name
+		suffix := ""
+		if strings.HasSuffix(name, listSuffix) {
+			suffix = listSuffix
+			basename = strings.TrimRight(name, listSuffix)
+		}
+		tableColumn, ok = tableColumnMap[basename]
+		if ok {
+			if suffix == listSuffix {
+				variable.Type = fmt.Sprintf("[]%s", tableColumn.Type) // 完善列表类型
+				entityTplData.Attributes = append(entityTplData.Attributes, variable)
+				continue
+			}
+		}
+		// 处理 后缀带类型的变量
+		typ := variableSuffix2Type(name)
+		if typ != "" {
+			variable.Type = typ
+			entityTplData.Attributes = append(entityTplData.Attributes, variable)
+			continue
+		}
+
 		lname := strings.ToLower(name)
 		if columnName, ok := columnNameMap[lname]; ok { // 检测模板中大小写拼写错误
 			err = errors.Errorf("spelling mistake: have %s, want %s", name, columnName)
@@ -198,6 +223,43 @@ func FormatEntityData(entityElement *EntityElement) (entityTplData *EntityTplDat
 	sort.Sort(entityTplData.Attributes)
 	return
 }
+
+type VariableSuffixType struct {
+	Suffix string
+	Type   string
+}
+
+type VariableSuffixTypes []*VariableSuffixType
+
+func (v VariableSuffixTypes) Len() int { // 重写 Len() 方法
+	return len(v)
+}
+func (v VariableSuffixTypes) Swap(i, j int) { // 重写 Swap() 方法
+	v[i], v[j] = v[j], v[i]
+}
+func (v VariableSuffixTypes) Less(i, j int) bool { // 重写 Less() 方法， 从长到短排序
+	return len(v[i].Suffix) > len(v[j].Suffix)
+}
+
+var VariableSuffixTypeList = VariableSuffixTypes{
+	&VariableSuffixType{Suffix: "ListInt", Type: "[]int"},
+	&VariableSuffixType{Suffix: "ListStr", Type: "[]string"},
+	&VariableSuffixType{Suffix: "Str", Type: "string"},
+	&VariableSuffixType{Suffix: "Int", Type: "int"},
+}
+
+func variableSuffix2Type(variableName string) (typ string) {
+	typ = ""
+	sort.Sort(VariableSuffixTypeList)
+	for _, vs2t := range VariableSuffixTypeList {
+		if strings.HasSuffix(variableName, vs2t.Suffix) {
+			typ = vs2t.Type
+			return // 匹配第一个即返回
+		}
+	}
+	return
+}
+
 func EntityTpl() (tpl string) {
 	tpl = `
 		type {{.StructName}} struct{

@@ -8,12 +8,12 @@ package example
 				
 			
 				
-					Operator interface{} 
+					OperatorIDInt int 
 				
 				
 			
 				
-					OperatorID interface{} 
+					OperatorStr string 
 				
 				
 			
@@ -21,6 +21,21 @@ package example
 
 		func (t *APIAutoSQLDelEntity) TplName() string{
 			return "api.auto.sql.Del"
+		}
+
+	
+
+		type APIAutoSQLGetAllByAPIIDEntity struct{
+			
+				
+					APIIDList []string 
+				
+				
+			
+		}
+
+		func (t *APIAutoSQLGetAllByAPIIDEntity) TplName() string{
+			return "api.auto.sql.GetAllByAPIID"
 		}
 
 	
@@ -190,27 +205,17 @@ package example
 
 	
 
-		type ExampleAutoSQLDelEntity struct{
+		type ExampleAutoSQLGetAllByExampleIDEntity struct{
 			
 				
-					ExampleID string 
-				
-				
-			
-				
-					Operator interface{} 
-				
-				
-			
-				
-					OperatorID interface{} 
+					ExampleIDList []string 
 				
 				
 			
 		}
 
-		func (t *ExampleAutoSQLDelEntity) TplName() string{
-			return "example.auto.sql.Del"
+		func (t *ExampleAutoSQLGetAllByExampleIDEntity) TplName() string{
+			return "example.auto.sql.GetAllByExampleID"
 		}
 
 	
@@ -380,27 +385,17 @@ package example
 
 	
 
-		type MarkdownAutoSQLDelEntity struct{
+		type MarkdownAutoSQLGetAllByMarkdownIDEntity struct{
 			
 				
-					MarkdownID string 
-				
-				
-			
-				
-					Operator interface{} 
-				
-				
-			
-				
-					OperatorID interface{} 
+					MarkdownIDList []string 
 				
 				
 			
 		}
 
-		func (t *MarkdownAutoSQLDelEntity) TplName() string{
-			return "markdown.auto.sql.Del"
+		func (t *MarkdownAutoSQLGetAllByMarkdownIDEntity) TplName() string{
+			return "markdown.auto.sql.GetAllByMarkdownID"
 		}
 
 	
@@ -580,27 +575,17 @@ package example
 
 	
 
-		type ParameterAutoSQLDelEntity struct{
+		type ParameterAutoSQLGetAllByParameterIDEntity struct{
 			
 				
-					Operator interface{} 
-				
-				
-			
-				
-					OperatorID interface{} 
-				
-				
-			
-				
-					ParameterID string 
+					ParameterIDList []string 
 				
 				
 			
 		}
 
-		func (t *ParameterAutoSQLDelEntity) TplName() string{
-			return "parameter.auto.sql.Del"
+		func (t *ParameterAutoSQLGetAllByParameterIDEntity) TplName() string{
+			return "parameter.auto.sql.GetAllByParameterID"
 		}
 
 	
@@ -890,27 +875,17 @@ package example
 
 	
 
-		type ServerAutoSQLDelEntity struct{
+		type ServerAutoSQLGetAllByServerIDEntity struct{
 			
 				
-					Operator interface{} 
-				
-				
-			
-				
-					OperatorID interface{} 
-				
-				
-			
-				
-					ServerID string 
+					ServerIDList []string 
 				
 				
 			
 		}
 
-		func (t *ServerAutoSQLDelEntity) TplName() string{
-			return "server.auto.sql.Del"
+		func (t *ServerAutoSQLGetAllByServerIDEntity) TplName() string{
+			return "server.auto.sql.GetAllByServerID"
 		}
 
 	
@@ -1060,27 +1035,17 @@ package example
 
 	
 
-		type ServiceAutoSQLDelEntity struct{
+		type ServiceAutoSQLGetAllByServiceIDEntity struct{
 			
 				
-					Operator interface{} 
-				
-				
-			
-				
-					OperatorID interface{} 
-				
-				
-			
-				
-					ServiceID string 
+					ServiceIDList []string 
 				
 				
 			
 		}
 
-		func (t *ServiceAutoSQLDelEntity) TplName() string{
-			return "service.auto.sql.Del"
+		func (t *ServiceAutoSQLGetAllByServiceIDEntity) TplName() string{
+			return "service.auto.sql.GetAllByServiceID"
 		}
 
 	
@@ -1260,27 +1225,17 @@ package example
 
 	
 
-		type ValidateSchemaAutoSQLDelEntity struct{
+		type ValidateSchemaAutoSQLGetAllByValidateSchemaIDEntity struct{
 			
 				
-					Operator interface{} 
-				
-				
-			
-				
-					OperatorID interface{} 
-				
-				
-			
-				
-					ValidateSchemaID string 
+					ValidateSchemaIDList []string 
 				
 				
 			
 		}
 
-		func (t *ValidateSchemaAutoSQLDelEntity) TplName() string{
-			return "validate_schema.auto.sql.Del"
+		func (t *ValidateSchemaAutoSQLGetAllByValidateSchemaIDEntity) TplName() string{
+			return "validate_schema.auto.sql.GetAllByValidateSchemaID"
 		}
 
 	
