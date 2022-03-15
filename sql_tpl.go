@@ -13,7 +13,7 @@ func Backquote(s string) (out string) {
 }
 
 func GenerateSQLTpl(table *Table, repo *RepositoryMeta) (tplDefineList []*gqttpl.TPLDefine, err error) { // list 保证后面输出顺序
-	metaNamespaceList, err := repo.GetNamespaceBySufix(MetaNameSpaceSuffix)
+	metaNamespaceList, err := repo.GetNamespaceBySufix(MetaNameSpaceSuffix, true)
 	if err != nil {
 		return
 	}

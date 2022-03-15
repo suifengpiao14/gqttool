@@ -18,30 +18,30 @@ import (
 
 func main() {
 	var (
-		ddlFile        string
+		metaDir        string
 		modelFilename  string
-		tplDir         string
+		sqlDir         string
 		entityFilename string
 		force          bool
 		err            error
 	)
 	modelCmd := flag.NewFlagSet("model", flag.ExitOnError)
 	modelCmd.Usage = helpModel
-	crudCmd := flag.NewFlagSet("crud", flag.ExitOnError)
-	crudCmd.Usage = helpCrud
+	SQLCmd := flag.NewFlagSet("crud", flag.ExitOnError)
+	SQLCmd.Usage = helpSQL
 	entityCmd := flag.NewFlagSet("entity", flag.ExitOnError)
 	entityCmd.Usage = helpEntity
 	modelCmd.BoolVar(&force, "force", false, "overwrite exist file")
-	modelCmd.StringVar(&ddlFile, "ddl", "template/ddl.sql.tpl", "ddl template file name")
-	modelCmd.StringVar(&modelFilename, "model", "repository.model.go", "ddl template file name")
+	modelCmd.StringVar(&metaDir, "metaDir", "template/meta", "ddl/config file dir")
+	modelCmd.StringVar(&modelFilename, "model", "model.gen.go", "model file name")
 
-	crudCmd.BoolVar(&force, "force", false, "overwrite exist file")
-	crudCmd.StringVar(&ddlFile, "ddl", "template/ddl.sql.tpl", "ddl template file name")
-	crudCmd.StringVar(&tplDir, "tplDir", "template", "sql template dir")
+	SQLCmd.BoolVar(&force, "force", false, "overwrite exist file")
+	SQLCmd.StringVar(&metaDir, "metaDir", "template/meta", "ddl/config/sql template file dir")
+	SQLCmd.StringVar(&sqlDir, "sqlDir", "template/sql", "sql template dir")
 
 	entityCmd.BoolVar(&force, "force", false, "overwrite exist file")
-	entityCmd.StringVar(&tplDir, "tplDir", "template", "sql template dir")
-	entityCmd.StringVar(&entityFilename, "entity", "repository.entity.go", "entity file")
+	entityCmd.StringVar(&sqlDir, "sqlDir", "template/sql", "sql template dir")
+	entityCmd.StringVar(&entityFilename, "entity", "entity.gen.go", "entity file")
 	testing.Init()
 
 	if len(os.Args) < 3 {
@@ -51,21 +51,21 @@ func main() {
 	switch os.Args[1] {
 	case "model":
 		modelCmd.Parse(args)
-		err = runCmdModel(ddlFile, modelFilename, force)
+		err = runCmdModel(metaDir, modelFilename, force)
 		if err != nil {
 			panic(err)
 		}
 
-	case "crud":
-		crudCmd.Parse(args)
-		err = runCmdCrud(tplDir, force)
+	case "sql":
+		SQLCmd.Parse(args)
+		err = runCmdSQL(metaDir, sqlDir, force)
 		if err != nil {
 			panic(err)
 		}
 
 	case "entity":
 		entityCmd.Parse(args)
-		err = runCmdEntity(tplDir, entityFilename, force)
+		err = runCmdEntity(sqlDir, entityFilename, force)
 		if err != nil {
 			panic(err)
 		}
@@ -75,16 +75,12 @@ func main() {
 	}
 }
 
-func runCmdModel(ddlFile string, modelFile string, force bool) (err error) {
+func runCmdModel(metaDir string, modelFile string, force bool) (err error) {
 	repo := gqttool.NewRepositoryMeta()
 	errChain := errorformatter.NewErrorChain()
 	var content string
 	var modelStructList gqttool.ModelStructList
-	errChain.Run(func() (err error) {
-		content, err = GetFileContent(ddlFile)
-		return
-	}).
-		SetError(repo.AddByNamespace("ddl", content, gqttool.MetaTemplatefuncMap)).
+	errChain.SetError(repo.AddByDir(metaDir, gqttool.MetaTemplatefuncMap)).
 		Run(func() (err error) {
 			modelStructList, err = GenerateTableModel(repo)
 			return
@@ -113,11 +109,11 @@ func runCmdModel(ddlFile string, modelFile string, force bool) (err error) {
 	return
 }
 
-func runCmdCrud(tplDir string, force bool) (err error) {
+func runCmdSQL(metaDir string, sqlDir string, force bool) (err error) {
 	repo := gqttool.NewRepositoryMeta()
 	errChain := errorformatter.NewErrorChain()
 	var sqlTplNamespaceList []*gqttool.SQLTplNamespace
-	errChain.SetError(repo.AddByDir(tplDir, gqttool.MetaTemplatefuncMap)).
+	errChain.SetError(repo.AddByDir(metaDir, gqttool.MetaTemplatefuncMap)).
 		Run(func() (err error) {
 			sqlTplNamespaceList, err = GenerateCrud(repo)
 			return
@@ -128,7 +124,7 @@ func runCmdCrud(tplDir string, force bool) (err error) {
 		return
 	}
 	for _, sqlTplNamespace := range sqlTplNamespaceList {
-		filename := fmt.Sprintf("%s/%s.auto.sql.tpl", tplDir, sqlTplNamespace.Filename())
+		filename := fmt.Sprintf("%s/%s.gen.sql.tpl", sqlDir, sqlTplNamespace.Filename())
 		err = saveFile(filename, sqlTplNamespace.String(), force)
 		if err != nil {
 			return
@@ -137,14 +133,14 @@ func runCmdCrud(tplDir string, force bool) (err error) {
 	return
 }
 
-func runCmdEntity(sqlTplDir string, entityFilename string, force bool) (err error) {
+func runCmdEntity(sqlsqlDir string, entityFilename string, force bool) (err error) {
 	repo := gqttool.NewRepositoryMeta()
 	errChain := errorformatter.NewErrorChain()
 	var entityList = make([]string, 0)
 	var sqlTplDefineList = make([]*gqttpl.TPLDefine, 0)
-	errChain.SetError(repo.AddByDir(sqlTplDir, gqttool.MetaTemplatefuncMap)).
+	errChain.SetError(repo.AddByDir(sqlsqlDir, gqttool.MetaTemplatefuncMap)).
 		Run(func() (err error) {
-			sqlTplDefineList, err = gqttool.ParseDirSqlTplDefine(sqlTplDir)
+			sqlTplDefineList, err = gqttool.ParseDirSqlTplDefine(sqlsqlDir)
 			return
 		}).
 		Run(func() (err error) {
@@ -322,41 +318,41 @@ func helpModel() {
 	fmt.Fprint(os.Stderr, `gqttool model is generate go struct from mysql ddl
 
 Usage:
-  gqttool model -force true -ddl ddlFilename -model modelFilename
+  gqttool model -metaDir metaDir -model modelFilename -force true
 
 Flags:
   -force overwrite exists file
-  -ddl
-        mysql ddl file path
+  -metaDir
+        template meta dir
 
   -model
         model filename
 
 Example:
 
-  gqttool model -force true -ddl template/ddl.sql.tpl -model repository.model.go
+  gqttool model -metaDir template/meta -model model.gen.go -force true
 
 `)
 	os.Exit(0)
 }
 
-func helpCrud() {
-	fmt.Fprint(os.Stderr, `gqttool crud is  generation crud sql from mysql ddl
+func helpSQL() {
+	fmt.Fprint(os.Stderr, `gqttool sql is  generation  sql from mysql ddl
 
 Usage:
-  gqttool crud  -force true -ddl ddlFilename -tplDir sqlTplSaveDir
+  gqttool sql -metaDir metaDirReadDir -sqlDir sqlTplSaveDir -force true
   
 Flags:
   -force overwrite exists file
-  -ddl
-        mysql ddl filename
+  -metaDir
+        template meta dir
 
-  -tplDir
-        save sqlTpl file path
+  -sqlDir
+        save sqlTpl file dir
 
 Example:
 
-  gqttool crud -force true -ddl template/ddl.sql.tpl -tplDir template
+  gqttool crud -metaDir template/meta -sqlDir template/sql -force true
 
 `)
 	os.Exit(0)
@@ -366,19 +362,19 @@ func helpEntity() {
 	fmt.Fprint(os.Stderr, `gqttool entity is  generation sql template inpur args entity
 
 Usage:
-  gqttool entity -force true  -tplDir sqlTplDir -entity entityFilename
+  gqttool entity -sqlDir sqlsqlDir -entity entityFilename -force true
   
 
 Flags:
  -force overwrite exists file 
- -tplDir 
+ -sqlDir 
 		sqlTpl file dir
  -entity 
 		sqlTpl  entity filename
 
 Example:
 
-  gqttool entity -force true -tplDir template -entity repository.entity.go
+  gqttool entity -sqlDir template/sql -entity entity.gen.go -force true
 
 `)
 	os.Exit(0)
@@ -388,32 +384,32 @@ func help() {
 	fmt.Fprint(os.Stderr, `gqttool is the code generation tool for the gqt package.
 
 Usage:
-  gqttool model  -force true -ddl ddlFilename -model modelFilename
-  gqttool crud -force true  -ddl ddlFilename -tplDir sqlTplSaveDir
-  gqttool entity -force true  -tplDir sqlTplDir -entity entityFilename
+  gqttool model  -metaDir metaDir -model modelFilename -force true
+  gqttool sql -metaDir metaDir -sqlDir sqlTplSaveDir -force true
+  gqttool entity  -sqlDir sqlsqlDir -entity entityFilename -force true
   
 Commands:
   model
   		Generate go struct from  mysql ddl
-  crud
-        Generate crud sql.tpl from mysql ddl
+  sql
+        Generate sql sql.tpl from mysql ddl and meta template
   entity
-  		Generate sql.tpl input entity from mysql sqlTplDir
+  		Generate sql.tpl input entity from mysql sqlsqlDir
 
 Flags:
   -force overwrite exists file
-  -ddl
-        mysql ddl filename
+  -metaDir
+        template meta dir
   -model
-        repository model filename
- -tplDir 
+         model filename
+ -sqlDir 
 		sqlTpl file dir
  -entity 
 		sqlTpl  argument entity filename
 
 Example:
 
-  gqttool model -force true -ddl template/ddl.sql.tpl -model repository.model.go
+  gqttool model  -metaDir template/meta -model model.gen.go -force true
 
 `)
 	os.Exit(0)

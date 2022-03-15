@@ -62,7 +62,13 @@ func (r *RepositoryMeta) AddByDir(root string, funcMap template.FuncMap) (err er
 }
 
 func (r *RepositoryMeta) AddByNamespace(namespace string, content string, funcMap template.FuncMap) (err error) {
-	t, err := gqttpl.AddTemplateByStr(namespace, content, funcMap, MetaLeftDelim, MetaRightDelim)
+	leftDelim := gqt.LeftDelim
+	rightDelim := gqt.RightDelim
+	if strings.HasSuffix(namespace, MetaNameSpaceSuffix) {
+		leftDelim = MetaLeftDelim
+		rightDelim = MetaRightDelim
+	}
+	t, err := gqttpl.AddTemplateByStr(namespace, content, funcMap, leftDelim, rightDelim)
 	if err != nil {
 		err = errors.WithStack(err)
 		return err
@@ -88,15 +94,19 @@ func (r *RepositoryMeta) GetTPLDefine(fullname string, data interface{}) (tplDef
 	return
 }
 
-func (r *RepositoryMeta) GetNamespaceBySufix(suffix string) (namespaceList []string, err error) {
+func (r *RepositoryMeta) GetNamespaceBySufix(suffix string, notFoundErr bool) (namespaceList []string, err error) {
 	namespaceList = make([]string, 0)
 	for namespace := range r.templates {
 		if strings.HasSuffix(namespace, suffix) {
 			namespaceList = append(namespaceList, namespace)
 		}
 	}
-	if len(namespaceList) < 1 {
-		err = errors.Errorf("not find  namespace with sufix %s", suffix)
+	l := len(namespaceList)
+	if l == 0 {
+		if notFoundErr { // 找不到报错
+			err = errors.Errorf("not find  namespace with sufix %s", suffix)
+			return
+		}
 		return
 	}
 	sort.Strings(namespaceList)
@@ -105,8 +115,11 @@ func (r *RepositoryMeta) GetNamespaceBySufix(suffix string) (namespaceList []str
 
 func (r *RepositoryMeta) GetDatabaseConfig() (cfg *DatabaseConfig, err error) {
 	cfg = &DatabaseConfig{}
-	namespaceList, err := r.GetNamespaceBySufix(ConfigNamespaceSuffix)
+	namespaceList, err := r.GetNamespaceBySufix(ConfigNamespaceSuffix, false)
 	if err != nil {
+		return
+	}
+	if len(namespaceList) == 0 {
 		return
 	}
 	namespace := namespaceList[0]
@@ -123,7 +136,7 @@ func (r *RepositoryMeta) GetDatabaseConfig() (cfg *DatabaseConfig, err error) {
 }
 
 func (r *RepositoryMeta) GetDDLTPLDefine() (defineResultList []*gqttpl.TPLDefine, err error) {
-	ddlNamespaceList, err := r.GetNamespaceBySufix(DDLNamespaceSuffix)
+	ddlNamespaceList, err := r.GetNamespaceBySufix(DDLNamespaceSuffix, true)
 	if err != nil {
 		return
 	}

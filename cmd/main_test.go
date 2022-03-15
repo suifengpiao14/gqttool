@@ -8,9 +8,9 @@ import (
 )
 
 func TestRunCmdModel(t *testing.T) {
-	ddlFile := "../example/template/ddl.sql.tpl"
-	modelDir := "../example/"
-	err := runCmdModel(ddlFile, modelDir, true)
+	metaDir := "../example/template/"
+	modelFile := "../example/model.gen.go"
+	err := runCmdModel(metaDir, modelFile, true)
 	if err != nil {
 		panic(err)
 	}
@@ -39,8 +39,9 @@ func TestRunCmdEntity(*testing.T) {
 	}
 }
 func TestRunCmdCrud(*testing.T) {
-	tplDir := "../example/template"
-	err := runCmdCrud(tplDir, true)
+	metaDir := "../example/template/meta"
+	tplDir := "../example/template/sql"
+	err := runCmdCrud(metaDir, tplDir, true)
 	if err != nil {
 		panic(err)
 	}
