@@ -203,7 +203,7 @@ func EntityTpl() (tpl string) {
 		type {{.StructName}} struct{
 			{{range .Attributes }}
 				{{if  .IsSubDefine}}
-					*{{.Name}}
+					*{{.FullnameCamel}}Entity
 				{{else}}
 					{{.Name}} {{.Type}} 
 				{{end}}

@@ -62,15 +62,9 @@ func TplGetByPrimaryKey(data interface{}) (tpl string, err error) {
 var tplPaginateWhereName = "PaginateWhere"
 
 func TplPaginateWhere(data interface{}) (tpl string, err error) {
-	table, err := convertData2Table(data)
-	if err != nil {
-		return
-	}
 	tpl = fmt.Sprintf("{{define \"%s\"}}\n  ", tplPaginateWhereName)
-	if table.DeleteColumn != "" {
-		tpl = fmt.Sprintf("%s  and `%s` is null", tpl, table.DeleteColumn)
-	}
-	tpl = tpl + ";\n{{end}}\n"
+
+	tpl = tpl + "\n{{end}}\n"
 	return
 }
 
@@ -81,6 +75,9 @@ func TplPaginateTotal(data interface{}) (tpl string, err error) {
 	}
 	name := "PaginateTotal"
 	tpl = fmt.Sprintf("{{define \"%s\"}}\nselect count(*) as `count` from `%s`  where 1=1 {{template \"%s\" \".\"}} ", name, table.TableName, tplPaginateWhereName)
+	if table.DeleteColumn != "" {
+		tpl = fmt.Sprintf("%s  and `%s` is null", tpl, table.DeleteColumn)
+	}
 	tpl = tpl + ";\n{{end}}\n"
 	return
 }
@@ -92,6 +89,9 @@ func TplPaginate(data interface{}) (tpl string, err error) {
 	}
 	name := "Paginate"
 	tpl = fmt.Sprintf("{{define \"%s\"}}\nselect * from `%s`  where 1=1 {{template \"%s\" \".\"}} ", name, table.TableName, tplPaginateWhereName)
+	if table.DeleteColumn != "" {
+		tpl = fmt.Sprintf("%s  and `%s` is null", tpl, table.DeleteColumn)
+	}
 	updatedAtColumn := table.UpdatedAtColumn()
 	if updatedAtColumn != nil {
 		tpl = fmt.Sprintf(" %s order by `%s` desc ", tpl, updatedAtColumn.Name)

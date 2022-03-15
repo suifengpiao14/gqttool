@@ -2,11 +2,20 @@ package example
 
 		type APIAutoSQLDelEntity struct{
 			
-				APIID string 
+				
+					APIID string 
+				
+				
 			
-				Operator interface{} 
+				
+					Operator interface{} 
+				
+				
 			
-				OperatorID interface{} 
+				
+					OperatorID interface{} 
+				
+				
 			
 		}
 
@@ -18,7 +27,10 @@ package example
 
 		type APIAutoSQLGetByAPIIDEntity struct{
 			
-				APIID string 
+				
+					APIID string 
+				
+				
 			
 		}
 
@@ -30,21 +42,45 @@ package example
 
 		type APIAutoSQLInsertEntity struct{
 			
-				APIID string 
+				
+					APIID string 
+				
+				
 			
-				Description string 
+				
+					Description string 
+				
+				
 			
-				Name string 
+				
+					Name string 
+				
+				
 			
-				ServiceID string 
+				
+					ServiceID string 
+				
+				
 			
-				Summary string 
+				
+					Summary string 
+				
+				
 			
-				Tags string 
+				
+					Tags string 
+				
+				
 			
-				Title string 
+				
+					Title string 
+				
+				
 			
-				URI string 
+				
+					URI string 
+				
+				
 			
 		}
 
@@ -56,9 +92,20 @@ package example
 
 		type APIAutoSQLPaginateEntity struct{
 			
-				Limit int 
+				
+					Limit int 
+				
+				
 			
-				Offset int 
+				
+					Offset int 
+				
+				
+			
+				
+					*APIAutoSQLPaginateWhereEntity
+				
+				
 			
 		}
 
@@ -69,6 +116,11 @@ package example
 	
 
 		type APIAutoSQLPaginateTotalEntity struct{
+			
+				
+					*APIAutoSQLPaginateWhereEntity
+				
+				
 			
 		}
 
@@ -90,21 +142,45 @@ package example
 
 		type APIAutoSQLUpdateEntity struct{
 			
-				APIID string 
+				
+					APIID string 
+				
+				
 			
-				Description string 
+				
+					Description string 
+				
+				
 			
-				Name string 
+				
+					Name string 
+				
+				
 			
-				ServiceID string 
+				
+					ServiceID string 
+				
+				
 			
-				Summary string 
+				
+					Summary string 
+				
+				
 			
-				Tags string 
+				
+					Tags string 
+				
+				
 			
-				Title string 
+				
+					Title string 
+				
+				
 			
-				URI string 
+				
+					URI string 
+				
+				
 			
 		}
 
@@ -116,11 +192,20 @@ package example
 
 		type ExampleAutoSQLDelEntity struct{
 			
-				ExampleID string 
+				
+					ExampleID string 
+				
+				
 			
-				Operator interface{} 
+				
+					Operator interface{} 
+				
+				
 			
-				OperatorID interface{} 
+				
+					OperatorID interface{} 
+				
+				
 			
 		}
 
@@ -132,7 +217,10 @@ package example
 
 		type ExampleAutoSQLGetByExampleIDEntity struct{
 			
-				ExampleID string 
+				
+					ExampleID string 
+				
+				
 			
 		}
 
@@ -144,21 +232,45 @@ package example
 
 		type ExampleAutoSQLInsertEntity struct{
 			
-				APIID string 
+				
+					APIID string 
+				
+				
 			
-				ExampleID string 
+				
+					ExampleID string 
+				
+				
 			
-				Request string 
+				
+					Request string 
+				
+				
 			
-				Response string 
+				
+					Response string 
+				
+				
 			
-				ServiceID string 
+				
+					ServiceID string 
+				
+				
 			
-				Summary string 
+				
+					Summary string 
+				
+				
 			
-				Tag string 
+				
+					Tag string 
+				
+				
 			
-				Title string 
+				
+					Title string 
+				
+				
 			
 		}
 
@@ -170,9 +282,20 @@ package example
 
 		type ExampleAutoSQLPaginateEntity struct{
 			
-				Limit int 
+				
+					Limit int 
+				
+				
 			
-				Offset int 
+				
+					Offset int 
+				
+				
+			
+				
+					*ExampleAutoSQLPaginateWhereEntity
+				
+				
 			
 		}
 
@@ -183,6 +306,11 @@ package example
 	
 
 		type ExampleAutoSQLPaginateTotalEntity struct{
+			
+				
+					*ExampleAutoSQLPaginateWhereEntity
+				
+				
 			
 		}
 
@@ -204,21 +332,45 @@ package example
 
 		type ExampleAutoSQLUpdateEntity struct{
 			
-				APIID string 
+				
+					APIID string 
+				
+				
 			
-				ExampleID string 
+				
+					ExampleID string 
+				
+				
 			
-				Request string 
+				
+					Request string 
+				
+				
 			
-				Response string 
+				
+					Response string 
+				
+				
 			
-				ServiceID string 
+				
+					ServiceID string 
+				
+				
 			
-				Summary string 
+				
+					Summary string 
+				
+				
 			
-				Tag string 
+				
+					Tag string 
+				
+				
 			
-				Title string 
+				
+					Title string 
+				
+				
 			
 		}
 
@@ -230,11 +382,20 @@ package example
 
 		type MarkdownAutoSQLDelEntity struct{
 			
-				MarkdownID string 
+				
+					MarkdownID string 
+				
+				
 			
-				Operator interface{} 
+				
+					Operator interface{} 
+				
+				
 			
-				OperatorID interface{} 
+				
+					OperatorID interface{} 
+				
+				
 			
 		}
 
@@ -246,7 +407,10 @@ package example
 
 		type MarkdownAutoSQLGetByMarkdownIDEntity struct{
 			
-				MarkdownID string 
+				
+					MarkdownID string 
+				
+				
 			
 		}
 
@@ -258,23 +422,50 @@ package example
 
 		type MarkdownAutoSQLInsertEntity struct{
 			
-				APIID string 
+				
+					APIID string 
+				
+				
 			
-				Content string 
+				
+					Content string 
+				
+				
 			
-				Markdown string 
+				
+					Markdown string 
+				
+				
 			
-				MarkdownID string 
+				
+					MarkdownID string 
+				
+				
 			
-				Name string 
+				
+					Name string 
+				
+				
 			
-				OwnerID int 
+				
+					OwnerID int 
+				
+				
 			
-				OwnerName string 
+				
+					OwnerName string 
+				
+				
 			
-				ServiceID string 
+				
+					ServiceID string 
+				
+				
 			
-				Title string 
+				
+					Title string 
+				
+				
 			
 		}
 
@@ -286,9 +477,20 @@ package example
 
 		type MarkdownAutoSQLPaginateEntity struct{
 			
-				Limit int 
+				
+					Limit int 
+				
+				
 			
-				Offset int 
+				
+					Offset int 
+				
+				
+			
+				
+					*MarkdownAutoSQLPaginateWhereEntity
+				
+				
 			
 		}
 
@@ -299,6 +501,11 @@ package example
 	
 
 		type MarkdownAutoSQLPaginateTotalEntity struct{
+			
+				
+					*MarkdownAutoSQLPaginateWhereEntity
+				
+				
 			
 		}
 
@@ -320,23 +527,50 @@ package example
 
 		type MarkdownAutoSQLUpdateEntity struct{
 			
-				APIID string 
+				
+					APIID string 
+				
+				
 			
-				Content string 
+				
+					Content string 
+				
+				
 			
-				Markdown string 
+				
+					Markdown string 
+				
+				
 			
-				MarkdownID string 
+				
+					MarkdownID string 
+				
+				
 			
-				Name string 
+				
+					Name string 
+				
+				
 			
-				OwnerID int 
+				
+					OwnerID int 
+				
+				
 			
-				OwnerName string 
+				
+					OwnerName string 
+				
+				
 			
-				ServiceID string 
+				
+					ServiceID string 
+				
+				
 			
-				Title string 
+				
+					Title string 
+				
+				
 			
 		}
 
@@ -348,11 +582,20 @@ package example
 
 		type ParameterAutoSQLDelEntity struct{
 			
-				Operator interface{} 
+				
+					Operator interface{} 
+				
+				
 			
-				OperatorID interface{} 
+				
+					OperatorID interface{} 
+				
+				
 			
-				ParameterID string 
+				
+					ParameterID string 
+				
+				
 			
 		}
 
@@ -364,7 +607,10 @@ package example
 
 		type ParameterAutoSQLGetByParameterIDEntity struct{
 			
-				ParameterID string 
+				
+					ParameterID string 
+				
+				
 			
 		}
 
@@ -376,45 +622,105 @@ package example
 
 		type ParameterAutoSQLInsertEntity struct{
 			
-				APIID string 
+				
+					APIID string 
+				
+				
 			
-				AllowEmptyValue string 
+				
+					AllowEmptyValue string 
+				
+				
 			
-				AllowReserved string 
+				
+					AllowReserved string 
+				
+				
 			
-				Deprecated string 
+				
+					Deprecated string 
+				
+				
 			
-				Description string 
+				
+					Description string 
+				
+				
 			
-				Example string 
+				
+					Example string 
+				
+				
 			
-				Explode string 
+				
+					Explode string 
+				
+				
 			
-				FullName string 
+				
+					FullName string 
+				
+				
 			
-				HTTPStatus string 
+				
+					HTTPStatus string 
+				
+				
 			
-				Method string 
+				
+					Method string 
+				
+				
 			
-				Name string 
+				
+					Name string 
+				
+				
 			
-				ParameterID string 
+				
+					ParameterID string 
+				
+				
 			
-				Position string 
+				
+					Position string 
+				
+				
 			
-				Required string 
+				
+					Required string 
+				
+				
 			
-				Serialize string 
+				
+					Serialize string 
+				
+				
 			
-				ServiceID string 
+				
+					ServiceID string 
+				
+				
 			
-				Tag string 
+				
+					Tag string 
+				
+				
 			
-				Title string 
+				
+					Title string 
+				
+				
 			
-				Type string 
+				
+					Type string 
+				
+				
 			
-				ValidateSchemaID string 
+				
+					ValidateSchemaID string 
+				
+				
 			
 		}
 
@@ -426,9 +732,20 @@ package example
 
 		type ParameterAutoSQLPaginateEntity struct{
 			
-				Limit int 
+				
+					Limit int 
+				
+				
 			
-				Offset int 
+				
+					Offset int 
+				
+				
+			
+				
+					*ParameterAutoSQLPaginateWhereEntity
+				
+				
 			
 		}
 
@@ -439,6 +756,11 @@ package example
 	
 
 		type ParameterAutoSQLPaginateTotalEntity struct{
+			
+				
+					*ParameterAutoSQLPaginateWhereEntity
+				
+				
 			
 		}
 
@@ -460,45 +782,105 @@ package example
 
 		type ParameterAutoSQLUpdateEntity struct{
 			
-				APIID string 
+				
+					APIID string 
+				
+				
 			
-				AllowEmptyValue string 
+				
+					AllowEmptyValue string 
+				
+				
 			
-				AllowReserved string 
+				
+					AllowReserved string 
+				
+				
 			
-				Deprecated string 
+				
+					Deprecated string 
+				
+				
 			
-				Description string 
+				
+					Description string 
+				
+				
 			
-				Example string 
+				
+					Example string 
+				
+				
 			
-				Explode string 
+				
+					Explode string 
+				
+				
 			
-				FullName string 
+				
+					FullName string 
+				
+				
 			
-				HTTPStatus string 
+				
+					HTTPStatus string 
+				
+				
 			
-				Method string 
+				
+					Method string 
+				
+				
 			
-				Name string 
+				
+					Name string 
+				
+				
 			
-				ParameterID string 
+				
+					ParameterID string 
+				
+				
 			
-				Position string 
+				
+					Position string 
+				
+				
 			
-				Required string 
+				
+					Required string 
+				
+				
 			
-				Serialize string 
+				
+					Serialize string 
+				
+				
 			
-				ServiceID string 
+				
+					ServiceID string 
+				
+				
 			
-				Tag string 
+				
+					Tag string 
+				
+				
 			
-				Title string 
+				
+					Title string 
+				
+				
 			
-				Type string 
+				
+					Type string 
+				
+				
 			
-				ValidateSchemaID string 
+				
+					ValidateSchemaID string 
+				
+				
 			
 		}
 
@@ -510,11 +892,20 @@ package example
 
 		type ServerAutoSQLDelEntity struct{
 			
-				Operator interface{} 
+				
+					Operator interface{} 
+				
+				
 			
-				OperatorID interface{} 
+				
+					OperatorID interface{} 
+				
+				
 			
-				ServerID string 
+				
+					ServerID string 
+				
+				
 			
 		}
 
@@ -526,7 +917,10 @@ package example
 
 		type ServerAutoSQLGetByServerIDEntity struct{
 			
-				ServerID string 
+				
+					ServerID string 
+				
+				
 			
 		}
 
@@ -538,17 +932,35 @@ package example
 
 		type ServerAutoSQLInsertEntity struct{
 			
-				Description string 
+				
+					Description string 
+				
+				
 			
-				ExtensionIds string 
+				
+					ExtensionIds string 
+				
+				
 			
-				Proxy string 
+				
+					Proxy string 
+				
+				
 			
-				ServerID string 
+				
+					ServerID string 
+				
+				
 			
-				ServiceID string 
+				
+					ServiceID string 
+				
+				
 			
-				URL string 
+				
+					URL string 
+				
+				
 			
 		}
 
@@ -560,9 +972,20 @@ package example
 
 		type ServerAutoSQLPaginateEntity struct{
 			
-				Limit int 
+				
+					Limit int 
+				
+				
 			
-				Offset int 
+				
+					Offset int 
+				
+				
+			
+				
+					*ServerAutoSQLPaginateWhereEntity
+				
+				
 			
 		}
 
@@ -573,6 +996,11 @@ package example
 	
 
 		type ServerAutoSQLPaginateTotalEntity struct{
+			
+				
+					*ServerAutoSQLPaginateWhereEntity
+				
+				
 			
 		}
 
@@ -594,17 +1022,35 @@ package example
 
 		type ServerAutoSQLUpdateEntity struct{
 			
-				Description string 
+				
+					Description string 
+				
+				
 			
-				ExtensionIds string 
+				
+					ExtensionIds string 
+				
+				
 			
-				Proxy string 
+				
+					Proxy string 
+				
+				
 			
-				ServerID string 
+				
+					ServerID string 
+				
+				
 			
-				ServiceID string 
+				
+					ServiceID string 
+				
+				
 			
-				URL string 
+				
+					URL string 
+				
+				
 			
 		}
 
@@ -616,11 +1062,20 @@ package example
 
 		type ServiceAutoSQLDelEntity struct{
 			
-				Operator interface{} 
+				
+					Operator interface{} 
+				
+				
 			
-				OperatorID interface{} 
+				
+					OperatorID interface{} 
+				
+				
 			
-				ServiceID string 
+				
+					ServiceID string 
+				
+				
 			
 		}
 
@@ -632,7 +1087,10 @@ package example
 
 		type ServiceAutoSQLGetByServiceIDEntity struct{
 			
-				ServiceID string 
+				
+					ServiceID string 
+				
+				
 			
 		}
 
@@ -644,23 +1102,50 @@ package example
 
 		type ServiceAutoSQLInsertEntity struct{
 			
-				ContactIds string 
+				
+					ContactIds string 
+				
+				
 			
-				Description string 
+				
+					Description string 
+				
+				
 			
-				License string 
+				
+					License string 
+				
+				
 			
-				Proxy string 
+				
+					Proxy string 
+				
+				
 			
-				Security string 
+				
+					Security string 
+				
+				
 			
-				ServiceID string 
+				
+					ServiceID string 
+				
+				
 			
-				Title string 
+				
+					Title string 
+				
+				
 			
-				Variables string 
+				
+					Variables string 
+				
+				
 			
-				Version string 
+				
+					Version string 
+				
+				
 			
 		}
 
@@ -672,9 +1157,20 @@ package example
 
 		type ServiceAutoSQLPaginateEntity struct{
 			
-				Limit int 
+				
+					Limit int 
+				
+				
 			
-				Offset int 
+				
+					Offset int 
+				
+				
+			
+				
+					*ServiceAutoSQLPaginateWhereEntity
+				
+				
 			
 		}
 
@@ -685,6 +1181,11 @@ package example
 	
 
 		type ServiceAutoSQLPaginateTotalEntity struct{
+			
+				
+					*ServiceAutoSQLPaginateWhereEntity
+				
+				
 			
 		}
 
@@ -706,23 +1207,50 @@ package example
 
 		type ServiceAutoSQLUpdateEntity struct{
 			
-				ContactIds string 
+				
+					ContactIds string 
+				
+				
 			
-				Description string 
+				
+					Description string 
+				
+				
 			
-				License string 
+				
+					License string 
+				
+				
 			
-				Proxy string 
+				
+					Proxy string 
+				
+				
 			
-				Security string 
+				
+					Security string 
+				
+				
 			
-				ServiceID string 
+				
+					ServiceID string 
+				
+				
 			
-				Title string 
+				
+					Title string 
+				
+				
 			
-				Variables string 
+				
+					Variables string 
+				
+				
 			
-				Version string 
+				
+					Version string 
+				
+				
 			
 		}
 
@@ -734,11 +1262,20 @@ package example
 
 		type ValidateSchemaAutoSQLDelEntity struct{
 			
-				Operator interface{} 
+				
+					Operator interface{} 
+				
+				
 			
-				OperatorID interface{} 
+				
+					OperatorID interface{} 
+				
+				
 			
-				ValidateSchemaID string 
+				
+					ValidateSchemaID string 
+				
+				
 			
 		}
 
@@ -750,7 +1287,10 @@ package example
 
 		type ValidateSchemaAutoSQLGetByValidateSchemaIDEntity struct{
 			
-				ValidateSchemaID string 
+				
+					ValidateSchemaID string 
+				
+				
 			
 		}
 
@@ -762,89 +1302,215 @@ package example
 
 		type ValidateSchemaAutoSQLInsertEntity struct{
 			
-				AdditionalProperties string 
+				
+					AdditionalProperties string 
+				
+				
 			
-				AllOf string 
+				
+					AllOf string 
+				
+				
 			
-				AllowEmptyValue string 
+				
+					AllowEmptyValue string 
+				
+				
 			
-				AllowReserved string 
+				
+					AllowReserved string 
+				
+				
 			
-				AnyOf string 
+				
+					AnyOf string 
+				
+				
 			
-				Default string 
+				
+					Default string 
+				
+				
 			
-				Deprecated string 
+				
+					Deprecated string 
+				
+				
 			
-				Description string 
+				
+					Description string 
+				
+				
 			
-				Discriminator string 
+				
+					Discriminator string 
+				
+				
 			
-				Enum string 
+				
+					Enum string 
+				
+				
 			
-				EnumNames string 
+				
+					EnumNames string 
+				
+				
 			
-				EnumTitles string 
+				
+					EnumTitles string 
+				
+				
 			
-				Example string 
+				
+					Example string 
+				
+				
 			
-				ExclusiveMaximum string 
+				
+					ExclusiveMaximum string 
+				
+				
 			
-				ExclusiveMinimum string 
+				
+					ExclusiveMinimum string 
+				
+				
 			
-				Extensions string 
+				
+					Extensions string 
+				
+				
 			
-				ExternalDocs string 
+				
+					ExternalDocs string 
+				
+				
 			
-				ExternalPros string 
+				
+					ExternalPros string 
+				
+				
 			
-				Format string 
+				
+					Format string 
+				
+				
 			
-				MaxItems int 
+				
+					MaxItems int 
+				
+				
 			
-				MaxLength int 
+				
+					MaxLength int 
+				
+				
 			
-				MaxProperties int 
+				
+					MaxProperties int 
+				
+				
 			
-				Maxnum int 
+				
+					Maxnum int 
+				
+				
 			
-				MinItems int 
+				
+					MinItems int 
+				
+				
 			
-				MinLength int 
+				
+					MinLength int 
+				
+				
 			
-				MinProperties int 
+				
+					MinProperties int 
+				
+				
 			
-				Minimum int 
+				
+					Minimum int 
+				
+				
 			
-				MultipleOf int 
+				
+					MultipleOf int 
+				
+				
 			
-				Not string 
+				
+					Not string 
+				
+				
 			
-				Nullable string 
+				
+					Nullable string 
+				
+				
 			
-				OneOf string 
+				
+					OneOf string 
+				
+				
 			
-				Pattern string 
+				
+					Pattern string 
+				
+				
 			
-				ReadOnly string 
+				
+					ReadOnly string 
+				
+				
 			
-				Remark string 
+				
+					Remark string 
+				
+				
 			
-				Required string 
+				
+					Required string 
+				
+				
 			
-				ServiceID string 
+				
+					ServiceID string 
+				
+				
 			
-				Summary string 
+				
+					Summary string 
+				
+				
 			
-				Type string 
+				
+					Type string 
+				
+				
 			
-				UniqueItems string 
+				
+					UniqueItems string 
+				
+				
 			
-				ValidateSchemaID string 
+				
+					ValidateSchemaID string 
+				
+				
 			
-				WriteOnly string 
+				
+					WriteOnly string 
+				
+				
 			
-				XML string 
+				
+					XML string 
+				
+				
 			
 		}
 
@@ -856,9 +1522,20 @@ package example
 
 		type ValidateSchemaAutoSQLPaginateEntity struct{
 			
-				Limit int 
+				
+					Limit int 
+				
+				
 			
-				Offset int 
+				
+					Offset int 
+				
+				
+			
+				
+					*ValidateSchemaAutoSQLPaginateWhereEntity
+				
+				
 			
 		}
 
@@ -869,6 +1546,11 @@ package example
 	
 
 		type ValidateSchemaAutoSQLPaginateTotalEntity struct{
+			
+				
+					*ValidateSchemaAutoSQLPaginateWhereEntity
+				
+				
 			
 		}
 
@@ -890,89 +1572,215 @@ package example
 
 		type ValidateSchemaAutoSQLUpdateEntity struct{
 			
-				AdditionalProperties string 
+				
+					AdditionalProperties string 
+				
+				
 			
-				AllOf string 
+				
+					AllOf string 
+				
+				
 			
-				AllowEmptyValue string 
+				
+					AllowEmptyValue string 
+				
+				
 			
-				AllowReserved string 
+				
+					AllowReserved string 
+				
+				
 			
-				AnyOf string 
+				
+					AnyOf string 
+				
+				
 			
-				Default string 
+				
+					Default string 
+				
+				
 			
-				Deprecated string 
+				
+					Deprecated string 
+				
+				
 			
-				Description string 
+				
+					Description string 
+				
+				
 			
-				Discriminator string 
+				
+					Discriminator string 
+				
+				
 			
-				Enum string 
+				
+					Enum string 
+				
+				
 			
-				EnumNames string 
+				
+					EnumNames string 
+				
+				
 			
-				EnumTitles string 
+				
+					EnumTitles string 
+				
+				
 			
-				Example string 
+				
+					Example string 
+				
+				
 			
-				ExclusiveMaximum string 
+				
+					ExclusiveMaximum string 
+				
+				
 			
-				ExclusiveMinimum string 
+				
+					ExclusiveMinimum string 
+				
+				
 			
-				Extensions string 
+				
+					Extensions string 
+				
+				
 			
-				ExternalDocs string 
+				
+					ExternalDocs string 
+				
+				
 			
-				ExternalPros string 
+				
+					ExternalPros string 
+				
+				
 			
-				Format string 
+				
+					Format string 
+				
+				
 			
-				MaxItems int 
+				
+					MaxItems int 
+				
+				
 			
-				MaxLength int 
+				
+					MaxLength int 
+				
+				
 			
-				MaxProperties int 
+				
+					MaxProperties int 
+				
+				
 			
-				Maxnum int 
+				
+					Maxnum int 
+				
+				
 			
-				MinItems int 
+				
+					MinItems int 
+				
+				
 			
-				MinLength int 
+				
+					MinLength int 
+				
+				
 			
-				MinProperties int 
+				
+					MinProperties int 
+				
+				
 			
-				Minimum int 
+				
+					Minimum int 
+				
+				
 			
-				MultipleOf int 
+				
+					MultipleOf int 
+				
+				
 			
-				Not string 
+				
+					Not string 
+				
+				
 			
-				Nullable string 
+				
+					Nullable string 
+				
+				
 			
-				OneOf string 
+				
+					OneOf string 
+				
+				
 			
-				Pattern string 
+				
+					Pattern string 
+				
+				
 			
-				ReadOnly string 
+				
+					ReadOnly string 
+				
+				
 			
-				Remark string 
+				
+					Remark string 
+				
+				
 			
-				Required string 
+				
+					Required string 
+				
+				
 			
-				ServiceID string 
+				
+					ServiceID string 
+				
+				
 			
-				Summary string 
+				
+					Summary string 
+				
+				
 			
-				Type string 
+				
+					Type string 
+				
+				
 			
-				UniqueItems string 
+				
+					UniqueItems string 
+				
+				
 			
-				ValidateSchemaID string 
+				
+					ValidateSchemaID string 
+				
+				
 			
-				WriteOnly string 
+				
+					WriteOnly string 
+				
+				
 			
-				XML string 
+				
+					XML string 
+				
+				
 			
 		}
 

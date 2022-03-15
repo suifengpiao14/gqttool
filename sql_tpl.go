@@ -2,6 +2,7 @@ package gqttool
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/suifengpiao14/gqt/v2/gqttpl"
 )
@@ -11,14 +12,38 @@ func Backquote(s string) (out string) {
 	return
 }
 
-func GenerateSQLTpl(table *Table, repo *RepositoryMeta) (defineResultList []*gqttpl.TPLDefine, err error) { // list 保证后面输出顺序
-	metaNamespace, err := repo.GetNamespaceBySufix(MetaNameSpaceSuffix)
+func GenerateSQLTpl(table *Table, repo *RepositoryMeta) (tplDefineList []*gqttpl.TPLDefine, err error) { // list 保证后面输出顺序
+	metaNamespaceList, err := repo.GetNamespaceBySufix(MetaNameSpaceSuffix)
 	if err != nil {
 		return
 	}
-	defineResultList, err = repo.GetByNamespace(metaNamespace, table)
-	if err != nil {
-		return
+	sqlNamespace := ""
+	tableNamespace := ""
+	for _, namespace := range metaNamespaceList {
+		sqlSuffix := fmt.Sprintf("%s.%s", "sql", MetaNameSpaceSuffix)
+		if strings.HasSuffix(namespace, sqlSuffix) {
+			sqlNamespace = namespace
+		}
+		tableSuffix := fmt.Sprintf("%s.%s", table.SnakeCase(), MetaNameSpaceSuffix)
+		if strings.HasSuffix(namespace, tableSuffix) {
+			tableNamespace = namespace
+		}
+	}
+	tplDefineList = make([]*gqttpl.TPLDefine, 0)
+	if sqlNamespace != "" {
+		sqlTplDefineList, err := repo.GetByNamespace(sqlNamespace, table)
+		if err != nil {
+			return tplDefineList, err
+		}
+		tplDefineList = append(tplDefineList, sqlTplDefineList...)
+	}
+
+	if tableNamespace != "" {
+		tableTplDefineList, err := repo.GetByNamespace(tableNamespace, table)
+		if err != nil {
+			return tplDefineList, err
+		}
+		tplDefineList = append(tplDefineList, tableTplDefineList...)
 	}
 	return
 }

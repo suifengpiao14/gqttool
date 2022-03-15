@@ -121,6 +121,11 @@ func (t *Table) TableNameCamel() (camelName string) {
 	camelName = ToCamel(name)
 	return
 }
+func (t *Table) SnakeCase() (snakeName string) {
+	name := t.TableNameTrimPrefix()
+	snakeName = SnakeCase(name)
+	return
+}
 func (t *Table) TableNameTrimPrefix() (name string) {
 	name = t.TableName
 	if t.TablePrefix != "" {
