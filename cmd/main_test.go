@@ -41,7 +41,7 @@ func TestRunCmdEntity(*testing.T) {
 func TestRunCmdCrud(*testing.T) {
 	metaDir := "../example/template/meta"
 	tplDir := "../example/template/sql"
-	err := runCmdCrud(metaDir, tplDir, true)
+	err := runCmdSQL(metaDir, tplDir, true)
 	if err != nil {
 		panic(err)
 	}
