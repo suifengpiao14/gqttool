@@ -19,14 +19,14 @@ var MetaTemplatefuncMap = template.FuncMap{
 	"toLowerCamel":  gqttpl.ToLowerCamel,
 	"snakeCase":     gqttpl.SnakeCase,
 
-	"tplGetByPrimaryKey":    TplGetByPrimaryKey,
-	"tplGetAllByPrimaryKey": TplGetAllByPrimaryKey,
-	"tplPaginateWhere":      TplPaginateWhere,
-	"tplPaginateTotal":      TplPaginateTotal,
-	"tplPaginate":           TplPaginate,
-	"tplInsert":             TplInsert,
-	"tplUpdate":             TplUpdate,
-	"tplDel":                TplDel,
+	"tplGetByPrimaryKey":        TplGetByPrimaryKey,
+	"tplGetAllByPrimaryKeyList": TplGetAllByPrimaryKeyList,
+	"tplPaginateWhere":          TplPaginateWhere,
+	"tplPaginateTotal":          TplPaginateTotal,
+	"tplPaginate":               TplPaginate,
+	"tplInsert":                 TplInsert,
+	"tplUpdate":                 TplUpdate,
+	"tplDel":                    TplDel,
 }
 
 func convertData2Table(data interface{}) (table *Table, err error) {
@@ -46,13 +46,13 @@ func convertData2Table(data interface{}) (table *Table, err error) {
 	return
 }
 
-func TplGetAllByPrimaryKey(data interface{}) (tpl string, err error) {
+func TplGetAllByPrimaryKeyList(data interface{}) (tpl string, err error) {
 	table, err := convertData2Table(data)
 	if err != nil {
 		return
 	}
 	primaryKeyCamel := table.PrimaryKeyCamel()
-	name := fmt.Sprintf("GetAllBy%s", primaryKeyCamel)
+	name := fmt.Sprintf("GetAllBy%sList", primaryKeyCamel)
 	tpl = fmt.Sprintf("{{define \"%s\"}}\nselect * from `%s`  where `%s` in ({{in . .%sList}})", name, table.TableName, table.PrimaryKey, primaryKeyCamel)
 	if table.DeleteColumn != "" {
 		tpl = fmt.Sprintf("%s  and `%s` is null", tpl, table.DeleteColumn)
