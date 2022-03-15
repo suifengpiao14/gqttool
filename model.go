@@ -85,7 +85,7 @@ const (
 )
 
 type Column struct {
-	prefix        string
+	Prefix        string
 	CamelName     string
 	Name          string
 	Type          string
