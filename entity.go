@@ -271,6 +271,7 @@ func EntityTpl() (tpl string) {
 				{{end}}
 				
 			{{end}}
+			gqt.DataVolumeMap
 		}
 
 		func (t *{{.StructName}}) TplName() string{

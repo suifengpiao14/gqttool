@@ -160,7 +160,9 @@ func runCmdEntity(sqlsqlDir string, entityFilename string, force bool) (err erro
 		return
 	}
 	packageLine := fmt.Sprintf("package %s", packageName)
+	importLine := `import "github.com/suifengpiao14/gqt/v2"`
 	contentArr = append(contentArr, packageLine)
+	contentArr = append(contentArr, importLine)
 	contentArr = append(contentArr, entityList...)
 	content := strings.Join(contentArr, "\n")
 	err = saveFile(entityFilename, content, force)
