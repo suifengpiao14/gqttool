@@ -1,6 +1,6 @@
 
 [[tplGetByPrimaryKey .]]
-[[tplGetAllByPrimaryKey .]]
+[[tplGetAllByPrimaryKeyList .]]
 
 [[tplPaginateWhere .]]
 [[tplPaginateTotal .]]

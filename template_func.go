@@ -91,7 +91,7 @@ func TplPaginateTotal(data interface{}) (tpl string, err error) {
 		return
 	}
 	name := "PaginateTotal"
-	tpl = fmt.Sprintf("{{define \"%s\"}}\nselect count(*) as `count` from `%s`  where 1=1 {{template \"%s\" \".\"}} ", name, table.TableName, tplPaginateWhereName)
+	tpl = fmt.Sprintf("{{define \"%s\"}}\nselect count(*) as `count` from `%s`  where 1=1 {{template \"%s\" .}} ", name, table.TableName, tplPaginateWhereName)
 	if table.DeleteColumn != "" {
 		tpl = fmt.Sprintf("%s  and `%s` is null", tpl, table.DeleteColumn)
 	}
@@ -105,7 +105,7 @@ func TplPaginate(data interface{}) (tpl string, err error) {
 		return
 	}
 	name := "Paginate"
-	tpl = fmt.Sprintf("{{define \"%s\"}}\nselect * from `%s`  where 1=1 {{template \"%s\" \".\"}} ", name, table.TableName, tplPaginateWhereName)
+	tpl = fmt.Sprintf("{{define \"%s\"}}\nselect * from `%s`  where 1=1 {{template \"%s\" .}} ", name, table.TableName, tplPaginateWhereName)
 	if table.DeleteColumn != "" {
 		tpl = fmt.Sprintf("%s  and `%s` is null", tpl, table.DeleteColumn)
 	}

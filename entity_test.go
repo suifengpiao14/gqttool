@@ -4,7 +4,9 @@ import (
 	"fmt"
 	"testing"
 
+	"github.com/suifengpiao14/gqt/v2"
 	"github.com/suifengpiao14/gqt/v2/gqttpl"
+	"github.com/suifengpiao14/gqttool/example"
 )
 
 func TestGetTemplateNames(t *testing.T) {
@@ -174,4 +176,24 @@ select * from service where service_id=:ServiceID and  deleted_at is null;
 		SQLTpl: sqlTplService,
 	}
 	return
+}
+
+func TestWhereConditon(t *testing.T) {
+	entity := example.SQLAPIGenSQLPaginateEntity{
+		Limit:  10,
+		Offset: 20,
+	}
+	// entity.SQLAPIGenSQLPaginateWhereEntity = example.SQLAPIGenSQLPaginateWhereEntity{
+	// 	APIIDList: []int{1, 3},
+	// }
+	repo := gqt.NewRepositorySQL()
+	err := repo.AddByDir("example/template", gqt.TemplatefuncMap)
+	if err != nil {
+		panic(err)
+	}
+	sqlRow, err := repo.GetSQLByTplEntity(&entity)
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println(sqlRow.SQL)
 }
