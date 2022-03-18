@@ -1,6 +1,6 @@
 package example
 
-import "github.com/suifengpiao14/gqt/v2"
+import "github.com/suifengpiao14/gqt/v2/gqttpl"
 
 type SQLAPIGenSQLDelEntity struct {
 	APIID string
@@ -9,7 +9,7 @@ type SQLAPIGenSQLDelEntity struct {
 
 	OperatorStr string
 
-	gqt.DataVolumeMap
+	gqttpl.DataVolumeMap
 }
 
 func (t *SQLAPIGenSQLDelEntity) TplName() string {
@@ -19,7 +19,7 @@ func (t *SQLAPIGenSQLDelEntity) TplName() string {
 type SQLAPIGenSQLGetAllByAPIIDListEntity struct {
 	APIIDList []string
 
-	gqt.DataVolumeMap
+	gqttpl.DataVolumeMap
 }
 
 func (t *SQLAPIGenSQLGetAllByAPIIDListEntity) TplName() string {
@@ -29,7 +29,7 @@ func (t *SQLAPIGenSQLGetAllByAPIIDListEntity) TplName() string {
 type SQLAPIGenSQLGetByAPIIDEntity struct {
 	APIID string
 
-	gqt.DataVolumeMap
+	gqttpl.DataVolumeMap
 }
 
 func (t *SQLAPIGenSQLGetByAPIIDEntity) TplName() string {
@@ -53,7 +53,7 @@ type SQLAPIGenSQLInsertEntity struct {
 
 	URI string
 
-	gqt.DataVolumeMap
+	gqttpl.DataVolumeMap
 }
 
 func (t *SQLAPIGenSQLInsertEntity) TplName() string {
@@ -67,7 +67,7 @@ type SQLAPIGenSQLPaginateEntity struct {
 
 	SQLAPIGenSQLPaginateWhereEntity
 
-	gqt.DataVolumeMap
+	gqttpl.DataVolumeMap
 }
 
 func (t *SQLAPIGenSQLPaginateEntity) TplName() string {
@@ -75,9 +75,9 @@ func (t *SQLAPIGenSQLPaginateEntity) TplName() string {
 }
 
 type SQLAPIGenSQLPaginateTotalEntity struct {
-	*SQLAPIGenSQLPaginateWhereEntity
+	SQLAPIGenSQLPaginateWhereEntity
 
-	gqt.DataVolumeMap
+	gqttpl.DataVolumeMap
 }
 
 func (t *SQLAPIGenSQLPaginateTotalEntity) TplName() string {
@@ -85,9 +85,9 @@ func (t *SQLAPIGenSQLPaginateTotalEntity) TplName() string {
 }
 
 type SQLAPIGenSQLPaginateWhereEntity struct {
-	APIIDList []int
+	APIIDList interface{}
 
-	gqt.DataVolumeMap
+	gqttpl.DataVolumeMap
 }
 
 func (t *SQLAPIGenSQLPaginateWhereEntity) TplName() string {
@@ -111,7 +111,7 @@ type SQLAPIGenSQLUpdateEntity struct {
 
 	URI string
 
-	gqt.DataVolumeMap
+	gqttpl.DataVolumeMap
 }
 
 func (t *SQLAPIGenSQLUpdateEntity) TplName() string {
@@ -121,7 +121,7 @@ func (t *SQLAPIGenSQLUpdateEntity) TplName() string {
 type SQLExampleGenSQLGetAllByExampleIDListEntity struct {
 	ExampleIDList []string
 
-	gqt.DataVolumeMap
+	gqttpl.DataVolumeMap
 }
 
 func (t *SQLExampleGenSQLGetAllByExampleIDListEntity) TplName() string {
@@ -131,7 +131,7 @@ func (t *SQLExampleGenSQLGetAllByExampleIDListEntity) TplName() string {
 type SQLExampleGenSQLGetByExampleIDEntity struct {
 	ExampleID string
 
-	gqt.DataVolumeMap
+	gqttpl.DataVolumeMap
 }
 
 func (t *SQLExampleGenSQLGetByExampleIDEntity) TplName() string {
@@ -155,7 +155,7 @@ type SQLExampleGenSQLInsertEntity struct {
 
 	Title string
 
-	gqt.DataVolumeMap
+	gqttpl.DataVolumeMap
 }
 
 func (t *SQLExampleGenSQLInsertEntity) TplName() string {
@@ -167,9 +167,9 @@ type SQLExampleGenSQLPaginateEntity struct {
 
 	Offset int
 
-	*SQLExampleGenSQLPaginateWhereEntity
+	SQLExampleGenSQLPaginateWhereEntity
 
-	gqt.DataVolumeMap
+	gqttpl.DataVolumeMap
 }
 
 func (t *SQLExampleGenSQLPaginateEntity) TplName() string {
@@ -177,9 +177,9 @@ func (t *SQLExampleGenSQLPaginateEntity) TplName() string {
 }
 
 type SQLExampleGenSQLPaginateTotalEntity struct {
-	*SQLExampleGenSQLPaginateWhereEntity
+	SQLExampleGenSQLPaginateWhereEntity
 
-	gqt.DataVolumeMap
+	gqttpl.DataVolumeMap
 }
 
 func (t *SQLExampleGenSQLPaginateTotalEntity) TplName() string {
@@ -187,7 +187,7 @@ func (t *SQLExampleGenSQLPaginateTotalEntity) TplName() string {
 }
 
 type SQLExampleGenSQLPaginateWhereEntity struct {
-	gqt.DataVolumeMap
+	gqttpl.DataVolumeMap
 }
 
 func (t *SQLExampleGenSQLPaginateWhereEntity) TplName() string {
@@ -211,7 +211,7 @@ type SQLExampleGenSQLUpdateEntity struct {
 
 	Title string
 
-	gqt.DataVolumeMap
+	gqttpl.DataVolumeMap
 }
 
 func (t *SQLExampleGenSQLUpdateEntity) TplName() string {
@@ -221,7 +221,7 @@ func (t *SQLExampleGenSQLUpdateEntity) TplName() string {
 type SQLMarkdownGenSQLGetAllByMarkdownIDListEntity struct {
 	MarkdownIDList []string
 
-	gqt.DataVolumeMap
+	gqttpl.DataVolumeMap
 }
 
 func (t *SQLMarkdownGenSQLGetAllByMarkdownIDListEntity) TplName() string {
@@ -231,7 +231,7 @@ func (t *SQLMarkdownGenSQLGetAllByMarkdownIDListEntity) TplName() string {
 type SQLMarkdownGenSQLGetByMarkdownIDEntity struct {
 	MarkdownID string
 
-	gqt.DataVolumeMap
+	gqttpl.DataVolumeMap
 }
 
 func (t *SQLMarkdownGenSQLGetByMarkdownIDEntity) TplName() string {
@@ -257,7 +257,7 @@ type SQLMarkdownGenSQLInsertEntity struct {
 
 	Title string
 
-	gqt.DataVolumeMap
+	gqttpl.DataVolumeMap
 }
 
 func (t *SQLMarkdownGenSQLInsertEntity) TplName() string {
@@ -269,9 +269,9 @@ type SQLMarkdownGenSQLPaginateEntity struct {
 
 	Offset int
 
-	*SQLMarkdownGenSQLPaginateWhereEntity
+	SQLMarkdownGenSQLPaginateWhereEntity
 
-	gqt.DataVolumeMap
+	gqttpl.DataVolumeMap
 }
 
 func (t *SQLMarkdownGenSQLPaginateEntity) TplName() string {
@@ -279,9 +279,9 @@ func (t *SQLMarkdownGenSQLPaginateEntity) TplName() string {
 }
 
 type SQLMarkdownGenSQLPaginateTotalEntity struct {
-	*SQLMarkdownGenSQLPaginateWhereEntity
+	SQLMarkdownGenSQLPaginateWhereEntity
 
-	gqt.DataVolumeMap
+	gqttpl.DataVolumeMap
 }
 
 func (t *SQLMarkdownGenSQLPaginateTotalEntity) TplName() string {
@@ -289,7 +289,7 @@ func (t *SQLMarkdownGenSQLPaginateTotalEntity) TplName() string {
 }
 
 type SQLMarkdownGenSQLPaginateWhereEntity struct {
-	gqt.DataVolumeMap
+	gqttpl.DataVolumeMap
 }
 
 func (t *SQLMarkdownGenSQLPaginateWhereEntity) TplName() string {
@@ -315,7 +315,7 @@ type SQLMarkdownGenSQLUpdateEntity struct {
 
 	Title string
 
-	gqt.DataVolumeMap
+	gqttpl.DataVolumeMap
 }
 
 func (t *SQLMarkdownGenSQLUpdateEntity) TplName() string {
@@ -325,7 +325,7 @@ func (t *SQLMarkdownGenSQLUpdateEntity) TplName() string {
 type SQLParameterGenSQLGetAllByParameterIDListEntity struct {
 	ParameterIDList []string
 
-	gqt.DataVolumeMap
+	gqttpl.DataVolumeMap
 }
 
 func (t *SQLParameterGenSQLGetAllByParameterIDListEntity) TplName() string {
@@ -335,7 +335,7 @@ func (t *SQLParameterGenSQLGetAllByParameterIDListEntity) TplName() string {
 type SQLParameterGenSQLGetByParameterIDEntity struct {
 	ParameterID string
 
-	gqt.DataVolumeMap
+	gqttpl.DataVolumeMap
 }
 
 func (t *SQLParameterGenSQLGetByParameterIDEntity) TplName() string {
@@ -383,7 +383,7 @@ type SQLParameterGenSQLInsertEntity struct {
 
 	ValidateSchemaID string
 
-	gqt.DataVolumeMap
+	gqttpl.DataVolumeMap
 }
 
 func (t *SQLParameterGenSQLInsertEntity) TplName() string {
@@ -395,9 +395,9 @@ type SQLParameterGenSQLPaginateEntity struct {
 
 	Offset int
 
-	*SQLParameterGenSQLPaginateWhereEntity
+	SQLParameterGenSQLPaginateWhereEntity
 
-	gqt.DataVolumeMap
+	gqttpl.DataVolumeMap
 }
 
 func (t *SQLParameterGenSQLPaginateEntity) TplName() string {
@@ -405,9 +405,9 @@ func (t *SQLParameterGenSQLPaginateEntity) TplName() string {
 }
 
 type SQLParameterGenSQLPaginateTotalEntity struct {
-	*SQLParameterGenSQLPaginateWhereEntity
+	SQLParameterGenSQLPaginateWhereEntity
 
-	gqt.DataVolumeMap
+	gqttpl.DataVolumeMap
 }
 
 func (t *SQLParameterGenSQLPaginateTotalEntity) TplName() string {
@@ -415,7 +415,7 @@ func (t *SQLParameterGenSQLPaginateTotalEntity) TplName() string {
 }
 
 type SQLParameterGenSQLPaginateWhereEntity struct {
-	gqt.DataVolumeMap
+	gqttpl.DataVolumeMap
 }
 
 func (t *SQLParameterGenSQLPaginateWhereEntity) TplName() string {
@@ -463,7 +463,7 @@ type SQLParameterGenSQLUpdateEntity struct {
 
 	ValidateSchemaID string
 
-	gqt.DataVolumeMap
+	gqttpl.DataVolumeMap
 }
 
 func (t *SQLParameterGenSQLUpdateEntity) TplName() string {
@@ -473,7 +473,7 @@ func (t *SQLParameterGenSQLUpdateEntity) TplName() string {
 type SQLServerGenSQLGetAllByServerIDListEntity struct {
 	ServerIDList []string
 
-	gqt.DataVolumeMap
+	gqttpl.DataVolumeMap
 }
 
 func (t *SQLServerGenSQLGetAllByServerIDListEntity) TplName() string {
@@ -483,7 +483,7 @@ func (t *SQLServerGenSQLGetAllByServerIDListEntity) TplName() string {
 type SQLServerGenSQLGetByServerIDEntity struct {
 	ServerID string
 
-	gqt.DataVolumeMap
+	gqttpl.DataVolumeMap
 }
 
 func (t *SQLServerGenSQLGetByServerIDEntity) TplName() string {
@@ -503,7 +503,7 @@ type SQLServerGenSQLInsertEntity struct {
 
 	URL string
 
-	gqt.DataVolumeMap
+	gqttpl.DataVolumeMap
 }
 
 func (t *SQLServerGenSQLInsertEntity) TplName() string {
@@ -515,9 +515,9 @@ type SQLServerGenSQLPaginateEntity struct {
 
 	Offset int
 
-	*SQLServerGenSQLPaginateWhereEntity
+	SQLServerGenSQLPaginateWhereEntity
 
-	gqt.DataVolumeMap
+	gqttpl.DataVolumeMap
 }
 
 func (t *SQLServerGenSQLPaginateEntity) TplName() string {
@@ -525,9 +525,9 @@ func (t *SQLServerGenSQLPaginateEntity) TplName() string {
 }
 
 type SQLServerGenSQLPaginateTotalEntity struct {
-	*SQLServerGenSQLPaginateWhereEntity
+	SQLServerGenSQLPaginateWhereEntity
 
-	gqt.DataVolumeMap
+	gqttpl.DataVolumeMap
 }
 
 func (t *SQLServerGenSQLPaginateTotalEntity) TplName() string {
@@ -535,7 +535,7 @@ func (t *SQLServerGenSQLPaginateTotalEntity) TplName() string {
 }
 
 type SQLServerGenSQLPaginateWhereEntity struct {
-	gqt.DataVolumeMap
+	gqttpl.DataVolumeMap
 }
 
 func (t *SQLServerGenSQLPaginateWhereEntity) TplName() string {
@@ -555,7 +555,7 @@ type SQLServerGenSQLUpdateEntity struct {
 
 	URL string
 
-	gqt.DataVolumeMap
+	gqttpl.DataVolumeMap
 }
 
 func (t *SQLServerGenSQLUpdateEntity) TplName() string {
@@ -565,7 +565,7 @@ func (t *SQLServerGenSQLUpdateEntity) TplName() string {
 type SQLServiceGenSQLGetAllByServiceIDListEntity struct {
 	ServiceIDList []string
 
-	gqt.DataVolumeMap
+	gqttpl.DataVolumeMap
 }
 
 func (t *SQLServiceGenSQLGetAllByServiceIDListEntity) TplName() string {
@@ -575,7 +575,7 @@ func (t *SQLServiceGenSQLGetAllByServiceIDListEntity) TplName() string {
 type SQLServiceGenSQLGetByServiceIDEntity struct {
 	ServiceID string
 
-	gqt.DataVolumeMap
+	gqttpl.DataVolumeMap
 }
 
 func (t *SQLServiceGenSQLGetByServiceIDEntity) TplName() string {
@@ -601,7 +601,7 @@ type SQLServiceGenSQLInsertEntity struct {
 
 	Version string
 
-	gqt.DataVolumeMap
+	gqttpl.DataVolumeMap
 }
 
 func (t *SQLServiceGenSQLInsertEntity) TplName() string {
@@ -613,9 +613,9 @@ type SQLServiceGenSQLPaginateEntity struct {
 
 	Offset int
 
-	*SQLServiceGenSQLPaginateWhereEntity
+	SQLServiceGenSQLPaginateWhereEntity
 
-	gqt.DataVolumeMap
+	gqttpl.DataVolumeMap
 }
 
 func (t *SQLServiceGenSQLPaginateEntity) TplName() string {
@@ -623,9 +623,9 @@ func (t *SQLServiceGenSQLPaginateEntity) TplName() string {
 }
 
 type SQLServiceGenSQLPaginateTotalEntity struct {
-	*SQLServiceGenSQLPaginateWhereEntity
+	SQLServiceGenSQLPaginateWhereEntity
 
-	gqt.DataVolumeMap
+	gqttpl.DataVolumeMap
 }
 
 func (t *SQLServiceGenSQLPaginateTotalEntity) TplName() string {
@@ -633,7 +633,7 @@ func (t *SQLServiceGenSQLPaginateTotalEntity) TplName() string {
 }
 
 type SQLServiceGenSQLPaginateWhereEntity struct {
-	gqt.DataVolumeMap
+	gqttpl.DataVolumeMap
 }
 
 func (t *SQLServiceGenSQLPaginateWhereEntity) TplName() string {
@@ -659,7 +659,7 @@ type SQLServiceGenSQLUpdateEntity struct {
 
 	Version string
 
-	gqt.DataVolumeMap
+	gqttpl.DataVolumeMap
 }
 
 func (t *SQLServiceGenSQLUpdateEntity) TplName() string {
@@ -669,7 +669,7 @@ func (t *SQLServiceGenSQLUpdateEntity) TplName() string {
 type SQLValidateSchemaGenSQLGetAllByValidateSchemaIDListEntity struct {
 	ValidateSchemaIDList []string
 
-	gqt.DataVolumeMap
+	gqttpl.DataVolumeMap
 }
 
 func (t *SQLValidateSchemaGenSQLGetAllByValidateSchemaIDListEntity) TplName() string {
@@ -679,7 +679,7 @@ func (t *SQLValidateSchemaGenSQLGetAllByValidateSchemaIDListEntity) TplName() st
 type SQLValidateSchemaGenSQLGetByValidateSchemaIDEntity struct {
 	ValidateSchemaID string
 
-	gqt.DataVolumeMap
+	gqttpl.DataVolumeMap
 }
 
 func (t *SQLValidateSchemaGenSQLGetByValidateSchemaIDEntity) TplName() string {
@@ -771,7 +771,7 @@ type SQLValidateSchemaGenSQLInsertEntity struct {
 
 	XML string
 
-	gqt.DataVolumeMap
+	gqttpl.DataVolumeMap
 }
 
 func (t *SQLValidateSchemaGenSQLInsertEntity) TplName() string {
@@ -783,9 +783,9 @@ type SQLValidateSchemaGenSQLPaginateEntity struct {
 
 	Offset int
 
-	*SQLValidateSchemaGenSQLPaginateWhereEntity
+	SQLValidateSchemaGenSQLPaginateWhereEntity
 
-	gqt.DataVolumeMap
+	gqttpl.DataVolumeMap
 }
 
 func (t *SQLValidateSchemaGenSQLPaginateEntity) TplName() string {
@@ -793,9 +793,9 @@ func (t *SQLValidateSchemaGenSQLPaginateEntity) TplName() string {
 }
 
 type SQLValidateSchemaGenSQLPaginateTotalEntity struct {
-	*SQLValidateSchemaGenSQLPaginateWhereEntity
+	SQLValidateSchemaGenSQLPaginateWhereEntity
 
-	gqt.DataVolumeMap
+	gqttpl.DataVolumeMap
 }
 
 func (t *SQLValidateSchemaGenSQLPaginateTotalEntity) TplName() string {
@@ -803,7 +803,7 @@ func (t *SQLValidateSchemaGenSQLPaginateTotalEntity) TplName() string {
 }
 
 type SQLValidateSchemaGenSQLPaginateWhereEntity struct {
-	gqt.DataVolumeMap
+	gqttpl.DataVolumeMap
 }
 
 func (t *SQLValidateSchemaGenSQLPaginateWhereEntity) TplName() string {
@@ -895,7 +895,7 @@ type SQLValidateSchemaGenSQLUpdateEntity struct {
 
 	XML string
 
-	gqt.DataVolumeMap
+	gqttpl.DataVolumeMap
 }
 
 func (t *SQLValidateSchemaGenSQLUpdateEntity) TplName() string {
