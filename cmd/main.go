@@ -27,7 +27,7 @@ func main() {
 	)
 	modelCmd := flag.NewFlagSet("model", flag.ExitOnError)
 	modelCmd.Usage = helpModel
-	SQLCmd := flag.NewFlagSet("crud", flag.ExitOnError)
+	SQLCmd := flag.NewFlagSet("sql", flag.ExitOnError)
 	SQLCmd.Usage = helpSQL
 	entityCmd := flag.NewFlagSet("entity", flag.ExitOnError)
 	entityCmd.Usage = helpEntity
@@ -115,7 +115,7 @@ func runCmdSQL(metaDir string, sqlDir string, force bool) (err error) {
 	var sqlTplNamespaceList []*gqttool.SQLTplNamespace
 	errChain.SetError(repo.AddByDir(metaDir, gqttool.MetaTemplatefuncMap)).
 		Run(func() (err error) {
-			sqlTplNamespaceList, err = GenerateCrud(repo)
+			sqlTplNamespaceList, err = GenerateSQL(repo)
 			return
 		})
 
@@ -263,7 +263,7 @@ func GenerateEntity(rep *gqttool.RepositoryMeta, sqlTplDefineList []*gqttpl.TPLD
 	return
 }
 
-func GenerateCrud(rep *gqttool.RepositoryMeta) (sqlTplNamespaceList []*gqttool.SQLTplNamespace, err error) {
+func GenerateSQL(rep *gqttool.RepositoryMeta) (sqlTplNamespaceList []*gqttool.SQLTplNamespace, err error) {
 	ddlDefineList, err := rep.GetDDLTPLDefine()
 	if err != nil {
 		return
@@ -354,7 +354,7 @@ Flags:
 
 Example:
 
-  gqttool crud -metaDir template/meta -sqlDir template/sql -force true
+  gqttool sql -metaDir template/meta -sqlDir template/sql -force true
 
 `)
 	os.Exit(0)
