@@ -65,7 +65,7 @@ func main() {
 
 	case "entity":
 		entityCmd.Parse(args)
-		err = runCmdEntity(sqlDir, entityFilename, force)
+		err = runCmdSQLEntity(sqlDir, entityFilename, force)
 		if err != nil {
 			panic(err)
 		}
@@ -133,18 +133,18 @@ func runCmdSQL(metaDir string, sqlDir string, force bool) (err error) {
 	return
 }
 
-func runCmdEntity(sqlsqlDir string, entityFilename string, force bool) (err error) {
+func runCmdSQLEntity(sqlDir string, entityFilename string, force bool) (err error) {
 	repo := gqttool.NewRepositoryMeta()
 	errChain := errorformatter.NewErrorChain()
 	var entityList = make([]string, 0)
 	var sqlTplDefineList = make([]*gqttpl.TPLDefine, 0)
-	errChain.SetError(repo.AddByDir(sqlsqlDir, gqttool.MetaTemplatefuncMap)).
+	errChain.SetError(repo.AddByDir(sqlDir, gqttool.MetaTemplatefuncMap)).
 		Run(func() (err error) {
-			sqlTplDefineList, err = gqttool.ParseDirSqlTplDefine(sqlsqlDir)
+			sqlTplDefineList, err = gqttool.ParseDirTplDefine(sqlDir, gqttpl.SQLNamespaceSuffix)
 			return
 		}).
 		Run(func() (err error) {
-			entityList, err = GenerateEntity(repo, sqlTplDefineList)
+			entityList, err = GenerateSQLEntity(repo, sqlTplDefineList)
 			return
 		})
 
@@ -172,6 +172,44 @@ func runCmdEntity(sqlsqlDir string, entityFilename string, force bool) (err erro
 	return
 }
 
+func runCmdCURLEntity(curlDir string, entityFilename string, force bool) (err error) {
+	repo := gqttool.NewRepositoryMeta()
+	errChain := errorformatter.NewErrorChain()
+	var entityList = make([]string, 0)
+	var tplDefineList = make([]*gqttpl.TPLDefine, 0)
+	errChain.SetError(repo.AddByDir(curlDir, gqttool.MetaTemplatefuncMap)).
+		Run(func() (err error) {
+			tplDefineList, err = gqttool.ParseDirTplDefine(curlDir, gqttpl.CURLNamespaceSuffix)
+			return
+		}).
+		Run(func() (err error) {
+			entityList, err = GenerateCURLEntity(repo, tplDefineList)
+			return
+		})
+
+	err = errChain.Error()
+	if err != nil {
+		return
+	}
+	sort.Strings(entityList)
+
+	contentArr := make([]string, 0)
+	packageName, err := gqttool.GeneratePackageName(path.Dir(entityFilename))
+	if err != nil {
+		return
+	}
+	packageLine := fmt.Sprintf("package %s", packageName)
+	importLine := `import "github.com/suifengpiao14/gqt/v2/gqttpl"`
+	contentArr = append(contentArr, packageLine)
+	contentArr = append(contentArr, importLine)
+	contentArr = append(contentArr, entityList...)
+	content := strings.Join(contentArr, "\n")
+	err = saveFile(entityFilename, content, force)
+	if err != nil {
+		return
+	}
+	return
+}
 func GetFileContent(file string) (content string, err error) {
 	f, err := os.OpenFile(file, os.O_RDONLY, fs.ModePerm)
 	if err != nil {
@@ -216,7 +254,19 @@ func IsExist(path string) bool {
 	return true
 }
 
-func GenerateEntity(rep *gqttool.RepositoryMeta, sqlTplDefineList []*gqttpl.TPLDefine) (entityList []string, err error) {
+func GenerateCURLEntity(rep *gqttool.RepositoryMeta, curlTplDefineList []*gqttpl.TPLDefine) (entityList []string, err error) {
+	entityList = make([]string, 0)
+	for _, sqlDefineTpl := range curlTplDefineList {
+		entityStruct, err := gqttool.CURLEntity(sqlDefineTpl)
+		if err != nil {
+			return nil, err
+		}
+		entityList = append(entityList, entityStruct)
+	}
+	return
+}
+
+func GenerateSQLEntity(rep *gqttool.RepositoryMeta, sqlTplDefineList []*gqttpl.TPLDefine) (entityList []string, err error) {
 	entityList = make([]string, 0)
 	ddlDefineList, err := rep.GetDDLTPLDefine()
 	if err != nil {
@@ -252,7 +302,7 @@ func GenerateEntity(rep *gqttool.RepositoryMeta, sqlTplDefineList []*gqttpl.TPLD
 			}
 		}
 
-		entityStruct, err := gqttool.RepositoryEntity(sqlDefineTpl, relationTableList)
+		entityStruct, err := gqttool.SQLEntity(sqlDefineTpl, relationTableList)
 		if err != nil {
 			return nil, err
 		}

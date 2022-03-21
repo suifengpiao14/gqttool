@@ -102,7 +102,7 @@ func TestRepositoryEntity(t *testing.T) {
 		Name:      "test",
 		Namespace: "ddl",
 	}
-	entityStruct, err := RepositoryEntity(sqlTplDefine, tableList)
+	entityStruct, err := SQLEntity(sqlTplDefine, tableList)
 	if err != nil {
 		panic(err)
 	}

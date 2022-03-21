@@ -20,8 +20,8 @@ type EntityElement struct {
 	FullName    string
 }
 
-//RepositoryEntity 根据数据表ddl和sql tpl 生成 sql tpl 调用的输入、输出实体
-func RepositoryEntity(sqlTplDefine *gqttpl.TPLDefine, tableList []*Table) (entityStruct string, err error) {
+//SQLEntity 根据数据表ddl和sql tpl 生成 sql tpl 调用的输入、输出实体
+func SQLEntity(sqlTplDefine *gqttpl.TPLDefine, tableList []*Table) (entityStruct string, err error) {
 	variableMap := ParsSqlTplVariable(sqlTplDefine.Output, sqlTplDefine.Namespace)
 
 	structName := sqlTplDefine.FullnameCamel()
@@ -105,8 +105,8 @@ func (s *SQLTplNamespace) Filename() (out string) {
 	return
 }
 
-func ParseDirSqlTplDefine(sqlTplDir string) (sqlTplDefineList []*gqttpl.TPLDefine, err error) {
-	allFileList, err := gqttpl.GetTplFilesByDir(sqlTplDir, gqttpl.SQLNamespaceSuffix)
+func ParseDirTplDefine(tplDir string, namespaceSuffix string) (sqlTplDefineList []*gqttpl.TPLDefine, err error) {
+	allFileList, err := gqttpl.GetTplFilesByDir(tplDir, namespaceSuffix)
 	if err != nil {
 		return
 	}
@@ -121,7 +121,7 @@ func ParseDirSqlTplDefine(sqlTplDir string) (sqlTplDefineList []*gqttpl.TPLDefin
 			if err != nil {
 				return nil, err
 			}
-			namespace := gqttpl.FileName2Namespace(filename, sqlTplDir)
+			namespace := gqttpl.FileName2Namespace(filename, tplDir)
 			sqlTplDefine := &gqttpl.TPLDefine{
 				Name:      name,
 				Namespace: namespace,
@@ -265,7 +265,7 @@ func EntityTpl() (tpl string) {
 		type {{.StructName}} struct{
 			{{range .Attributes }}
 				{{if  .IsSubDefine}}
-					{{.FullnameCamel}}Entity
+					*{{.FullnameCamel}}Entity
 				{{else}}
 					{{.Name}} {{.Type}} 
 				{{end}}
