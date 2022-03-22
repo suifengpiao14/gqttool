@@ -21,6 +21,7 @@ func main() {
 		metaDir        string
 		modelFilename  string
 		sqlDir         string
+		curlDir        string
 		entityFilename string
 		force          bool
 		err            error
@@ -29,8 +30,10 @@ func main() {
 	modelCmd.Usage = helpModel
 	SQLCmd := flag.NewFlagSet("sql", flag.ExitOnError)
 	SQLCmd.Usage = helpSQL
-	entityCmd := flag.NewFlagSet("entity", flag.ExitOnError)
-	entityCmd.Usage = helpEntity
+	sqlEntityCmd := flag.NewFlagSet("entity", flag.ExitOnError)
+	sqlEntityCmd.Usage = helpSQLEntity
+	curlEntityCmd := flag.NewFlagSet("entity", flag.ExitOnError)
+	curlEntityCmd.Usage = helpCURLEntity
 	modelCmd.BoolVar(&force, "force", false, "overwrite exist file")
 	modelCmd.StringVar(&metaDir, "metaDir", "template/meta", "ddl/config file dir")
 	modelCmd.StringVar(&modelFilename, "model", "model.gen.go", "model file name")
@@ -39,9 +42,12 @@ func main() {
 	SQLCmd.StringVar(&metaDir, "metaDir", "template/meta", "ddl/config/sql template file dir")
 	SQLCmd.StringVar(&sqlDir, "sqlDir", "template/sql", "sql template dir")
 
-	entityCmd.BoolVar(&force, "force", false, "overwrite exist file")
-	entityCmd.StringVar(&sqlDir, "sqlDir", "template/sql", "sql template dir")
-	entityCmd.StringVar(&entityFilename, "entity", "entity.gen.go", "entity file")
+	sqlEntityCmd.BoolVar(&force, "force", false, "overwrite exist file")
+	sqlEntityCmd.StringVar(&sqlDir, "sqlDir", "template/sql", "sql template dir")
+	sqlEntityCmd.StringVar(&entityFilename, "entity", "sql.entity.gen.go", "entity file")
+	curlEntityCmd.BoolVar(&force, "force", false, "overwrite exist file")
+	curlEntityCmd.StringVar(&sqlDir, "sqlDir", "template/sql", "sql template dir")
+	curlEntityCmd.StringVar(&entityFilename, "entity", "sql.entity.gen.go", "entity file")
 	testing.Init()
 
 	if len(os.Args) < 3 {
@@ -64,8 +70,12 @@ func main() {
 		}
 
 	case "entity":
-		entityCmd.Parse(args)
+		sqlEntityCmd.Parse(args)
 		err = runCmdSQLEntity(sqlDir, entityFilename, force)
+		if err != nil {
+			panic(err)
+		}
+		err = runCmdCURLEntity(sqlDir, entityFilename, force)
 		if err != nil {
 			panic(err)
 		}
@@ -410,7 +420,7 @@ Example:
 	os.Exit(0)
 }
 
-func helpEntity() {
+func helpSQLEntity() {
 	fmt.Fprint(os.Stderr, `gqttool entity is  generation sql template inpur args entity
 
 Usage:
