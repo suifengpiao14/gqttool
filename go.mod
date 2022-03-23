@@ -9,8 +9,8 @@ require (
 	github.com/iancoleman/strcase v0.2.0
 	github.com/pkg/errors v0.9.1
 	github.com/suifengpiao14/errorformatter v0.0.0-20220214013820-e0177a90fb70
-	github.com/suifengpiao14/gqt/v2 v2.0.0-20220319020828-30e8a3a5d03e
-	github.com/suifengpiao14/gqtcurl v0.0.0-20220321090203-7e726f6dd4b8
+	github.com/suifengpiao14/gqt/v2 v2.0.0-20220323103507-52400f4fb037
+	github.com/suifengpiao14/gqtcurl v0.0.0-20220323103534-d699d5813c29
 )
 
 require (
@@ -20,18 +20,16 @@ require (
 	github.com/pingcap/parser v3.1.2+incompatible // indirect
 	github.com/pingcap/tipb v0.0.0-20220314125451-bfb5c2c55188 // indirect
 	github.com/remyoudompheng/bigfft v0.0.0-20200410134404-eec4a21b6bb0 // indirect
+	github.com/rs/xid v1.4.0 // indirect
 	github.com/shirou/gopsutil v3.21.11+incompatible // indirect
 	github.com/sirupsen/logrus v1.8.1 // indirect
 	github.com/yusufpapurcu/wmi v1.2.2 // indirect
-	goa.design/goa/v3 v3.7.0 // indirect
-	golang.org/x/sys v0.0.0-20220319134239-a9b59b0215f8 // indirect
-	gorm.io/gorm v1.23.3 // indirect
 
 )
 
 replace gorm.io/gorm => gorm.io/gorm v1.22.4
 
 // replace github.com/suifengpiao14/gqt/v2 => /Users/admin/Documents/go/gqt
-replace github.com/suifengpiao14/gqt/v2 => D:\\go\\gqt
+//replace github.com/suifengpiao14/gqt/v2 => D:\\go\\gqt
 
-replace github.com/suifengpiao14/gqtcurl => D:\\go\\gqtcurl
+//replace github.com/suifengpiao14/gqtcurl => D:\\go\\gqtcurl

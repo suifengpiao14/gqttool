@@ -10,25 +10,25 @@ import (
 
 //CURLEntity curl 请求体
 func CURLEntity(sqlTplDefine *gqttpl.TPLDefine, curlTplDefineRelationList gqttpl.TPLDefineList) (entityStruct string, err error) {
-	variableMap := ParseTplVariable(sqlTplDefine.Output, sqlTplDefine.Namespace)
-	newVariableMap := make(map[string]*Variable)
-	for variableName, variable := range variableMap {
+	variableList := ParseTplVariable(sqlTplDefine.Output, sqlTplDefine.Namespace)
+	aliasVariableList := make([]*Variable, 0)
+	for _, variable := range variableList {
 		if curlTplDefineRelationList.IsDefineNameCamel(variable.Name) {
-			variable.IsSubDefine = true
 			// 增加一个简称变量，方便模板中使用简称引用
-			alias := &Variable{ //variable.IsSubDefine =true ,不能直接使用
-				Name:      variable.Name,
-				Namespace: variable.Namespace,
+			alias := &Variable{ //复制一份，作为隐式引用属性
+				Name:        variable.Name,
+				Namespace:   variable.Namespace,
+				IsSubDefine: true,
 			}
-			newVariableMap[variable.Name] = alias
+			aliasVariableList = append(aliasVariableList, alias)
 		}
-		newVariableMap[variableName] = variable
 	}
+	variableList = append(variableList, aliasVariableList...)
 	structName := sqlTplDefine.FullnameCamel()
 	entityElement := &EntityElement{
-		VariableMap: newVariableMap,
-		Name:        structName,
-		FullName:    fmt.Sprintf("%s.%s", sqlTplDefine.Namespace, sqlTplDefine.Name),
+		Variables: variableList,
+		Name:      structName,
+		FullName:  fmt.Sprintf("%s.%s", sqlTplDefine.Namespace, sqlTplDefine.Name),
 	}
 	entityTplData, err := FormatEntityData(entityElement)
 	if err != nil {
