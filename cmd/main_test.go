@@ -30,15 +30,23 @@ func TestGeneratePackageName(t *testing.T) {
 	fmt.Println(packageName)
 }
 
-func TestRunCmdEntity(*testing.T) {
+func TestRunCmdSQLEntity(*testing.T) {
 	tplDir := "../example/template"
-	entity := "../example/repository.entity.go"
-	err := runCmdEntity(tplDir, entity, true)
+	entity := "../example/sql.entity.go"
+	err := runCmdSQLEntity(tplDir, entity, true)
 	if err != nil {
 		panic(err)
 	}
 }
-func TestRunCmdCrud(*testing.T) {
+func TestRunCmdCRULEntity(*testing.T) {
+	tplDir := "../example/template"
+	entity := "../example/curl.entity.gen.go"
+	err := runCmdCURLEntity(tplDir, entity, true)
+	if err != nil {
+		panic(err)
+	}
+}
+func TestRunCmdJSQL(*testing.T) {
 	metaDir := "../example/template/meta"
 	tplDir := "../example/template/sql"
 	err := runCmdSQL(metaDir, tplDir, true)

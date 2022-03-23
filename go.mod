@@ -10,6 +10,7 @@ require (
 	github.com/pkg/errors v0.9.1
 	github.com/suifengpiao14/errorformatter v0.0.0-20220214013820-e0177a90fb70
 	github.com/suifengpiao14/gqt/v2 v2.0.0-20220319020828-30e8a3a5d03e
+	github.com/suifengpiao14/gqtcurl v0.0.0-20220321090203-7e726f6dd4b8
 )
 
 require (
@@ -24,9 +25,13 @@ require (
 	github.com/yusufpapurcu/wmi v1.2.2 // indirect
 	goa.design/goa/v3 v3.7.0 // indirect
 	golang.org/x/sys v0.0.0-20220319134239-a9b59b0215f8 // indirect
+	gorm.io/gorm v1.23.3 // indirect
 
 )
 
 replace gorm.io/gorm => gorm.io/gorm v1.22.4
 
 // replace github.com/suifengpiao14/gqt/v2 => /Users/admin/Documents/go/gqt
+replace github.com/suifengpiao14/gqt/v2 => D:\\go\\gqt
+
+replace github.com/suifengpiao14/gqtcurl => D:\\go\\gqtcurl

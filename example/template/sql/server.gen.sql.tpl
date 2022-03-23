@@ -13,11 +13,11 @@ select * from `t_server`  where `server_id` in ({{in . .ServerIDList}})  and `de
 {{end}}
 
 {{define "PaginateTotal"}}
-select count(*) as `count` from `t_server`  where 1=1 {{template "PaginateWhere" "."}}   and `deleted_at` is null;
+select count(*) as `count` from `t_server`  where 1=1 {{template "PaginateWhere" .}}   and `deleted_at` is null;
 {{end}}
 
   {{define "Paginate"}}
-select * from `t_server`  where 1=1 {{template "PaginateWhere" "."}}   and `deleted_at` is null order by `updated_at` desc  limit :Offset,:Limit ;
+select * from `t_server`  where 1=1 {{template "PaginateWhere" .}}   and `deleted_at` is null order by `updated_at` desc  limit :Offset,:Limit ;
 {{end}}
 
 

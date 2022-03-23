@@ -6,6 +6,7 @@ import (
 
 	"github.com/suifengpiao14/gqt/v2"
 	"github.com/suifengpiao14/gqt/v2/gqttpl"
+	"github.com/suifengpiao14/gqtcurl"
 	"github.com/suifengpiao14/gqttool/example"
 )
 
@@ -196,4 +197,23 @@ func TestWhereConditon(t *testing.T) {
 		panic(err)
 	}
 	fmt.Println(sqlRow.SQL)
+}
+
+func TestCurlEntity(t *testing.T) {
+	repo := gqtcurl.NewRepositoryCURL()
+	repo.AddByDir("example/template", gqtcurl.TemplatefuncMap)
+	CURLEntity := example.CurlOrderCurlGetOrderByOrderNumberEntity{
+		SecretKey: "SecretKey",
+		ServiceID: "ServiceID",
+		CurlOrderCurlGetOrderByOrderNumberBodyEntity: &example.CurlOrderCurlGetOrderByOrderNumberBodyEntity{
+			OrderNumber: "15454",
+		},
+		DataVolumeMap: &gqttpl.DataVolumeMap{},
+	}
+	curlRow, err := repo.GetCURLByTplEntity(&CURLEntity)
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println(curlRow.RequestData)
+
 }

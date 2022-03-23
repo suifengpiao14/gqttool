@@ -7,6 +7,7 @@ import (
 	"text/template"
 
 	"github.com/pkg/errors"
+	"github.com/suifengpiao14/gqt/v2/gqttpl"
 
 	executor "github.com/bytewatch/ddl-executor"
 )
@@ -113,6 +114,7 @@ type Table struct {
 	DeleteColumn string
 	Columns      []*Column
 	EnumsConst   map[string]string
+	*gqttpl.DataVolumeMap
 }
 
 //CamelName 删除表前缀，转换成 camel 格式

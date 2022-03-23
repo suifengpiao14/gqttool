@@ -9,7 +9,7 @@ select * from `t_api`  where `api_id` in ({{in . .APIIDList}})  and `deleted_at`
 
 
 {{define "PaginateWhere"}}
-  and `api_id` in ({{in . .APIIDList}})
+  
 {{end}}
 
 {{define "PaginateTotal"}}

@@ -151,6 +151,8 @@ func ParseDefine(content string) (defineList []string) {
 				defineList = append(defineList, content)
 				break
 			}
+		} else {
+			break
 		}
 	}
 	return
@@ -271,11 +273,16 @@ func EntityTpl() (tpl string) {
 				{{end}}
 				
 			{{end}}
-			gqttpl.DataVolumeMap
+			*gqttpl.DataVolumeMap
 		}
 
 		func (t *{{.StructName}}) TplName() string{
 			return "{{.FullName}}"
+		}
+
+		func (t *{{.StructName}}) TplOutput(entity gqttpl.TplEntityInterface ) (out string,err error){
+			out,err=gqttpl.TplOutput(entity,entity.TplName())
+			return 
 		}
 
 	`
@@ -308,7 +315,7 @@ func (v Variables) Less(i, j int) bool { // 重写 Less() 方法， 从小到大
 	return v[i].Name < v[j].Name
 }
 
-func ParsSqlTplVariable(sqlTpl string, namespace string) (variableMap map[string]*Variable) {
+func ParseTplVariable(sqlTpl string, namespace string) (variableMap map[string]*Variable) {
 	variableMap = make(map[string]*Variable)
 	byteArr := []byte(sqlTpl)
 	leftDelim := byte('{')
@@ -345,6 +352,27 @@ func ParsSqlTplVariable(sqlTpl string, namespace string) (variableMap map[string
 
 	}
 
+	// parse sub define variable
+	templateNameList := GetTemplateNames(sqlTpl)
+	for _, templateName := range templateNameList {
+		templateName = ToCamel(templateName)
+		variable := &Variable{
+			Namespace:   namespace,
+			Name:        templateName,
+			Type:        "interface{}",
+			IsSubDefine: true,
+			AllowEmpty:  false,
+		}
+		variableMap[templateName] = variable
+	}
+
+	return
+}
+
+func ParsSqlTplVariable(sqlTpl string, namespace string) (variableMap map[string]*Variable) {
+	variableMap = ParseTplVariable(sqlTpl, namespace)
+	byteArr := []byte(sqlTpl)
+
 	// parse sql variable
 	sqlVariableDelim := byte(':')
 
@@ -361,19 +389,6 @@ func ParsSqlTplVariable(sqlTpl string, namespace string) (variableMap map[string
 	limitVariabeMap := GetLimitVariable(sqlTpl)
 	for name, variable := range limitVariabeMap {
 		variableMap[name] = variable
-	}
-	// parse sub define variable
-	templateNameList := GetTemplateNames(sqlTpl)
-	for _, templateName := range templateNameList {
-		templateName = ToCamel(templateName)
-		variable := &Variable{
-			Namespace:   namespace,
-			Name:        templateName,
-			Type:        "interface{}",
-			IsSubDefine: true,
-			AllowEmpty:  false,
-		}
-		variableMap[templateName] = variable
 	}
 
 	return

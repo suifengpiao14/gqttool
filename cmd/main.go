@@ -30,9 +30,9 @@ func main() {
 	modelCmd.Usage = helpModel
 	SQLCmd := flag.NewFlagSet("sql", flag.ExitOnError)
 	SQLCmd.Usage = helpSQL
-	sqlEntityCmd := flag.NewFlagSet("entity", flag.ExitOnError)
+	sqlEntityCmd := flag.NewFlagSet("sqlEntity", flag.ExitOnError)
 	sqlEntityCmd.Usage = helpSQLEntity
-	curlEntityCmd := flag.NewFlagSet("entity", flag.ExitOnError)
+	curlEntityCmd := flag.NewFlagSet("curlEntity", flag.ExitOnError)
 	curlEntityCmd.Usage = helpCURLEntity
 	modelCmd.BoolVar(&force, "force", false, "overwrite exist file")
 	modelCmd.StringVar(&metaDir, "metaDir", "template/meta", "ddl/config file dir")
@@ -45,9 +45,10 @@ func main() {
 	sqlEntityCmd.BoolVar(&force, "force", false, "overwrite exist file")
 	sqlEntityCmd.StringVar(&sqlDir, "sqlDir", "template/sql", "sql template dir")
 	sqlEntityCmd.StringVar(&entityFilename, "entity", "sql.entity.gen.go", "entity file")
+
 	curlEntityCmd.BoolVar(&force, "force", false, "overwrite exist file")
-	curlEntityCmd.StringVar(&sqlDir, "sqlDir", "template/sql", "sql template dir")
-	curlEntityCmd.StringVar(&entityFilename, "entity", "sql.entity.gen.go", "entity file")
+	curlEntityCmd.StringVar(&curlDir, "curlDir", "template/sql", "sql template dir")
+	curlEntityCmd.StringVar(&entityFilename, "entity", "curl.entity.gen.go", "entity file")
 	testing.Init()
 
 	if len(os.Args) < 3 {
@@ -69,12 +70,14 @@ func main() {
 			panic(err)
 		}
 
-	case "entity":
+	case "sqlEntity":
 		sqlEntityCmd.Parse(args)
 		err = runCmdSQLEntity(sqlDir, entityFilename, force)
 		if err != nil {
 			panic(err)
 		}
+	case "curlEntity":
+		curlEntityCmd.Parse(args)
 		err = runCmdCURLEntity(sqlDir, entityFilename, force)
 		if err != nil {
 			panic(err)
@@ -267,7 +270,7 @@ func IsExist(path string) bool {
 func GenerateCURLEntity(rep *gqttool.RepositoryMeta, curlTplDefineList []*gqttpl.TPLDefine) (entityList []string, err error) {
 	entityList = make([]string, 0)
 	for _, sqlDefineTpl := range curlTplDefineList {
-		entityStruct, err := gqttool.CURLEntity(sqlDefineTpl)
+		entityStruct, err := gqttool.CURLEntity(sqlDefineTpl, curlTplDefineList)
 		if err != nil {
 			return nil, err
 		}
@@ -421,22 +424,43 @@ Example:
 }
 
 func helpSQLEntity() {
-	fmt.Fprint(os.Stderr, `gqttool entity is  generation sql template inpur args entity
+	fmt.Fprint(os.Stderr, `gqttool sqlEntity is  generation sql template input args entity
 
 Usage:
-  gqttool entity -sqlDir sqlsqlDir -entity entityFilename -force true
+  gqttool sqlEntity  -sqlDir sqlsqlDir -sqlEntity entityFilename -force true
   
 
 Flags:
  -force overwrite exists file 
  -sqlDir 
 		sqlTpl file dir
- -entity 
+ -sqlEntity 
 		sqlTpl  entity filename
 
 Example:
 
-  gqttool entity -sqlDir template/sql -entity entity.gen.go -force true
+  gqttool sqlEntity -sqlDir template/sql -entity entity.gen.go -force true
+
+`)
+	os.Exit(0)
+}
+func helpCURLEntity() {
+	fmt.Fprint(os.Stderr, `gqttool curlEntity is  generation sql template input args entity
+
+Usage:
+  gqttool curlEntity -sqlDir sqlsqlDir -entity entityFilename -force true
+  
+
+Flags:
+ -force overwrite exists file 
+ -sqlDir 
+		sqlTpl file dir
+ -curlEntity 
+		sqlTpl  entity filename
+
+Example:
+
+  gqttool curlEntity -sqlDir template/sql -entity entity.gen.go -force true
 
 `)
 	os.Exit(0)
