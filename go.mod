@@ -9,8 +9,8 @@ require (
 	github.com/iancoleman/strcase v0.2.0
 	github.com/pkg/errors v0.9.1
 	github.com/suifengpiao14/errorformatter v0.0.0-20220214013820-e0177a90fb70
-	github.com/suifengpiao14/gqt/v2 v2.0.0-20220323103507-52400f4fb037
-	github.com/suifengpiao14/gqtcurl v0.0.0-20220323103534-d699d5813c29
+	github.com/suifengpiao14/gqt/v2 v2.0.0-20220324032337-a3142e94f017
+	github.com/suifengpiao14/gqtcurl v0.0.0-20220324033730-e45ba72461db
 )
 
 require (
@@ -30,5 +30,5 @@ require (
 replace gorm.io/gorm => gorm.io/gorm v1.22.4
 
 //replace github.com/suifengpiao14/gqt/v2 => /Users/admin/Documents/go/gqt
-replace github.com/suifengpiao14/gqt/v2 => D:\\go\\gqt
-replace github.com/suifengpiao14/gqtcurl => D:\\go\\gqtcurl
+//replace github.com/suifengpiao14/gqt/v2 => D:\\go\\gqt
+//replace github.com/suifengpiao14/gqtcurl => D:\\go\\gqtcurl
