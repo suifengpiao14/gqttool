@@ -3,17 +3,11 @@ import "github.com/suifengpiao14/gqt/v2/gqttpl"
 
 		type CurlOrderCurlGetOrderByOrderNumberBodyEntity struct{
 			
-				
-					OrderNumber interface{} 
-				
-				
+				OrderNumber interface{} 
 			
-				
-					ServiceID interface{} 
-				
-				
+				ServiceID interface{} 
 			
-			*gqttpl.DataVolumeMap
+			gqttpl.TplEmptyEntity
 		}
 
 		func (t *CurlOrderCurlGetOrderByOrderNumberBodyEntity) TplName() string{
@@ -21,7 +15,7 @@ import "github.com/suifengpiao14/gqt/v2/gqttpl"
 		}
 
 		func (t *CurlOrderCurlGetOrderByOrderNumberBodyEntity) TplOutput(entity gqttpl.TplEntityInterface ) (out string,err error){
-			out,err=gqttpl.TplOutput(entity,entity.TplName())
+			out,err=gqttpl.TplOutput(entity,t.TplName())
 			return 
 		}
 
@@ -29,22 +23,15 @@ import "github.com/suifengpiao14/gqt/v2/gqttpl"
 
 		type CurlOrderCurlGetOrderByOrderNumberEntity struct{
 			
-				
-					*CurlOrderCurlGetOrderByOrderNumberBodyEntity
-				
-				
+				GetOrderByOrderNumberBody CurlOrderCurlGetOrderByOrderNumberBodyEntity 
 			
-				
-					SecretKey interface{} 
-				
-				
+				 CurlOrderCurlGetOrderByOrderNumberBodyEntity 
 			
-				
-					ServiceID interface{} 
-				
-				
+				SecretKey interface{} 
 			
-			*gqttpl.DataVolumeMap
+				ServiceID interface{} 
+			
+			gqttpl.TplEmptyEntity
 		}
 
 		func (t *CurlOrderCurlGetOrderByOrderNumberEntity) TplName() string{
@@ -52,7 +39,7 @@ import "github.com/suifengpiao14/gqt/v2/gqttpl"
 		}
 
 		func (t *CurlOrderCurlGetOrderByOrderNumberEntity) TplOutput(entity gqttpl.TplEntityInterface ) (out string,err error){
-			out,err=gqttpl.TplOutput(entity,entity.TplName())
+			out,err=gqttpl.TplOutput(entity,t.TplName())
 			return 
 		}
 

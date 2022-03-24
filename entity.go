@@ -20,6 +20,8 @@ type EntityElement struct {
 	FullName  string
 }
 
+const STRUCT_DEFINE_NANE_FORMAT = "%sEntity"
+
 //SQLEntity 根据数据表ddl和sql tpl 生成 sql tpl 调用的输入、输出实体
 func SQLEntity(sqlTplDefine *gqttpl.TPLDefine, tableList []*Table) (entityStruct string, err error) {
 	variableList := ParsSqlTplVariable(sqlTplDefine.Output, sqlTplDefine.Namespace)
@@ -266,14 +268,9 @@ func EntityTpl() (tpl string) {
 	tpl = `
 		type {{.StructName}} struct{
 			{{range .Attributes }}
-				{{if  .IsSubDefine}}
-					*{{.FullnameCamel}}Entity
-				{{else}}
-					{{.Name}} {{.Type}} 
-				{{end}}
-				
+				{{.FieldName}} {{.Type}} 
 			{{end}}
-			*gqttpl.DataVolumeMap
+			gqttpl.TplEmptyEntity
 		}
 
 		func (t *{{.StructName}}) TplName() string{
@@ -281,7 +278,7 @@ func EntityTpl() (tpl string) {
 		}
 
 		func (t *{{.StructName}}) TplOutput(entity gqttpl.TplEntityInterface ) (out string,err error){
-			out,err=gqttpl.TplOutput(entity,entity.TplName())
+			out,err=gqttpl.TplOutput(entity,t.TplName())
 			return 
 		}
 
@@ -290,11 +287,11 @@ func EntityTpl() (tpl string) {
 }
 
 type Variable struct {
-	Namespace   string
-	Name        string
-	IsSubDefine bool
-	Type        string
-	AllowEmpty  bool
+	Namespace  string
+	Name       string // 模板中的原始名称
+	FieldName  string // 当变量作为结构体的字段时，字段名称
+	Type       string
+	AllowEmpty bool
 }
 
 func (v *Variable) FullnameCamel() (fullnameCamel string) {
@@ -315,8 +312,21 @@ func (v Variables) Less(i, j int) bool { // 重写 Less() 方法， 从小到大
 	return v[i].Name < v[j].Name
 }
 
-func ParseTplVariable(sqlTpl string, namespace string) (variableList []*Variable) {
-	variableMap := make(map[string]*Variable)
+//UniqueItems 去重
+func (v Variables) UniqueItems() (uniq []*Variable) {
+	vmap := make(map[string]*Variable)
+	for _, variable := range v {
+		vmap[variable.Name] = variable
+	}
+	uniq = make([]*Variable, 0)
+	for _, variable := range vmap {
+		uniq = append(uniq, variable)
+	}
+	return
+}
+
+func ParseTplVariable(sqlTpl string, namespace string) (variableList Variables) {
+	variableList = make([]*Variable, 0)
 	byteArr := []byte(sqlTpl)
 	leftDelim := byte('{')
 	rightDelim := byte('}')
@@ -346,7 +356,8 @@ func ParseTplVariable(sqlTpl string, namespace string) (variableList []*Variable
 		variable, _ := parsePrefixVariable(item, byte('.'))
 		if variable.Name != "" {
 			variable.Namespace = namespace
-			variableMap[variable.Name] = &variable
+			variable.FieldName = variable.Name
+			variableList = append(variableList, &variable)
 
 		}
 
@@ -356,28 +367,24 @@ func ParseTplVariable(sqlTpl string, namespace string) (variableList []*Variable
 	templateNameList := GetTemplateNames(sqlTpl)
 	for _, templateName := range templateNameList {
 		templateName = ToCamel(templateName)
-		variable := &Variable{
-			Namespace:   namespace,
-			Name:        templateName,
-			Type:        "interface{}",
-			IsSubDefine: true,
-			AllowEmpty:  false,
+		variable := Variable{
+			Namespace:  namespace,
+			Name:       templateName,
+			AllowEmpty: false,
 		}
-		variableMap[templateName] = variable
+		variable.Type = fmt.Sprintf(STRUCT_DEFINE_NANE_FORMAT, variable.FullnameCamel())
+		variableList = append(variableList, &variable)
 	}
-	variableList = make(Variables, 0)
-	for _, variable := range variableMap {
-		variableList = append(variableList, variable)
-	}
+
+	variableList = variableList.UniqueItems()
 
 	return
 }
 
-func ParsSqlTplVariable(sqlTpl string, namespace string) (variableList []*Variable) {
-	variableMap := make(map[string]*Variable)
+func ParsSqlTplVariable(sqlTpl string, namespace string) (variableList Variables) {
 	subVariableList := ParseTplVariable(sqlTpl, namespace)
 	for _, variable := range subVariableList {
-		variableMap[variable.Name] = variable
+		variableList = append(variableList, variable)
 	}
 	byteArr := []byte(sqlTpl)
 
@@ -389,25 +396,20 @@ func ParsSqlTplVariable(sqlTpl string, namespace string) (variableList []*Variab
 		if variable.Name == "" {
 			break
 		}
-		variableMap[variable.Name] = &variable
+		variable.FieldName = variable.Name
 		variable.Namespace = namespace
+		variableList = append(variableList, &variable)
 		pos += len(variable.Name)
 		byteArr = byteArr[pos:]
 	}
-	limitVariabeMap := GetLimitVariable(sqlTpl)
-	for name, variable := range limitVariabeMap {
-		variableMap[name] = variable
-	}
-	variableList = make([]*Variable, 0)
-	for _, variable := range variableMap {
-		variableList = append(variableList, variable)
-	}
-
+	limitVariabeList := GetLimitVariable(sqlTpl, namespace)
+	variableList = append(variableList, limitVariabeList...)
+	variableList = variableList.UniqueItems()
 	return
 }
 
-func GetLimitVariable(sqlTpl string) (variableMap map[string]*Variable) {
-	variableMap = make(map[string]*Variable)
+func GetLimitVariable(sqlTpl string, namespace string) (variableList []*Variable) {
+	variableList = make([]*Variable, 0)
 	index := strings.Index(strings.ToLower(sqlTpl), "limit")
 	if index < 0 {
 		return
@@ -421,9 +423,11 @@ func GetLimitVariable(sqlTpl string) (variableMap map[string]*Variable) {
 		if variable.Name == "" {
 			break
 		}
+		variable.FieldName = variable.Name
 		variable.Type = "int"
 		variable.AllowEmpty = false
-		variableMap[variable.Name] = &variable
+		variable.Namespace = namespace
+		variableList = append(variableList, &variable)
 		pos += len(variable.Name)
 		byteArr = byteArr[pos:]
 	}

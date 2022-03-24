@@ -22,7 +22,7 @@
 {{end}}
 
 {{define "GetOrderByOrderNumber"}}
-{{- $body:=jsonCompact ( .GetOrderByOrderNumberBody.TplOutput *) -}}
+{{- $body:=jsonCompact ( .GetOrderByOrderNumberBody.TplOutput .) -}}
 POST http://ordserver.huishoubao.com/order_center/getOrderInfo HTTP/1.1
 Content-Type: application/json
 HSB-OPENAPI-CALLERSERVICEID: {{.ServiceID}}

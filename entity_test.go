@@ -201,15 +201,15 @@ func TestWhereConditon(t *testing.T) {
 
 func TestCurlEntity(t *testing.T) {
 	repo := gqtcurl.NewRepositoryCURL()
-	repo.AddByDir("example/template", gqtcurl.TemplatefuncMap)
-	CURLEntity := example.CurlOrderCurlGetOrderByOrderNumberEntity{
-		SecretKey: "SecretKey",
-		ServiceID: "ServiceID",
-		CurlOrderCurlGetOrderByOrderNumberBodyEntity: &example.CurlOrderCurlGetOrderByOrderNumberBodyEntity{
-			OrderNumber: "15454",
-		},
-		DataVolumeMap: &gqttpl.DataVolumeMap{},
+	err := repo.AddByDir("example/template", gqtcurl.TemplatefuncMap)
+	if err != nil {
+		panic(err)
 	}
+	CURLEntity := example.CurlOrderCurlGetOrderByOrderNumberEntity{
+		SecretKey: "mafera15478515",
+		ServiceID: "100354",
+	}
+	CURLEntity.OrderNumber = "15454"
 	curlRow, err := repo.GetCURLByTplEntity(&CURLEntity)
 	if err != nil {
 		panic(err)

@@ -78,7 +78,7 @@ func (r *RepositoryMeta) AddByNamespace(namespace string, content string, funcMa
 }
 
 // GetByNamespace get all template under namespace
-func (r *RepositoryMeta) GetByNamespace(namespace string, data gqttpl.DataVolumeInterface) (tplDefineList []*gqttpl.TPLDefine, err error) {
+func (r *RepositoryMeta) GetByNamespace(namespace string, data gqttpl.TplEntityInterface) (tplDefineList []*gqttpl.TPLDefine, err error) {
 	tplDefineList, err = gqttpl.ExecuteNamespaceTemplate(r.templates, namespace, data)
 	if err != nil {
 		return nil, err
@@ -86,7 +86,7 @@ func (r *RepositoryMeta) GetByNamespace(namespace string, data gqttpl.DataVolume
 	return
 }
 
-func (r *RepositoryMeta) GetTPLDefine(fullname string, data gqttpl.DataVolumeInterface) (tplDefine *gqttpl.TPLDefine, err error) {
+func (r *RepositoryMeta) GetTPLDefine(fullname string, data gqttpl.TplEntityInterface) (tplDefine *gqttpl.TPLDefine, err error) {
 	tplDefine, err = gqttpl.ExecuteTemplate(r.templates, fullname, data)
 	if err != nil {
 		return nil, err
