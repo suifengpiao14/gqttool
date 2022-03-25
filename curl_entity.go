@@ -22,6 +22,7 @@ func CURLEntity(sqlTplDefine *gqttpl.TPLDefine, curlTplDefineRelationList gqttpl
 				Namespace: variable.Namespace,
 				Type:      fieldType,
 			}
+			variable.Type = fmt.Sprintf("*%s", variable.Type) // 别名没有实际数据传递需求，基本使用TplName()获取模板名称，所以使用引用即可，不需要初始化对象
 			aliasVariableList = append(aliasVariableList, alias)
 		}
 	}

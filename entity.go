@@ -276,12 +276,6 @@ func EntityTpl() (tpl string) {
 		func (t *{{.StructName}}) TplName() string{
 			return "{{.FullName}}"
 		}
-
-		func (t *{{.StructName}}) TplOutput(entity gqttpl.TplEntityInterface ) (out string,err error){
-			out,err=gqttpl.TplOutput(entity,t.TplName())
-			return 
-		}
-
 	`
 	return
 }

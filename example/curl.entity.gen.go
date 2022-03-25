@@ -13,17 +13,11 @@ import "github.com/suifengpiao14/gqt/v2/gqttpl"
 		func (t *CurlOrderCurlGetOrderByOrderNumberBodyEntity) TplName() string{
 			return "curl.order.curl.GetOrderByOrderNumberBody"
 		}
-
-		func (t *CurlOrderCurlGetOrderByOrderNumberBodyEntity) TplOutput(entity gqttpl.TplEntityInterface ) (out string,err error){
-			out,err=gqttpl.TplOutput(entity,t.TplName())
-			return 
-		}
-
 	
 
 		type CurlOrderCurlGetOrderByOrderNumberEntity struct{
 			
-				GetOrderByOrderNumberBody CurlOrderCurlGetOrderByOrderNumberBodyEntity 
+				GetOrderByOrderNumberBody *CurlOrderCurlGetOrderByOrderNumberBodyEntity 
 			
 				 CurlOrderCurlGetOrderByOrderNumberBodyEntity 
 			
@@ -37,10 +31,4 @@ import "github.com/suifengpiao14/gqt/v2/gqttpl"
 		func (t *CurlOrderCurlGetOrderByOrderNumberEntity) TplName() string{
 			return "curl.order.curl.GetOrderByOrderNumber"
 		}
-
-		func (t *CurlOrderCurlGetOrderByOrderNumberEntity) TplOutput(entity gqttpl.TplEntityInterface ) (out string,err error){
-			out,err=gqttpl.TplOutput(entity,t.TplName())
-			return 
-		}
-
 	

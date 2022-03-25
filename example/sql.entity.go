@@ -15,12 +15,6 @@ import "github.com/suifengpiao14/gqt/v2/gqttpl"
 		func (t *SQLAPIGenSQLDelEntity) TplName() string{
 			return "sql.api.gen.sql.Del"
 		}
-
-		func (t *SQLAPIGenSQLDelEntity) TplOutput(entity gqttpl.TplEntityInterface ) (out string,err error){
-			out,err=gqttpl.TplOutput(entity,t.TplName())
-			return 
-		}
-
 	
 
 		type SQLAPIGenSQLGetAllByAPIIDListEntity struct{
@@ -33,12 +27,6 @@ import "github.com/suifengpiao14/gqt/v2/gqttpl"
 		func (t *SQLAPIGenSQLGetAllByAPIIDListEntity) TplName() string{
 			return "sql.api.gen.sql.GetAllByAPIIDList"
 		}
-
-		func (t *SQLAPIGenSQLGetAllByAPIIDListEntity) TplOutput(entity gqttpl.TplEntityInterface ) (out string,err error){
-			out,err=gqttpl.TplOutput(entity,t.TplName())
-			return 
-		}
-
 	
 
 		type SQLAPIGenSQLGetByAPIIDEntity struct{
@@ -51,12 +39,6 @@ import "github.com/suifengpiao14/gqt/v2/gqttpl"
 		func (t *SQLAPIGenSQLGetByAPIIDEntity) TplName() string{
 			return "sql.api.gen.sql.GetByAPIID"
 		}
-
-		func (t *SQLAPIGenSQLGetByAPIIDEntity) TplOutput(entity gqttpl.TplEntityInterface ) (out string,err error){
-			out,err=gqttpl.TplOutput(entity,t.TplName())
-			return 
-		}
-
 	
 
 		type SQLAPIGenSQLInsertEntity struct{
@@ -83,12 +65,6 @@ import "github.com/suifengpiao14/gqt/v2/gqttpl"
 		func (t *SQLAPIGenSQLInsertEntity) TplName() string{
 			return "sql.api.gen.sql.Insert"
 		}
-
-		func (t *SQLAPIGenSQLInsertEntity) TplOutput(entity gqttpl.TplEntityInterface ) (out string,err error){
-			out,err=gqttpl.TplOutput(entity,t.TplName())
-			return 
-		}
-
 	
 
 		type SQLAPIGenSQLPaginateEntity struct{
@@ -105,12 +81,6 @@ import "github.com/suifengpiao14/gqt/v2/gqttpl"
 		func (t *SQLAPIGenSQLPaginateEntity) TplName() string{
 			return "sql.api.gen.sql.Paginate"
 		}
-
-		func (t *SQLAPIGenSQLPaginateEntity) TplOutput(entity gqttpl.TplEntityInterface ) (out string,err error){
-			out,err=gqttpl.TplOutput(entity,t.TplName())
-			return 
-		}
-
 	
 
 		type SQLAPIGenSQLPaginateTotalEntity struct{
@@ -123,12 +93,6 @@ import "github.com/suifengpiao14/gqt/v2/gqttpl"
 		func (t *SQLAPIGenSQLPaginateTotalEntity) TplName() string{
 			return "sql.api.gen.sql.PaginateTotal"
 		}
-
-		func (t *SQLAPIGenSQLPaginateTotalEntity) TplOutput(entity gqttpl.TplEntityInterface ) (out string,err error){
-			out,err=gqttpl.TplOutput(entity,t.TplName())
-			return 
-		}
-
 	
 
 		type SQLAPIGenSQLPaginateWhereEntity struct{
@@ -139,12 +103,6 @@ import "github.com/suifengpiao14/gqt/v2/gqttpl"
 		func (t *SQLAPIGenSQLPaginateWhereEntity) TplName() string{
 			return "sql.api.gen.sql.PaginateWhere"
 		}
-
-		func (t *SQLAPIGenSQLPaginateWhereEntity) TplOutput(entity gqttpl.TplEntityInterface ) (out string,err error){
-			out,err=gqttpl.TplOutput(entity,t.TplName())
-			return 
-		}
-
 	
 
 		type SQLAPIGenSQLUpdateEntity struct{
@@ -171,12 +129,6 @@ import "github.com/suifengpiao14/gqt/v2/gqttpl"
 		func (t *SQLAPIGenSQLUpdateEntity) TplName() string{
 			return "sql.api.gen.sql.Update"
 		}
-
-		func (t *SQLAPIGenSQLUpdateEntity) TplOutput(entity gqttpl.TplEntityInterface ) (out string,err error){
-			out,err=gqttpl.TplOutput(entity,t.TplName())
-			return 
-		}
-
 	
 
 		type SQLExampleGenSQLGetAllByExampleIDListEntity struct{
@@ -189,12 +141,6 @@ import "github.com/suifengpiao14/gqt/v2/gqttpl"
 		func (t *SQLExampleGenSQLGetAllByExampleIDListEntity) TplName() string{
 			return "sql.example.gen.sql.GetAllByExampleIDList"
 		}
-
-		func (t *SQLExampleGenSQLGetAllByExampleIDListEntity) TplOutput(entity gqttpl.TplEntityInterface ) (out string,err error){
-			out,err=gqttpl.TplOutput(entity,t.TplName())
-			return 
-		}
-
 	
 
 		type SQLExampleGenSQLGetByExampleIDEntity struct{
@@ -207,12 +153,6 @@ import "github.com/suifengpiao14/gqt/v2/gqttpl"
 		func (t *SQLExampleGenSQLGetByExampleIDEntity) TplName() string{
 			return "sql.example.gen.sql.GetByExampleID"
 		}
-
-		func (t *SQLExampleGenSQLGetByExampleIDEntity) TplOutput(entity gqttpl.TplEntityInterface ) (out string,err error){
-			out,err=gqttpl.TplOutput(entity,t.TplName())
-			return 
-		}
-
 	
 
 		type SQLExampleGenSQLInsertEntity struct{
@@ -239,12 +179,6 @@ import "github.com/suifengpiao14/gqt/v2/gqttpl"
 		func (t *SQLExampleGenSQLInsertEntity) TplName() string{
 			return "sql.example.gen.sql.Insert"
 		}
-
-		func (t *SQLExampleGenSQLInsertEntity) TplOutput(entity gqttpl.TplEntityInterface ) (out string,err error){
-			out,err=gqttpl.TplOutput(entity,t.TplName())
-			return 
-		}
-
 	
 
 		type SQLExampleGenSQLPaginateEntity struct{
@@ -261,12 +195,6 @@ import "github.com/suifengpiao14/gqt/v2/gqttpl"
 		func (t *SQLExampleGenSQLPaginateEntity) TplName() string{
 			return "sql.example.gen.sql.Paginate"
 		}
-
-		func (t *SQLExampleGenSQLPaginateEntity) TplOutput(entity gqttpl.TplEntityInterface ) (out string,err error){
-			out,err=gqttpl.TplOutput(entity,t.TplName())
-			return 
-		}
-
 	
 
 		type SQLExampleGenSQLPaginateTotalEntity struct{
@@ -279,12 +207,6 @@ import "github.com/suifengpiao14/gqt/v2/gqttpl"
 		func (t *SQLExampleGenSQLPaginateTotalEntity) TplName() string{
 			return "sql.example.gen.sql.PaginateTotal"
 		}
-
-		func (t *SQLExampleGenSQLPaginateTotalEntity) TplOutput(entity gqttpl.TplEntityInterface ) (out string,err error){
-			out,err=gqttpl.TplOutput(entity,t.TplName())
-			return 
-		}
-
 	
 
 		type SQLExampleGenSQLPaginateWhereEntity struct{
@@ -295,12 +217,6 @@ import "github.com/suifengpiao14/gqt/v2/gqttpl"
 		func (t *SQLExampleGenSQLPaginateWhereEntity) TplName() string{
 			return "sql.example.gen.sql.PaginateWhere"
 		}
-
-		func (t *SQLExampleGenSQLPaginateWhereEntity) TplOutput(entity gqttpl.TplEntityInterface ) (out string,err error){
-			out,err=gqttpl.TplOutput(entity,t.TplName())
-			return 
-		}
-
 	
 
 		type SQLExampleGenSQLUpdateEntity struct{
@@ -327,12 +243,6 @@ import "github.com/suifengpiao14/gqt/v2/gqttpl"
 		func (t *SQLExampleGenSQLUpdateEntity) TplName() string{
 			return "sql.example.gen.sql.Update"
 		}
-
-		func (t *SQLExampleGenSQLUpdateEntity) TplOutput(entity gqttpl.TplEntityInterface ) (out string,err error){
-			out,err=gqttpl.TplOutput(entity,t.TplName())
-			return 
-		}
-
 	
 
 		type SQLMarkdownGenSQLGetAllByMarkdownIDListEntity struct{
@@ -345,12 +255,6 @@ import "github.com/suifengpiao14/gqt/v2/gqttpl"
 		func (t *SQLMarkdownGenSQLGetAllByMarkdownIDListEntity) TplName() string{
 			return "sql.markdown.gen.sql.GetAllByMarkdownIDList"
 		}
-
-		func (t *SQLMarkdownGenSQLGetAllByMarkdownIDListEntity) TplOutput(entity gqttpl.TplEntityInterface ) (out string,err error){
-			out,err=gqttpl.TplOutput(entity,t.TplName())
-			return 
-		}
-
 	
 
 		type SQLMarkdownGenSQLGetByMarkdownIDEntity struct{
@@ -363,12 +267,6 @@ import "github.com/suifengpiao14/gqt/v2/gqttpl"
 		func (t *SQLMarkdownGenSQLGetByMarkdownIDEntity) TplName() string{
 			return "sql.markdown.gen.sql.GetByMarkdownID"
 		}
-
-		func (t *SQLMarkdownGenSQLGetByMarkdownIDEntity) TplOutput(entity gqttpl.TplEntityInterface ) (out string,err error){
-			out,err=gqttpl.TplOutput(entity,t.TplName())
-			return 
-		}
-
 	
 
 		type SQLMarkdownGenSQLInsertEntity struct{
@@ -397,12 +295,6 @@ import "github.com/suifengpiao14/gqt/v2/gqttpl"
 		func (t *SQLMarkdownGenSQLInsertEntity) TplName() string{
 			return "sql.markdown.gen.sql.Insert"
 		}
-
-		func (t *SQLMarkdownGenSQLInsertEntity) TplOutput(entity gqttpl.TplEntityInterface ) (out string,err error){
-			out,err=gqttpl.TplOutput(entity,t.TplName())
-			return 
-		}
-
 	
 
 		type SQLMarkdownGenSQLPaginateEntity struct{
@@ -419,12 +311,6 @@ import "github.com/suifengpiao14/gqt/v2/gqttpl"
 		func (t *SQLMarkdownGenSQLPaginateEntity) TplName() string{
 			return "sql.markdown.gen.sql.Paginate"
 		}
-
-		func (t *SQLMarkdownGenSQLPaginateEntity) TplOutput(entity gqttpl.TplEntityInterface ) (out string,err error){
-			out,err=gqttpl.TplOutput(entity,t.TplName())
-			return 
-		}
-
 	
 
 		type SQLMarkdownGenSQLPaginateTotalEntity struct{
@@ -437,12 +323,6 @@ import "github.com/suifengpiao14/gqt/v2/gqttpl"
 		func (t *SQLMarkdownGenSQLPaginateTotalEntity) TplName() string{
 			return "sql.markdown.gen.sql.PaginateTotal"
 		}
-
-		func (t *SQLMarkdownGenSQLPaginateTotalEntity) TplOutput(entity gqttpl.TplEntityInterface ) (out string,err error){
-			out,err=gqttpl.TplOutput(entity,t.TplName())
-			return 
-		}
-
 	
 
 		type SQLMarkdownGenSQLPaginateWhereEntity struct{
@@ -453,12 +333,6 @@ import "github.com/suifengpiao14/gqt/v2/gqttpl"
 		func (t *SQLMarkdownGenSQLPaginateWhereEntity) TplName() string{
 			return "sql.markdown.gen.sql.PaginateWhere"
 		}
-
-		func (t *SQLMarkdownGenSQLPaginateWhereEntity) TplOutput(entity gqttpl.TplEntityInterface ) (out string,err error){
-			out,err=gqttpl.TplOutput(entity,t.TplName())
-			return 
-		}
-
 	
 
 		type SQLMarkdownGenSQLUpdateEntity struct{
@@ -487,12 +361,6 @@ import "github.com/suifengpiao14/gqt/v2/gqttpl"
 		func (t *SQLMarkdownGenSQLUpdateEntity) TplName() string{
 			return "sql.markdown.gen.sql.Update"
 		}
-
-		func (t *SQLMarkdownGenSQLUpdateEntity) TplOutput(entity gqttpl.TplEntityInterface ) (out string,err error){
-			out,err=gqttpl.TplOutput(entity,t.TplName())
-			return 
-		}
-
 	
 
 		type SQLParameterGenSQLGetAllByParameterIDListEntity struct{
@@ -505,12 +373,6 @@ import "github.com/suifengpiao14/gqt/v2/gqttpl"
 		func (t *SQLParameterGenSQLGetAllByParameterIDListEntity) TplName() string{
 			return "sql.parameter.gen.sql.GetAllByParameterIDList"
 		}
-
-		func (t *SQLParameterGenSQLGetAllByParameterIDListEntity) TplOutput(entity gqttpl.TplEntityInterface ) (out string,err error){
-			out,err=gqttpl.TplOutput(entity,t.TplName())
-			return 
-		}
-
 	
 
 		type SQLParameterGenSQLGetByParameterIDEntity struct{
@@ -523,12 +385,6 @@ import "github.com/suifengpiao14/gqt/v2/gqttpl"
 		func (t *SQLParameterGenSQLGetByParameterIDEntity) TplName() string{
 			return "sql.parameter.gen.sql.GetByParameterID"
 		}
-
-		func (t *SQLParameterGenSQLGetByParameterIDEntity) TplOutput(entity gqttpl.TplEntityInterface ) (out string,err error){
-			out,err=gqttpl.TplOutput(entity,t.TplName())
-			return 
-		}
-
 	
 
 		type SQLParameterGenSQLInsertEntity struct{
@@ -579,12 +435,6 @@ import "github.com/suifengpiao14/gqt/v2/gqttpl"
 		func (t *SQLParameterGenSQLInsertEntity) TplName() string{
 			return "sql.parameter.gen.sql.Insert"
 		}
-
-		func (t *SQLParameterGenSQLInsertEntity) TplOutput(entity gqttpl.TplEntityInterface ) (out string,err error){
-			out,err=gqttpl.TplOutput(entity,t.TplName())
-			return 
-		}
-
 	
 
 		type SQLParameterGenSQLPaginateEntity struct{
@@ -601,12 +451,6 @@ import "github.com/suifengpiao14/gqt/v2/gqttpl"
 		func (t *SQLParameterGenSQLPaginateEntity) TplName() string{
 			return "sql.parameter.gen.sql.Paginate"
 		}
-
-		func (t *SQLParameterGenSQLPaginateEntity) TplOutput(entity gqttpl.TplEntityInterface ) (out string,err error){
-			out,err=gqttpl.TplOutput(entity,t.TplName())
-			return 
-		}
-
 	
 
 		type SQLParameterGenSQLPaginateTotalEntity struct{
@@ -619,12 +463,6 @@ import "github.com/suifengpiao14/gqt/v2/gqttpl"
 		func (t *SQLParameterGenSQLPaginateTotalEntity) TplName() string{
 			return "sql.parameter.gen.sql.PaginateTotal"
 		}
-
-		func (t *SQLParameterGenSQLPaginateTotalEntity) TplOutput(entity gqttpl.TplEntityInterface ) (out string,err error){
-			out,err=gqttpl.TplOutput(entity,t.TplName())
-			return 
-		}
-
 	
 
 		type SQLParameterGenSQLPaginateWhereEntity struct{
@@ -635,12 +473,6 @@ import "github.com/suifengpiao14/gqt/v2/gqttpl"
 		func (t *SQLParameterGenSQLPaginateWhereEntity) TplName() string{
 			return "sql.parameter.gen.sql.PaginateWhere"
 		}
-
-		func (t *SQLParameterGenSQLPaginateWhereEntity) TplOutput(entity gqttpl.TplEntityInterface ) (out string,err error){
-			out,err=gqttpl.TplOutput(entity,t.TplName())
-			return 
-		}
-
 	
 
 		type SQLParameterGenSQLUpdateEntity struct{
@@ -691,12 +523,6 @@ import "github.com/suifengpiao14/gqt/v2/gqttpl"
 		func (t *SQLParameterGenSQLUpdateEntity) TplName() string{
 			return "sql.parameter.gen.sql.Update"
 		}
-
-		func (t *SQLParameterGenSQLUpdateEntity) TplOutput(entity gqttpl.TplEntityInterface ) (out string,err error){
-			out,err=gqttpl.TplOutput(entity,t.TplName())
-			return 
-		}
-
 	
 
 		type SQLServerGenSQLGetAllByServerIDListEntity struct{
@@ -709,12 +535,6 @@ import "github.com/suifengpiao14/gqt/v2/gqttpl"
 		func (t *SQLServerGenSQLGetAllByServerIDListEntity) TplName() string{
 			return "sql.server.gen.sql.GetAllByServerIDList"
 		}
-
-		func (t *SQLServerGenSQLGetAllByServerIDListEntity) TplOutput(entity gqttpl.TplEntityInterface ) (out string,err error){
-			out,err=gqttpl.TplOutput(entity,t.TplName())
-			return 
-		}
-
 	
 
 		type SQLServerGenSQLGetByServerIDEntity struct{
@@ -727,12 +547,6 @@ import "github.com/suifengpiao14/gqt/v2/gqttpl"
 		func (t *SQLServerGenSQLGetByServerIDEntity) TplName() string{
 			return "sql.server.gen.sql.GetByServerID"
 		}
-
-		func (t *SQLServerGenSQLGetByServerIDEntity) TplOutput(entity gqttpl.TplEntityInterface ) (out string,err error){
-			out,err=gqttpl.TplOutput(entity,t.TplName())
-			return 
-		}
-
 	
 
 		type SQLServerGenSQLInsertEntity struct{
@@ -755,12 +569,6 @@ import "github.com/suifengpiao14/gqt/v2/gqttpl"
 		func (t *SQLServerGenSQLInsertEntity) TplName() string{
 			return "sql.server.gen.sql.Insert"
 		}
-
-		func (t *SQLServerGenSQLInsertEntity) TplOutput(entity gqttpl.TplEntityInterface ) (out string,err error){
-			out,err=gqttpl.TplOutput(entity,t.TplName())
-			return 
-		}
-
 	
 
 		type SQLServerGenSQLPaginateEntity struct{
@@ -777,12 +585,6 @@ import "github.com/suifengpiao14/gqt/v2/gqttpl"
 		func (t *SQLServerGenSQLPaginateEntity) TplName() string{
 			return "sql.server.gen.sql.Paginate"
 		}
-
-		func (t *SQLServerGenSQLPaginateEntity) TplOutput(entity gqttpl.TplEntityInterface ) (out string,err error){
-			out,err=gqttpl.TplOutput(entity,t.TplName())
-			return 
-		}
-
 	
 
 		type SQLServerGenSQLPaginateTotalEntity struct{
@@ -795,12 +597,6 @@ import "github.com/suifengpiao14/gqt/v2/gqttpl"
 		func (t *SQLServerGenSQLPaginateTotalEntity) TplName() string{
 			return "sql.server.gen.sql.PaginateTotal"
 		}
-
-		func (t *SQLServerGenSQLPaginateTotalEntity) TplOutput(entity gqttpl.TplEntityInterface ) (out string,err error){
-			out,err=gqttpl.TplOutput(entity,t.TplName())
-			return 
-		}
-
 	
 
 		type SQLServerGenSQLPaginateWhereEntity struct{
@@ -811,12 +607,6 @@ import "github.com/suifengpiao14/gqt/v2/gqttpl"
 		func (t *SQLServerGenSQLPaginateWhereEntity) TplName() string{
 			return "sql.server.gen.sql.PaginateWhere"
 		}
-
-		func (t *SQLServerGenSQLPaginateWhereEntity) TplOutput(entity gqttpl.TplEntityInterface ) (out string,err error){
-			out,err=gqttpl.TplOutput(entity,t.TplName())
-			return 
-		}
-
 	
 
 		type SQLServerGenSQLUpdateEntity struct{
@@ -839,12 +629,6 @@ import "github.com/suifengpiao14/gqt/v2/gqttpl"
 		func (t *SQLServerGenSQLUpdateEntity) TplName() string{
 			return "sql.server.gen.sql.Update"
 		}
-
-		func (t *SQLServerGenSQLUpdateEntity) TplOutput(entity gqttpl.TplEntityInterface ) (out string,err error){
-			out,err=gqttpl.TplOutput(entity,t.TplName())
-			return 
-		}
-
 	
 
 		type SQLServiceGenSQLGetAllByServiceIDListEntity struct{
@@ -857,12 +641,6 @@ import "github.com/suifengpiao14/gqt/v2/gqttpl"
 		func (t *SQLServiceGenSQLGetAllByServiceIDListEntity) TplName() string{
 			return "sql.service.gen.sql.GetAllByServiceIDList"
 		}
-
-		func (t *SQLServiceGenSQLGetAllByServiceIDListEntity) TplOutput(entity gqttpl.TplEntityInterface ) (out string,err error){
-			out,err=gqttpl.TplOutput(entity,t.TplName())
-			return 
-		}
-
 	
 
 		type SQLServiceGenSQLGetByServiceIDEntity struct{
@@ -875,12 +653,6 @@ import "github.com/suifengpiao14/gqt/v2/gqttpl"
 		func (t *SQLServiceGenSQLGetByServiceIDEntity) TplName() string{
 			return "sql.service.gen.sql.GetByServiceID"
 		}
-
-		func (t *SQLServiceGenSQLGetByServiceIDEntity) TplOutput(entity gqttpl.TplEntityInterface ) (out string,err error){
-			out,err=gqttpl.TplOutput(entity,t.TplName())
-			return 
-		}
-
 	
 
 		type SQLServiceGenSQLInsertEntity struct{
@@ -909,12 +681,6 @@ import "github.com/suifengpiao14/gqt/v2/gqttpl"
 		func (t *SQLServiceGenSQLInsertEntity) TplName() string{
 			return "sql.service.gen.sql.Insert"
 		}
-
-		func (t *SQLServiceGenSQLInsertEntity) TplOutput(entity gqttpl.TplEntityInterface ) (out string,err error){
-			out,err=gqttpl.TplOutput(entity,t.TplName())
-			return 
-		}
-
 	
 
 		type SQLServiceGenSQLPaginateEntity struct{
@@ -931,12 +697,6 @@ import "github.com/suifengpiao14/gqt/v2/gqttpl"
 		func (t *SQLServiceGenSQLPaginateEntity) TplName() string{
 			return "sql.service.gen.sql.Paginate"
 		}
-
-		func (t *SQLServiceGenSQLPaginateEntity) TplOutput(entity gqttpl.TplEntityInterface ) (out string,err error){
-			out,err=gqttpl.TplOutput(entity,t.TplName())
-			return 
-		}
-
 	
 
 		type SQLServiceGenSQLPaginateTotalEntity struct{
@@ -949,12 +709,6 @@ import "github.com/suifengpiao14/gqt/v2/gqttpl"
 		func (t *SQLServiceGenSQLPaginateTotalEntity) TplName() string{
 			return "sql.service.gen.sql.PaginateTotal"
 		}
-
-		func (t *SQLServiceGenSQLPaginateTotalEntity) TplOutput(entity gqttpl.TplEntityInterface ) (out string,err error){
-			out,err=gqttpl.TplOutput(entity,t.TplName())
-			return 
-		}
-
 	
 
 		type SQLServiceGenSQLPaginateWhereEntity struct{
@@ -965,12 +719,6 @@ import "github.com/suifengpiao14/gqt/v2/gqttpl"
 		func (t *SQLServiceGenSQLPaginateWhereEntity) TplName() string{
 			return "sql.service.gen.sql.PaginateWhere"
 		}
-
-		func (t *SQLServiceGenSQLPaginateWhereEntity) TplOutput(entity gqttpl.TplEntityInterface ) (out string,err error){
-			out,err=gqttpl.TplOutput(entity,t.TplName())
-			return 
-		}
-
 	
 
 		type SQLServiceGenSQLUpdateEntity struct{
@@ -999,12 +747,6 @@ import "github.com/suifengpiao14/gqt/v2/gqttpl"
 		func (t *SQLServiceGenSQLUpdateEntity) TplName() string{
 			return "sql.service.gen.sql.Update"
 		}
-
-		func (t *SQLServiceGenSQLUpdateEntity) TplOutput(entity gqttpl.TplEntityInterface ) (out string,err error){
-			out,err=gqttpl.TplOutput(entity,t.TplName())
-			return 
-		}
-
 	
 
 		type SQLValidateSchemaGenSQLGetAllByValidateSchemaIDListEntity struct{
@@ -1017,12 +759,6 @@ import "github.com/suifengpiao14/gqt/v2/gqttpl"
 		func (t *SQLValidateSchemaGenSQLGetAllByValidateSchemaIDListEntity) TplName() string{
 			return "sql.validate_schema.gen.sql.GetAllByValidateSchemaIDList"
 		}
-
-		func (t *SQLValidateSchemaGenSQLGetAllByValidateSchemaIDListEntity) TplOutput(entity gqttpl.TplEntityInterface ) (out string,err error){
-			out,err=gqttpl.TplOutput(entity,t.TplName())
-			return 
-		}
-
 	
 
 		type SQLValidateSchemaGenSQLGetByValidateSchemaIDEntity struct{
@@ -1035,12 +771,6 @@ import "github.com/suifengpiao14/gqt/v2/gqttpl"
 		func (t *SQLValidateSchemaGenSQLGetByValidateSchemaIDEntity) TplName() string{
 			return "sql.validate_schema.gen.sql.GetByValidateSchemaID"
 		}
-
-		func (t *SQLValidateSchemaGenSQLGetByValidateSchemaIDEntity) TplOutput(entity gqttpl.TplEntityInterface ) (out string,err error){
-			out,err=gqttpl.TplOutput(entity,t.TplName())
-			return 
-		}
-
 	
 
 		type SQLValidateSchemaGenSQLInsertEntity struct{
@@ -1135,12 +865,6 @@ import "github.com/suifengpiao14/gqt/v2/gqttpl"
 		func (t *SQLValidateSchemaGenSQLInsertEntity) TplName() string{
 			return "sql.validate_schema.gen.sql.Insert"
 		}
-
-		func (t *SQLValidateSchemaGenSQLInsertEntity) TplOutput(entity gqttpl.TplEntityInterface ) (out string,err error){
-			out,err=gqttpl.TplOutput(entity,t.TplName())
-			return 
-		}
-
 	
 
 		type SQLValidateSchemaGenSQLPaginateEntity struct{
@@ -1157,12 +881,6 @@ import "github.com/suifengpiao14/gqt/v2/gqttpl"
 		func (t *SQLValidateSchemaGenSQLPaginateEntity) TplName() string{
 			return "sql.validate_schema.gen.sql.Paginate"
 		}
-
-		func (t *SQLValidateSchemaGenSQLPaginateEntity) TplOutput(entity gqttpl.TplEntityInterface ) (out string,err error){
-			out,err=gqttpl.TplOutput(entity,t.TplName())
-			return 
-		}
-
 	
 
 		type SQLValidateSchemaGenSQLPaginateTotalEntity struct{
@@ -1175,12 +893,6 @@ import "github.com/suifengpiao14/gqt/v2/gqttpl"
 		func (t *SQLValidateSchemaGenSQLPaginateTotalEntity) TplName() string{
 			return "sql.validate_schema.gen.sql.PaginateTotal"
 		}
-
-		func (t *SQLValidateSchemaGenSQLPaginateTotalEntity) TplOutput(entity gqttpl.TplEntityInterface ) (out string,err error){
-			out,err=gqttpl.TplOutput(entity,t.TplName())
-			return 
-		}
-
 	
 
 		type SQLValidateSchemaGenSQLPaginateWhereEntity struct{
@@ -1191,12 +903,6 @@ import "github.com/suifengpiao14/gqt/v2/gqttpl"
 		func (t *SQLValidateSchemaGenSQLPaginateWhereEntity) TplName() string{
 			return "sql.validate_schema.gen.sql.PaginateWhere"
 		}
-
-		func (t *SQLValidateSchemaGenSQLPaginateWhereEntity) TplOutput(entity gqttpl.TplEntityInterface ) (out string,err error){
-			out,err=gqttpl.TplOutput(entity,t.TplName())
-			return 
-		}
-
 	
 
 		type SQLValidateSchemaGenSQLUpdateEntity struct{
@@ -1291,10 +997,4 @@ import "github.com/suifengpiao14/gqt/v2/gqttpl"
 		func (t *SQLValidateSchemaGenSQLUpdateEntity) TplName() string{
 			return "sql.validate_schema.gen.sql.Update"
 		}
-
-		func (t *SQLValidateSchemaGenSQLUpdateEntity) TplOutput(entity gqttpl.TplEntityInterface ) (out string,err error){
-			out,err=gqttpl.TplOutput(entity,t.TplName())
-			return 
-		}
-
 	
