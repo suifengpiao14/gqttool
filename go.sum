@@ -248,8 +248,12 @@ github.com/suifengpiao14/errorformatter v0.0.0-20220214013820-e0177a90fb70 h1:dF
 github.com/suifengpiao14/errorformatter v0.0.0-20220214013820-e0177a90fb70/go.mod h1:d4GXPUb6d5XkO5+uuiLsw85g+S/fyv/JsbHtGIptZGY=
 github.com/suifengpiao14/gqt/v2 v2.0.0-20220324032337-a3142e94f017 h1:T/X+pZOgQPjhcLSPM9jWr36kJ3PjUs+yDU6N1WXeXuU=
 github.com/suifengpiao14/gqt/v2 v2.0.0-20220324032337-a3142e94f017/go.mod h1:4najawt9TpKzKkYkbLOX5QQBH53hoiQBCbyreOHI47w=
+github.com/suifengpiao14/gqt/v2 v2.0.0-20220325022420-7413aa73f1c5 h1:U4LO7NFLRtSDbbFsj/Zd6UiKM+YllS23xUehE38RlAw=
+github.com/suifengpiao14/gqt/v2 v2.0.0-20220325022420-7413aa73f1c5/go.mod h1:4najawt9TpKzKkYkbLOX5QQBH53hoiQBCbyreOHI47w=
 github.com/suifengpiao14/gqtcurl v0.0.0-20220324033730-e45ba72461db h1:+sKanHLzXKC0JntPg1wxYCPTgphgCqDOdTNt08E1kmA=
 github.com/suifengpiao14/gqtcurl v0.0.0-20220324033730-e45ba72461db/go.mod h1:fez8lsOG9oorIEmXipIln0+09/0P2Wo9YvICJ8sT/9A=
+github.com/suifengpiao14/gqtcurl v0.0.0-20220325023955-8c1c170b6ff2 h1:6SJhINdS79/B3FueJQEw9EMIPfT+NJ81lpnVG+rgKCg=
+github.com/suifengpiao14/gqtcurl v0.0.0-20220325023955-8c1c170b6ff2/go.mod h1:fez8lsOG9oorIEmXipIln0+09/0P2Wo9YvICJ8sT/9A=
 github.com/tiancaiamao/appdash v0.0.0-20181126055449-889f96f722a2/go.mod h1:2PfKggNGDuadAa0LElHrByyrz4JPZ9fFx6Gs7nx7ZZU=
 github.com/tmc/grpc-websocket-proxy v0.0.0-20171017195756-830351dc03c6/go.mod h1:ncp9v5uamzpCO7NfCPTXjqaC+bZgJeR0sMTm6dMHP7U=
 github.com/twinj/uuid v1.0.0 h1:fzz7COZnDrXGTAOHGuUGYd6sG+JMq+AoE7+Jlu0przk=
