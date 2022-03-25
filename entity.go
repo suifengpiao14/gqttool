@@ -107,7 +107,7 @@ func (s *SQLTplNamespace) Filename() (out string) {
 	return
 }
 
-func ParseDirTplDefine(tplDir string, namespaceSuffix string) (sqlTplDefineList []*gqttpl.TPLDefine, err error) {
+func ParseDirTplDefine(tplDir string, namespaceSuffix string) (tplDefineList []*gqttpl.TPLDefine, err error) {
 	allFileList, err := gqttpl.GetTplFilesByDir(tplDir, namespaceSuffix)
 	if err != nil {
 		return
@@ -117,20 +117,21 @@ func ParseDirTplDefine(tplDir string, namespaceSuffix string) (sqlTplDefineList 
 		if err != nil {
 			return nil, err
 		}
-		sqlTplList := ParseDefine(string(b))
-		for _, sqlTpl := range sqlTplList {
-			name, err := GetDefineName(sqlTpl)
+		tplList := ParseDefine(string(b))
+		for _, tpl := range tplList {
+			name, err := GetDefineName(tpl)
 			if err != nil {
 				return nil, err
 			}
 			namespace := gqttpl.FileName2Namespace(filename, tplDir)
-			sqlTplDefine := &gqttpl.TPLDefine{
+			tplDefine := &gqttpl.TPLDefine{
 				Name:      name,
 				Namespace: namespace,
-				Output:    sqlTpl,
+				Output:    tpl,
+				Type:      gqttpl.TPL_DEFINE_TYPE_TEXT,
 				Input:     nil,
 			}
-			sqlTplDefineList = append(sqlTplDefineList, sqlTplDefine)
+			tplDefineList = append(tplDefineList, tplDefine)
 		}
 	}
 	return
@@ -460,17 +461,40 @@ func parsePrefixVariable(item []byte, variableStart byte) (variable Variable, po
 	return
 }
 
-func GetDefineName(sqlTpl string) (defineName string, err error) {
+func GetDefineName(tplDefine string) (defineName string, err error) {
 	delim := []byte("{{define \"")
-	sqlTplByte := []byte(sqlTpl)
-	index := bytes.Index(sqlTplByte, delim)
+	tplDefineByte := []byte(tplDefine)
+	index := bytes.Index(tplDefineByte, delim)
 	nameByte := make([]byte, 0)
 	if index >= 0 {
 		index += len(delim)
-		for i := index; i < len(sqlTplByte); i++ {
-			c := sqlTplByte[i]
+		for i := index; i < len(tplDefineByte); i++ {
+			c := tplDefineByte[i]
 			if c != '"' {
-				nameByte = append(nameByte, sqlTplByte[i])
+				nameByte = append(nameByte, tplDefineByte[i])
+			} else {
+				break
+			}
+
+		}
+	}
+	defineName = string(nameByte)
+	if defineName == "" {
+		err = errors.Errorf("define name is empty")
+	}
+	return
+}
+func GetDefineType(tplDefine string) (defineName string, err error) {
+	delim := []byte("{{define \"")
+	tplDefineByte := []byte(tplDefine)
+	index := bytes.Index(tplDefineByte, delim)
+	nameByte := make([]byte, 0)
+	if index >= 0 {
+		index += len(delim)
+		for i := index; i < len(tplDefineByte); i++ {
+			c := tplDefineByte[i]
+			if c != '"' {
+				nameByte = append(nameByte, tplDefineByte[i])
 			} else {
 				break
 			}
