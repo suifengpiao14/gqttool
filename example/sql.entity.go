@@ -3,14 +3,12 @@ import "github.com/suifengpiao14/gqt/v2/gqttpl"
 
 		type SQLAPIGenSQLDelEntity struct{
 			
-				APIID string 
+				APIID string  
 			
-				OperatorIDInt int 
+				OperatorIDInt int  
 			
-				OperatorStr string 
-			
-			gqttpl.TplEmptyEntity
-		}
+				OperatorStr string  
+			gqttpl.TplEmptyEntity}
 
 		func (t *SQLAPIGenSQLDelEntity) TplName() string{
 			return "sql.api.gen.sql.Del"
@@ -19,10 +17,8 @@ import "github.com/suifengpiao14/gqt/v2/gqttpl"
 
 		type SQLAPIGenSQLGetAllByAPIIDListEntity struct{
 			
-				APIIDList []string 
-			
-			gqttpl.TplEmptyEntity
-		}
+				APIIDList []string  
+			gqttpl.TplEmptyEntity}
 
 		func (t *SQLAPIGenSQLGetAllByAPIIDListEntity) TplName() string{
 			return "sql.api.gen.sql.GetAllByAPIIDList"
@@ -31,10 +27,8 @@ import "github.com/suifengpiao14/gqt/v2/gqttpl"
 
 		type SQLAPIGenSQLGetByAPIIDEntity struct{
 			
-				APIID string 
-			
-			gqttpl.TplEmptyEntity
-		}
+				APIID string  
+			gqttpl.TplEmptyEntity}
 
 		func (t *SQLAPIGenSQLGetByAPIIDEntity) TplName() string{
 			return "sql.api.gen.sql.GetByAPIID"
@@ -43,24 +37,22 @@ import "github.com/suifengpiao14/gqt/v2/gqttpl"
 
 		type SQLAPIGenSQLInsertEntity struct{
 			
-				APIID string 
+				APIID string  
 			
-				Description string 
+				Description string  
 			
-				Name string 
+				Name string  
 			
-				ServiceID string 
+				ServiceID string  
 			
-				Summary string 
+				Summary string  
 			
-				Tags string 
+				Tags string  
 			
-				Title string 
+				Title string  
 			
-				URI string 
-			
-			gqttpl.TplEmptyEntity
-		}
+				URI string  
+			gqttpl.TplEmptyEntity}
 
 		func (t *SQLAPIGenSQLInsertEntity) TplName() string{
 			return "sql.api.gen.sql.Insert"
@@ -69,14 +61,12 @@ import "github.com/suifengpiao14/gqt/v2/gqttpl"
 
 		type SQLAPIGenSQLPaginateEntity struct{
 			
-				Limit int 
+				Limit int  
 			
-				Offset int 
+				Offset int  
 			
-				 SQLAPIGenSQLPaginateWhereEntity 
-			
-			gqttpl.TplEmptyEntity
-		}
+				 SQLAPIGenSQLPaginateWhereEntity  
+			gqttpl.TplEmptyEntity}
 
 		func (t *SQLAPIGenSQLPaginateEntity) TplName() string{
 			return "sql.api.gen.sql.Paginate"
@@ -85,10 +75,8 @@ import "github.com/suifengpiao14/gqt/v2/gqttpl"
 
 		type SQLAPIGenSQLPaginateTotalEntity struct{
 			
-				 SQLAPIGenSQLPaginateWhereEntity 
-			
-			gqttpl.TplEmptyEntity
-		}
+				 SQLAPIGenSQLPaginateWhereEntity  
+			gqttpl.TplEmptyEntity}
 
 		func (t *SQLAPIGenSQLPaginateTotalEntity) TplName() string{
 			return "sql.api.gen.sql.PaginateTotal"
@@ -97,8 +85,8 @@ import "github.com/suifengpiao14/gqt/v2/gqttpl"
 
 		type SQLAPIGenSQLPaginateWhereEntity struct{
 			
-			gqttpl.TplEmptyEntity
-		}
+				ID interface{}  
+			}
 
 		func (t *SQLAPIGenSQLPaginateWhereEntity) TplName() string{
 			return "sql.api.gen.sql.PaginateWhere"
@@ -107,24 +95,22 @@ import "github.com/suifengpiao14/gqt/v2/gqttpl"
 
 		type SQLAPIGenSQLUpdateEntity struct{
 			
-				APIID string 
+				APIID string  
 			
-				Description string 
+				Description string  
 			
-				Name string 
+				Name string  
 			
-				ServiceID string 
+				ServiceID string  
 			
-				Summary string 
+				Summary string  
 			
-				Tags string 
+				Tags string  
 			
-				Title string 
+				Title string  
 			
-				URI string 
-			
-			gqttpl.TplEmptyEntity
-		}
+				URI string  
+			gqttpl.TplEmptyEntity}
 
 		func (t *SQLAPIGenSQLUpdateEntity) TplName() string{
 			return "sql.api.gen.sql.Update"
@@ -133,10 +119,8 @@ import "github.com/suifengpiao14/gqt/v2/gqttpl"
 
 		type SQLExampleGenSQLGetAllByExampleIDListEntity struct{
 			
-				ExampleIDList []string 
-			
-			gqttpl.TplEmptyEntity
-		}
+				ExampleIDList []string  
+			gqttpl.TplEmptyEntity}
 
 		func (t *SQLExampleGenSQLGetAllByExampleIDListEntity) TplName() string{
 			return "sql.example.gen.sql.GetAllByExampleIDList"
@@ -145,10 +129,8 @@ import "github.com/suifengpiao14/gqt/v2/gqttpl"
 
 		type SQLExampleGenSQLGetByExampleIDEntity struct{
 			
-				ExampleID string 
-			
-			gqttpl.TplEmptyEntity
-		}
+				ExampleID string  
+			gqttpl.TplEmptyEntity}
 
 		func (t *SQLExampleGenSQLGetByExampleIDEntity) TplName() string{
 			return "sql.example.gen.sql.GetByExampleID"
@@ -157,24 +139,22 @@ import "github.com/suifengpiao14/gqt/v2/gqttpl"
 
 		type SQLExampleGenSQLInsertEntity struct{
 			
-				APIID string 
+				APIID string  
 			
-				ExampleID string 
+				ExampleID string  
 			
-				Request string 
+				Request string  
 			
-				Response string 
+				Response string  
 			
-				ServiceID string 
+				ServiceID string  
 			
-				Summary string 
+				Summary string  
 			
-				Tag string 
+				Tag string  
 			
-				Title string 
-			
-			gqttpl.TplEmptyEntity
-		}
+				Title string  
+			gqttpl.TplEmptyEntity}
 
 		func (t *SQLExampleGenSQLInsertEntity) TplName() string{
 			return "sql.example.gen.sql.Insert"
@@ -183,14 +163,12 @@ import "github.com/suifengpiao14/gqt/v2/gqttpl"
 
 		type SQLExampleGenSQLPaginateEntity struct{
 			
-				Limit int 
+				Limit int  
 			
-				Offset int 
+				Offset int  
 			
-				 SQLExampleGenSQLPaginateWhereEntity 
-			
-			gqttpl.TplEmptyEntity
-		}
+				 SQLExampleGenSQLPaginateWhereEntity  
+			gqttpl.TplEmptyEntity}
 
 		func (t *SQLExampleGenSQLPaginateEntity) TplName() string{
 			return "sql.example.gen.sql.Paginate"
@@ -199,10 +177,8 @@ import "github.com/suifengpiao14/gqt/v2/gqttpl"
 
 		type SQLExampleGenSQLPaginateTotalEntity struct{
 			
-				 SQLExampleGenSQLPaginateWhereEntity 
-			
-			gqttpl.TplEmptyEntity
-		}
+				 SQLExampleGenSQLPaginateWhereEntity  
+			gqttpl.TplEmptyEntity}
 
 		func (t *SQLExampleGenSQLPaginateTotalEntity) TplName() string{
 			return "sql.example.gen.sql.PaginateTotal"
@@ -210,9 +186,7 @@ import "github.com/suifengpiao14/gqt/v2/gqttpl"
 	
 
 		type SQLExampleGenSQLPaginateWhereEntity struct{
-			
-			gqttpl.TplEmptyEntity
-		}
+			}
 
 		func (t *SQLExampleGenSQLPaginateWhereEntity) TplName() string{
 			return "sql.example.gen.sql.PaginateWhere"
@@ -221,24 +195,22 @@ import "github.com/suifengpiao14/gqt/v2/gqttpl"
 
 		type SQLExampleGenSQLUpdateEntity struct{
 			
-				APIID string 
+				APIID string  
 			
-				ExampleID string 
+				ExampleID string  
 			
-				Request string 
+				Request string  
 			
-				Response string 
+				Response string  
 			
-				ServiceID string 
+				ServiceID string  
 			
-				Summary string 
+				Summary string  
 			
-				Tag string 
+				Tag string  
 			
-				Title string 
-			
-			gqttpl.TplEmptyEntity
-		}
+				Title string  
+			gqttpl.TplEmptyEntity}
 
 		func (t *SQLExampleGenSQLUpdateEntity) TplName() string{
 			return "sql.example.gen.sql.Update"
@@ -247,10 +219,8 @@ import "github.com/suifengpiao14/gqt/v2/gqttpl"
 
 		type SQLMarkdownGenSQLGetAllByMarkdownIDListEntity struct{
 			
-				MarkdownIDList []string 
-			
-			gqttpl.TplEmptyEntity
-		}
+				MarkdownIDList []string  
+			gqttpl.TplEmptyEntity}
 
 		func (t *SQLMarkdownGenSQLGetAllByMarkdownIDListEntity) TplName() string{
 			return "sql.markdown.gen.sql.GetAllByMarkdownIDList"
@@ -259,10 +229,8 @@ import "github.com/suifengpiao14/gqt/v2/gqttpl"
 
 		type SQLMarkdownGenSQLGetByMarkdownIDEntity struct{
 			
-				MarkdownID string 
-			
-			gqttpl.TplEmptyEntity
-		}
+				MarkdownID string  
+			gqttpl.TplEmptyEntity}
 
 		func (t *SQLMarkdownGenSQLGetByMarkdownIDEntity) TplName() string{
 			return "sql.markdown.gen.sql.GetByMarkdownID"
@@ -271,26 +239,24 @@ import "github.com/suifengpiao14/gqt/v2/gqttpl"
 
 		type SQLMarkdownGenSQLInsertEntity struct{
 			
-				APIID string 
+				APIID string  
 			
-				Content string 
+				Content string  
 			
-				Markdown string 
+				Markdown string  
 			
-				MarkdownID string 
+				MarkdownID string  
 			
-				Name string 
+				Name string  
 			
-				OwnerID int 
+				OwnerID int  
 			
-				OwnerName string 
+				OwnerName string  
 			
-				ServiceID string 
+				ServiceID string  
 			
-				Title string 
-			
-			gqttpl.TplEmptyEntity
-		}
+				Title string  
+			gqttpl.TplEmptyEntity}
 
 		func (t *SQLMarkdownGenSQLInsertEntity) TplName() string{
 			return "sql.markdown.gen.sql.Insert"
@@ -299,14 +265,12 @@ import "github.com/suifengpiao14/gqt/v2/gqttpl"
 
 		type SQLMarkdownGenSQLPaginateEntity struct{
 			
-				Limit int 
+				Limit int  
 			
-				Offset int 
+				Offset int  
 			
-				 SQLMarkdownGenSQLPaginateWhereEntity 
-			
-			gqttpl.TplEmptyEntity
-		}
+				 SQLMarkdownGenSQLPaginateWhereEntity  
+			gqttpl.TplEmptyEntity}
 
 		func (t *SQLMarkdownGenSQLPaginateEntity) TplName() string{
 			return "sql.markdown.gen.sql.Paginate"
@@ -315,10 +279,8 @@ import "github.com/suifengpiao14/gqt/v2/gqttpl"
 
 		type SQLMarkdownGenSQLPaginateTotalEntity struct{
 			
-				 SQLMarkdownGenSQLPaginateWhereEntity 
-			
-			gqttpl.TplEmptyEntity
-		}
+				 SQLMarkdownGenSQLPaginateWhereEntity  
+			gqttpl.TplEmptyEntity}
 
 		func (t *SQLMarkdownGenSQLPaginateTotalEntity) TplName() string{
 			return "sql.markdown.gen.sql.PaginateTotal"
@@ -326,9 +288,7 @@ import "github.com/suifengpiao14/gqt/v2/gqttpl"
 	
 
 		type SQLMarkdownGenSQLPaginateWhereEntity struct{
-			
-			gqttpl.TplEmptyEntity
-		}
+			}
 
 		func (t *SQLMarkdownGenSQLPaginateWhereEntity) TplName() string{
 			return "sql.markdown.gen.sql.PaginateWhere"
@@ -337,26 +297,24 @@ import "github.com/suifengpiao14/gqt/v2/gqttpl"
 
 		type SQLMarkdownGenSQLUpdateEntity struct{
 			
-				APIID string 
+				APIID string  
 			
-				Content string 
+				Content string  
 			
-				Markdown string 
+				Markdown string  
 			
-				MarkdownID string 
+				MarkdownID string  
 			
-				Name string 
+				Name string  
 			
-				OwnerID int 
+				OwnerID int  
 			
-				OwnerName string 
+				OwnerName string  
 			
-				ServiceID string 
+				ServiceID string  
 			
-				Title string 
-			
-			gqttpl.TplEmptyEntity
-		}
+				Title string  
+			gqttpl.TplEmptyEntity}
 
 		func (t *SQLMarkdownGenSQLUpdateEntity) TplName() string{
 			return "sql.markdown.gen.sql.Update"
@@ -365,10 +323,8 @@ import "github.com/suifengpiao14/gqt/v2/gqttpl"
 
 		type SQLParameterGenSQLGetAllByParameterIDListEntity struct{
 			
-				ParameterIDList []string 
-			
-			gqttpl.TplEmptyEntity
-		}
+				ParameterIDList []string  
+			gqttpl.TplEmptyEntity}
 
 		func (t *SQLParameterGenSQLGetAllByParameterIDListEntity) TplName() string{
 			return "sql.parameter.gen.sql.GetAllByParameterIDList"
@@ -377,10 +333,8 @@ import "github.com/suifengpiao14/gqt/v2/gqttpl"
 
 		type SQLParameterGenSQLGetByParameterIDEntity struct{
 			
-				ParameterID string 
-			
-			gqttpl.TplEmptyEntity
-		}
+				ParameterID string  
+			gqttpl.TplEmptyEntity}
 
 		func (t *SQLParameterGenSQLGetByParameterIDEntity) TplName() string{
 			return "sql.parameter.gen.sql.GetByParameterID"
@@ -389,48 +343,46 @@ import "github.com/suifengpiao14/gqt/v2/gqttpl"
 
 		type SQLParameterGenSQLInsertEntity struct{
 			
-				APIID string 
+				APIID string  
 			
-				AllowEmptyValue string 
+				AllowEmptyValue string  
 			
-				AllowReserved string 
+				AllowReserved string  
 			
-				Deprecated string 
+				Deprecated string  
 			
-				Description string 
+				Description string  
 			
-				Example string 
+				Example string  
 			
-				Explode string 
+				Explode string  
 			
-				FullName string 
+				FullName string  
 			
-				HTTPStatus string 
+				HTTPStatus string  
 			
-				Method string 
+				Method string  
 			
-				Name string 
+				Name string  
 			
-				ParameterID string 
+				ParameterID string  
 			
-				Position string 
+				Position string  
 			
-				Required string 
+				Required string  
 			
-				Serialize string 
+				Serialize string  
 			
-				ServiceID string 
+				ServiceID string  
 			
-				Tag string 
+				Tag string  
 			
-				Title string 
+				Title string  
 			
-				Type string 
+				Type string  
 			
-				ValidateSchemaID string 
-			
-			gqttpl.TplEmptyEntity
-		}
+				ValidateSchemaID string  
+			gqttpl.TplEmptyEntity}
 
 		func (t *SQLParameterGenSQLInsertEntity) TplName() string{
 			return "sql.parameter.gen.sql.Insert"
@@ -439,14 +391,12 @@ import "github.com/suifengpiao14/gqt/v2/gqttpl"
 
 		type SQLParameterGenSQLPaginateEntity struct{
 			
-				Limit int 
+				Limit int  
 			
-				Offset int 
+				Offset int  
 			
-				 SQLParameterGenSQLPaginateWhereEntity 
-			
-			gqttpl.TplEmptyEntity
-		}
+				 SQLParameterGenSQLPaginateWhereEntity  
+			gqttpl.TplEmptyEntity}
 
 		func (t *SQLParameterGenSQLPaginateEntity) TplName() string{
 			return "sql.parameter.gen.sql.Paginate"
@@ -455,10 +405,8 @@ import "github.com/suifengpiao14/gqt/v2/gqttpl"
 
 		type SQLParameterGenSQLPaginateTotalEntity struct{
 			
-				 SQLParameterGenSQLPaginateWhereEntity 
-			
-			gqttpl.TplEmptyEntity
-		}
+				 SQLParameterGenSQLPaginateWhereEntity  
+			gqttpl.TplEmptyEntity}
 
 		func (t *SQLParameterGenSQLPaginateTotalEntity) TplName() string{
 			return "sql.parameter.gen.sql.PaginateTotal"
@@ -466,9 +414,7 @@ import "github.com/suifengpiao14/gqt/v2/gqttpl"
 	
 
 		type SQLParameterGenSQLPaginateWhereEntity struct{
-			
-			gqttpl.TplEmptyEntity
-		}
+			}
 
 		func (t *SQLParameterGenSQLPaginateWhereEntity) TplName() string{
 			return "sql.parameter.gen.sql.PaginateWhere"
@@ -477,48 +423,46 @@ import "github.com/suifengpiao14/gqt/v2/gqttpl"
 
 		type SQLParameterGenSQLUpdateEntity struct{
 			
-				APIID string 
+				APIID string  
 			
-				AllowEmptyValue string 
+				AllowEmptyValue string  
 			
-				AllowReserved string 
+				AllowReserved string  
 			
-				Deprecated string 
+				Deprecated string  
 			
-				Description string 
+				Description string  
 			
-				Example string 
+				Example string  
 			
-				Explode string 
+				Explode string  
 			
-				FullName string 
+				FullName string  
 			
-				HTTPStatus string 
+				HTTPStatus string  
 			
-				Method string 
+				Method string  
 			
-				Name string 
+				Name string  
 			
-				ParameterID string 
+				ParameterID string  
 			
-				Position string 
+				Position string  
 			
-				Required string 
+				Required string  
 			
-				Serialize string 
+				Serialize string  
 			
-				ServiceID string 
+				ServiceID string  
 			
-				Tag string 
+				Tag string  
 			
-				Title string 
+				Title string  
 			
-				Type string 
+				Type string  
 			
-				ValidateSchemaID string 
-			
-			gqttpl.TplEmptyEntity
-		}
+				ValidateSchemaID string  
+			gqttpl.TplEmptyEntity}
 
 		func (t *SQLParameterGenSQLUpdateEntity) TplName() string{
 			return "sql.parameter.gen.sql.Update"
@@ -527,10 +471,8 @@ import "github.com/suifengpiao14/gqt/v2/gqttpl"
 
 		type SQLServerGenSQLGetAllByServerIDListEntity struct{
 			
-				ServerIDList []string 
-			
-			gqttpl.TplEmptyEntity
-		}
+				ServerIDList []string  
+			gqttpl.TplEmptyEntity}
 
 		func (t *SQLServerGenSQLGetAllByServerIDListEntity) TplName() string{
 			return "sql.server.gen.sql.GetAllByServerIDList"
@@ -539,10 +481,8 @@ import "github.com/suifengpiao14/gqt/v2/gqttpl"
 
 		type SQLServerGenSQLGetByServerIDEntity struct{
 			
-				ServerID string 
-			
-			gqttpl.TplEmptyEntity
-		}
+				ServerID string  
+			gqttpl.TplEmptyEntity}
 
 		func (t *SQLServerGenSQLGetByServerIDEntity) TplName() string{
 			return "sql.server.gen.sql.GetByServerID"
@@ -551,20 +491,18 @@ import "github.com/suifengpiao14/gqt/v2/gqttpl"
 
 		type SQLServerGenSQLInsertEntity struct{
 			
-				Description string 
+				Description string  
 			
-				ExtensionIds string 
+				ExtensionIds string  
 			
-				Proxy string 
+				Proxy string  
 			
-				ServerID string 
+				ServerID string  
 			
-				ServiceID string 
+				ServiceID string  
 			
-				URL string 
-			
-			gqttpl.TplEmptyEntity
-		}
+				URL string  
+			gqttpl.TplEmptyEntity}
 
 		func (t *SQLServerGenSQLInsertEntity) TplName() string{
 			return "sql.server.gen.sql.Insert"
@@ -573,14 +511,12 @@ import "github.com/suifengpiao14/gqt/v2/gqttpl"
 
 		type SQLServerGenSQLPaginateEntity struct{
 			
-				Limit int 
+				Limit int  
 			
-				Offset int 
+				Offset int  
 			
-				 SQLServerGenSQLPaginateWhereEntity 
-			
-			gqttpl.TplEmptyEntity
-		}
+				 SQLServerGenSQLPaginateWhereEntity  
+			gqttpl.TplEmptyEntity}
 
 		func (t *SQLServerGenSQLPaginateEntity) TplName() string{
 			return "sql.server.gen.sql.Paginate"
@@ -589,10 +525,8 @@ import "github.com/suifengpiao14/gqt/v2/gqttpl"
 
 		type SQLServerGenSQLPaginateTotalEntity struct{
 			
-				 SQLServerGenSQLPaginateWhereEntity 
-			
-			gqttpl.TplEmptyEntity
-		}
+				 SQLServerGenSQLPaginateWhereEntity  
+			gqttpl.TplEmptyEntity}
 
 		func (t *SQLServerGenSQLPaginateTotalEntity) TplName() string{
 			return "sql.server.gen.sql.PaginateTotal"
@@ -600,9 +534,7 @@ import "github.com/suifengpiao14/gqt/v2/gqttpl"
 	
 
 		type SQLServerGenSQLPaginateWhereEntity struct{
-			
-			gqttpl.TplEmptyEntity
-		}
+			}
 
 		func (t *SQLServerGenSQLPaginateWhereEntity) TplName() string{
 			return "sql.server.gen.sql.PaginateWhere"
@@ -611,20 +543,18 @@ import "github.com/suifengpiao14/gqt/v2/gqttpl"
 
 		type SQLServerGenSQLUpdateEntity struct{
 			
-				Description string 
+				Description string  
 			
-				ExtensionIds string 
+				ExtensionIds string  
 			
-				Proxy string 
+				Proxy string  
 			
-				ServerID string 
+				ServerID string  
 			
-				ServiceID string 
+				ServiceID string  
 			
-				URL string 
-			
-			gqttpl.TplEmptyEntity
-		}
+				URL string  
+			gqttpl.TplEmptyEntity}
 
 		func (t *SQLServerGenSQLUpdateEntity) TplName() string{
 			return "sql.server.gen.sql.Update"
@@ -633,10 +563,8 @@ import "github.com/suifengpiao14/gqt/v2/gqttpl"
 
 		type SQLServiceGenSQLGetAllByServiceIDListEntity struct{
 			
-				ServiceIDList []string 
-			
-			gqttpl.TplEmptyEntity
-		}
+				ServiceIDList []string  
+			gqttpl.TplEmptyEntity}
 
 		func (t *SQLServiceGenSQLGetAllByServiceIDListEntity) TplName() string{
 			return "sql.service.gen.sql.GetAllByServiceIDList"
@@ -645,10 +573,8 @@ import "github.com/suifengpiao14/gqt/v2/gqttpl"
 
 		type SQLServiceGenSQLGetByServiceIDEntity struct{
 			
-				ServiceID string 
-			
-			gqttpl.TplEmptyEntity
-		}
+				ServiceID string  
+			gqttpl.TplEmptyEntity}
 
 		func (t *SQLServiceGenSQLGetByServiceIDEntity) TplName() string{
 			return "sql.service.gen.sql.GetByServiceID"
@@ -657,26 +583,24 @@ import "github.com/suifengpiao14/gqt/v2/gqttpl"
 
 		type SQLServiceGenSQLInsertEntity struct{
 			
-				ContactIds string 
+				ContactIds string  
 			
-				Description string 
+				Description string  
 			
-				License string 
+				License string  
 			
-				Proxy string 
+				Proxy string  
 			
-				Security string 
+				Security string  
 			
-				ServiceID string 
+				ServiceID string  
 			
-				Title string 
+				Title string  
 			
-				Variables string 
+				Variables string  
 			
-				Version string 
-			
-			gqttpl.TplEmptyEntity
-		}
+				Version string  
+			gqttpl.TplEmptyEntity}
 
 		func (t *SQLServiceGenSQLInsertEntity) TplName() string{
 			return "sql.service.gen.sql.Insert"
@@ -685,14 +609,12 @@ import "github.com/suifengpiao14/gqt/v2/gqttpl"
 
 		type SQLServiceGenSQLPaginateEntity struct{
 			
-				Limit int 
+				Limit int  
 			
-				Offset int 
+				Offset int  
 			
-				 SQLServiceGenSQLPaginateWhereEntity 
-			
-			gqttpl.TplEmptyEntity
-		}
+				 SQLServiceGenSQLPaginateWhereEntity  
+			gqttpl.TplEmptyEntity}
 
 		func (t *SQLServiceGenSQLPaginateEntity) TplName() string{
 			return "sql.service.gen.sql.Paginate"
@@ -701,10 +623,8 @@ import "github.com/suifengpiao14/gqt/v2/gqttpl"
 
 		type SQLServiceGenSQLPaginateTotalEntity struct{
 			
-				 SQLServiceGenSQLPaginateWhereEntity 
-			
-			gqttpl.TplEmptyEntity
-		}
+				 SQLServiceGenSQLPaginateWhereEntity  
+			gqttpl.TplEmptyEntity}
 
 		func (t *SQLServiceGenSQLPaginateTotalEntity) TplName() string{
 			return "sql.service.gen.sql.PaginateTotal"
@@ -712,9 +632,7 @@ import "github.com/suifengpiao14/gqt/v2/gqttpl"
 	
 
 		type SQLServiceGenSQLPaginateWhereEntity struct{
-			
-			gqttpl.TplEmptyEntity
-		}
+			}
 
 		func (t *SQLServiceGenSQLPaginateWhereEntity) TplName() string{
 			return "sql.service.gen.sql.PaginateWhere"
@@ -723,26 +641,24 @@ import "github.com/suifengpiao14/gqt/v2/gqttpl"
 
 		type SQLServiceGenSQLUpdateEntity struct{
 			
-				ContactIds string 
+				ContactIds string  
 			
-				Description string 
+				Description string  
 			
-				License string 
+				License string  
 			
-				Proxy string 
+				Proxy string  
 			
-				Security string 
+				Security string  
 			
-				ServiceID string 
+				ServiceID string  
 			
-				Title string 
+				Title string  
 			
-				Variables string 
+				Variables string  
 			
-				Version string 
-			
-			gqttpl.TplEmptyEntity
-		}
+				Version string  
+			gqttpl.TplEmptyEntity}
 
 		func (t *SQLServiceGenSQLUpdateEntity) TplName() string{
 			return "sql.service.gen.sql.Update"
@@ -751,10 +667,8 @@ import "github.com/suifengpiao14/gqt/v2/gqttpl"
 
 		type SQLValidateSchemaGenSQLGetAllByValidateSchemaIDListEntity struct{
 			
-				ValidateSchemaIDList []string 
-			
-			gqttpl.TplEmptyEntity
-		}
+				ValidateSchemaIDList []string  
+			gqttpl.TplEmptyEntity}
 
 		func (t *SQLValidateSchemaGenSQLGetAllByValidateSchemaIDListEntity) TplName() string{
 			return "sql.validate_schema.gen.sql.GetAllByValidateSchemaIDList"
@@ -763,10 +677,8 @@ import "github.com/suifengpiao14/gqt/v2/gqttpl"
 
 		type SQLValidateSchemaGenSQLGetByValidateSchemaIDEntity struct{
 			
-				ValidateSchemaID string 
-			
-			gqttpl.TplEmptyEntity
-		}
+				ValidateSchemaID string  
+			gqttpl.TplEmptyEntity}
 
 		func (t *SQLValidateSchemaGenSQLGetByValidateSchemaIDEntity) TplName() string{
 			return "sql.validate_schema.gen.sql.GetByValidateSchemaID"
@@ -775,92 +687,90 @@ import "github.com/suifengpiao14/gqt/v2/gqttpl"
 
 		type SQLValidateSchemaGenSQLInsertEntity struct{
 			
-				AdditionalProperties string 
+				AdditionalProperties string  
 			
-				AllOf string 
+				AllOf string  
 			
-				AllowEmptyValue string 
+				AllowEmptyValue string  
 			
-				AllowReserved string 
+				AllowReserved string  
 			
-				AnyOf string 
+				AnyOf string  
 			
-				Default string 
+				Default string  
 			
-				Deprecated string 
+				Deprecated string  
 			
-				Description string 
+				Description string  
 			
-				Discriminator string 
+				Discriminator string  
 			
-				Enum string 
+				Enum string  
 			
-				EnumNames string 
+				EnumNames string  
 			
-				EnumTitles string 
+				EnumTitles string  
 			
-				Example string 
+				Example string  
 			
-				ExclusiveMaximum string 
+				ExclusiveMaximum string  
 			
-				ExclusiveMinimum string 
+				ExclusiveMinimum string  
 			
-				Extensions string 
+				Extensions string  
 			
-				ExternalDocs string 
+				ExternalDocs string  
 			
-				ExternalPros string 
+				ExternalPros string  
 			
-				Format string 
+				Format string  
 			
-				MaxItems int 
+				MaxItems int  
 			
-				MaxLength int 
+				MaxLength int  
 			
-				MaxProperties int 
+				MaxProperties int  
 			
-				Maxnum int 
+				Maxnum int  
 			
-				MinItems int 
+				MinItems int  
 			
-				MinLength int 
+				MinLength int  
 			
-				MinProperties int 
+				MinProperties int  
 			
-				Minimum int 
+				Minimum int  
 			
-				MultipleOf int 
+				MultipleOf int  
 			
-				Not string 
+				Not string  
 			
-				Nullable string 
+				Nullable string  
 			
-				OneOf string 
+				OneOf string  
 			
-				Pattern string 
+				Pattern string  
 			
-				ReadOnly string 
+				ReadOnly string  
 			
-				Remark string 
+				Remark string  
 			
-				Required string 
+				Required string  
 			
-				ServiceID string 
+				ServiceID string  
 			
-				Summary string 
+				Summary string  
 			
-				Type string 
+				Type string  
 			
-				UniqueItems string 
+				UniqueItems string  
 			
-				ValidateSchemaID string 
+				ValidateSchemaID string  
 			
-				WriteOnly string 
+				WriteOnly string  
 			
-				XML string 
-			
-			gqttpl.TplEmptyEntity
-		}
+				XML string  
+			gqttpl.TplEmptyEntity}
 
 		func (t *SQLValidateSchemaGenSQLInsertEntity) TplName() string{
 			return "sql.validate_schema.gen.sql.Insert"
@@ -869,14 +779,12 @@ import "github.com/suifengpiao14/gqt/v2/gqttpl"
 
 		type SQLValidateSchemaGenSQLPaginateEntity struct{
 			
-				Limit int 
+				Limit int  
 			
-				Offset int 
+				Offset int  
 			
-				 SQLValidateSchemaGenSQLPaginateWhereEntity 
-			
-			gqttpl.TplEmptyEntity
-		}
+				 SQLValidateSchemaGenSQLPaginateWhereEntity  
+			gqttpl.TplEmptyEntity}
 
 		func (t *SQLValidateSchemaGenSQLPaginateEntity) TplName() string{
 			return "sql.validate_schema.gen.sql.Paginate"
@@ -885,10 +793,8 @@ import "github.com/suifengpiao14/gqt/v2/gqttpl"
 
 		type SQLValidateSchemaGenSQLPaginateTotalEntity struct{
 			
-				 SQLValidateSchemaGenSQLPaginateWhereEntity 
-			
-			gqttpl.TplEmptyEntity
-		}
+				 SQLValidateSchemaGenSQLPaginateWhereEntity  
+			gqttpl.TplEmptyEntity}
 
 		func (t *SQLValidateSchemaGenSQLPaginateTotalEntity) TplName() string{
 			return "sql.validate_schema.gen.sql.PaginateTotal"
@@ -896,9 +802,7 @@ import "github.com/suifengpiao14/gqt/v2/gqttpl"
 	
 
 		type SQLValidateSchemaGenSQLPaginateWhereEntity struct{
-			
-			gqttpl.TplEmptyEntity
-		}
+			}
 
 		func (t *SQLValidateSchemaGenSQLPaginateWhereEntity) TplName() string{
 			return "sql.validate_schema.gen.sql.PaginateWhere"
@@ -907,92 +811,90 @@ import "github.com/suifengpiao14/gqt/v2/gqttpl"
 
 		type SQLValidateSchemaGenSQLUpdateEntity struct{
 			
-				AdditionalProperties string 
+				AdditionalProperties string  
 			
-				AllOf string 
+				AllOf string  
 			
-				AllowEmptyValue string 
+				AllowEmptyValue string  
 			
-				AllowReserved string 
+				AllowReserved string  
 			
-				AnyOf string 
+				AnyOf string  
 			
-				Default string 
+				Default string  
 			
-				Deprecated string 
+				Deprecated string  
 			
-				Description string 
+				Description string  
 			
-				Discriminator string 
+				Discriminator string  
 			
-				Enum string 
+				Enum string  
 			
-				EnumNames string 
+				EnumNames string  
 			
-				EnumTitles string 
+				EnumTitles string  
 			
-				Example string 
+				Example string  
 			
-				ExclusiveMaximum string 
+				ExclusiveMaximum string  
 			
-				ExclusiveMinimum string 
+				ExclusiveMinimum string  
 			
-				Extensions string 
+				Extensions string  
 			
-				ExternalDocs string 
+				ExternalDocs string  
 			
-				ExternalPros string 
+				ExternalPros string  
 			
-				Format string 
+				Format string  
 			
-				MaxItems int 
+				MaxItems int  
 			
-				MaxLength int 
+				MaxLength int  
 			
-				MaxProperties int 
+				MaxProperties int  
 			
-				Maxnum int 
+				Maxnum int  
 			
-				MinItems int 
+				MinItems int  
 			
-				MinLength int 
+				MinLength int  
 			
-				MinProperties int 
+				MinProperties int  
 			
-				Minimum int 
+				Minimum int  
 			
-				MultipleOf int 
+				MultipleOf int  
 			
-				Not string 
+				Not string  
 			
-				Nullable string 
+				Nullable string  
 			
-				OneOf string 
+				OneOf string  
 			
-				Pattern string 
+				Pattern string  
 			
-				ReadOnly string 
+				ReadOnly string  
 			
-				Remark string 
+				Remark string  
 			
-				Required string 
+				Required string  
 			
-				ServiceID string 
+				ServiceID string  
 			
-				Summary string 
+				Summary string  
 			
-				Type string 
+				Type string  
 			
-				UniqueItems string 
+				UniqueItems string  
 			
-				ValidateSchemaID string 
+				ValidateSchemaID string  
 			
-				WriteOnly string 
+				WriteOnly string  
 			
-				XML string 
-			
-			gqttpl.TplEmptyEntity
-		}
+				XML string  
+			gqttpl.TplEmptyEntity}
 
 		func (t *SQLValidateSchemaGenSQLUpdateEntity) TplName() string{
 			return "sql.validate_schema.gen.sql.Update"

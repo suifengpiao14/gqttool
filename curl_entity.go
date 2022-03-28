@@ -9,8 +9,8 @@ import (
 )
 
 //CURLEntity curl 请求体
-func CURLEntity(sqlTplDefine *gqttpl.TPLDefine, curlTplDefineRelationList gqttpl.TPLDefineList) (entityStruct string, err error) {
-	variableList := ParseTplVariable(sqlTplDefine.Output, sqlTplDefine.Namespace)
+func CURLEntity(curlTplDefine *gqttpl.TPLDefine, curlTplDefineRelationList gqttpl.TPLDefineList) (entityStruct string, err error) {
+	variableList := ParseCurlTplVariable(curlTplDefine)
 	aliasVariableList := make([]*Variable, 0)
 	for _, variable := range variableList {
 		if curlTplDefineRelationList.IsDefineNameCamel(variable.Name) {
@@ -27,22 +27,26 @@ func CURLEntity(sqlTplDefine *gqttpl.TPLDefine, curlTplDefineRelationList gqttpl
 		}
 	}
 	variableList = append(variableList, aliasVariableList...)
-	structName := sqlTplDefine.FullnameCamel()
-	entityElement := &EntityElement{
-		Variables: variableList,
-		Name:      structName,
-		FullName:  fmt.Sprintf("%s.%s", sqlTplDefine.Namespace, sqlTplDefine.Name),
-	}
-	entityTplData, err := FormatEntityData(entityElement)
+	tableList := make([]*Table, 0)
+	variableList, err = FormatVariableType(variableList, tableList)
 	if err != nil {
 		return
 	}
-	tp, err := template.New("").Parse(EntityTpl())
+	camelName := curlTplDefine.FullnameCamel()
+	entityElement := &EntityElement{
+		Name:       camelName,
+		Type:       curlTplDefine.Type(),
+		StructName: fmt.Sprintf(STRUCT_DEFINE_NANE_FORMAT, camelName),
+		//ImplementTplEntityInterface: curlTplDefine.Type() == gqttpl.TPL_DEFINE_TYPE_CURL_REQUEST,
+		Variables: variableList,
+		FullName:  curlTplDefine.Fullname(),
+	}
+	tp, err := template.New("").Parse(InputEntityTpl())
 	if err != nil {
 		return
 	}
 	buf := new(bytes.Buffer)
-	err = tp.Execute(buf, entityTplData)
+	err = tp.Execute(buf, entityElement)
 	if err != nil {
 		return
 	}

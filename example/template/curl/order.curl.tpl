@@ -53,5 +53,6 @@ Quotation       string  `json:"price" njson:"_data._data.basic.quotation"`      
 Address         string  `json:"address" njson:"_data._data.customData.address"` {{//上门地址}}
 BrandId         string  `json:"brandId" njson:"_data._data.good.brandId"`
 Business        string  `json:"business" njson:"_data._data.good.brandId"`
+ResponseStatus
 {{end}}
 

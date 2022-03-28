@@ -153,7 +153,7 @@ func runCmdSQLEntity(sqlDir string, entityFilename string, force bool) (err erro
 	var sqlTplDefineList = make([]*gqttpl.TPLDefine, 0)
 	errChain.SetError(repo.AddByDir(sqlDir, gqttool.MetaTemplatefuncMap)).
 		Run(func() (err error) {
-			sqlTplDefineList, err = gqttool.ParseDirTplDefine(sqlDir, gqttpl.SQLNamespaceSuffix)
+			sqlTplDefineList, err = gqttool.ParseDirTplDefine(sqlDir, gqttpl.SQLNamespaceSuffix, gqttpl.LeftDelim, gqttpl.RightDelim)
 			return
 		}).
 		Run(func() (err error) {
@@ -192,7 +192,7 @@ func runCmdCURLEntity(curlDir string, entityFilename string, force bool) (err er
 	var tplDefineList = make([]*gqttpl.TPLDefine, 0)
 	errChain.SetError(repo.AddByDir(curlDir, gqttool.MetaTemplatefuncMap)).
 		Run(func() (err error) {
-			tplDefineList, err = gqttool.ParseDirTplDefine(curlDir, gqttpl.CURLNamespaceSuffix)
+			tplDefineList, err = gqttool.ParseDirTplDefine(curlDir, gqttpl.CURLNamespaceSuffix, gqttpl.LeftDelim, gqttpl.RightDelim)
 			return
 		}).
 		Run(func() (err error) {

@@ -9,8 +9,8 @@ require (
 	github.com/iancoleman/strcase v0.2.0
 	github.com/pkg/errors v0.9.1
 	github.com/suifengpiao14/errorformatter v0.0.0-20220214013820-e0177a90fb70
-	github.com/suifengpiao14/gqt/v2 v2.0.0-20220325022420-7413aa73f1c5
-	github.com/suifengpiao14/gqtcurl v0.0.0-20220325023955-8c1c170b6ff2
+	github.com/suifengpiao14/gqt/v2 v2.0.0-20220328095318-532d2a943ffa
+	github.com/suifengpiao14/gqtcurl v0.0.0-20220328083028-a7a6f539c3a2
 )
 
 require (
@@ -24,11 +24,13 @@ require (
 	github.com/shirou/gopsutil v3.21.11+incompatible // indirect
 	github.com/sirupsen/logrus v1.8.1 // indirect
 	github.com/yusufpapurcu/wmi v1.2.2 // indirect
+	golang.org/x/sys v0.0.0-20220327210214-530d0810a4d0 // indirect
 
 )
 
 replace gorm.io/gorm => gorm.io/gorm v1.22.4
 
 //replace github.com/suifengpiao14/gqt/v2 => /Users/admin/Documents/go/gqt
-replace github.com/suifengpiao14/gqt/v2 => D:\\go\\gqt
-replace github.com/suifengpiao14/gqtcurl => D:\\go\\gqtcurl
+//replace github.com/suifengpiao14/gqt/v2 => D:\\go\\gqt
+
+//replace github.com/suifengpiao14/gqtcurl => D:\\go\\gqtcurl

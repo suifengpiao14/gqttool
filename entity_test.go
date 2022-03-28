@@ -31,7 +31,11 @@ func TestParsSqlTplVariable(t *testing.T) {
 	 {{if .Variables}} {{in . .List}} {{end}}
        where {{func .Func}} service_id=:ServiceID limit :Offset,:limit;
   `
-	veriableList := ParsSqlTplVariable(sqlTpl, "a")
+	tplDefine := &gqttpl.TPLDefine{
+		Output:    sqlTpl,
+		Namespace: "a",
+	}
+	veriableList := ParsSqlTplVariable(tplDefine)
 	fmt.Println(veriableList)
 }
 

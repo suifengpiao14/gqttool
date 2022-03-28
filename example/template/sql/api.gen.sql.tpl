@@ -1,6 +1,7 @@
 
 {{define "GetByAPIID"}}
-select * from `t_api`  where `api_id`=:APIID  and `deleted_at` is null;
+              
+              select * from `t_api`  where `api_id`=:APIID  and `deleted_at` is null;
 {{end}}
 
 {{define "GetAllByAPIIDList"}}
@@ -9,7 +10,7 @@ select * from `t_api`  where `api_id` in ({{in . .APIIDList}})  and `deleted_at`
 
 
 {{define "PaginateWhere"}}
-  
+   `id`=:ID
 {{end}}
 
 {{define "PaginateTotal"}}

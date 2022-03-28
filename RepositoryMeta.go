@@ -8,7 +8,6 @@ import (
 
 	"github.com/BurntSushi/toml"
 	"github.com/pkg/errors"
-	"github.com/suifengpiao14/gqt/v2"
 	"github.com/suifengpiao14/gqt/v2/gqttpl"
 )
 
@@ -43,7 +42,7 @@ func (r *RepositoryMeta) AddByDir(root string, funcMap template.FuncMap) (err er
 	if err != nil {
 		return
 	}
-	ddlTemplates, err := gqttpl.AddTemplateByDir(root, DDLNamespaceSuffix, funcMap, gqt.LeftDelim, gqt.RightDelim)
+	ddlTemplates, err := gqttpl.AddTemplateByDir(root, DDLNamespaceSuffix, funcMap, gqttpl.LeftDelim, gqttpl.RightDelim)
 	if err != nil {
 		return
 	}
@@ -51,7 +50,7 @@ func (r *RepositoryMeta) AddByDir(root string, funcMap template.FuncMap) (err er
 	for fullname, tpl := range ddlTemplates {
 		r.templates[fullname] = tpl
 	}
-	configTemplates, err := gqttpl.AddTemplateByDir(root, ConfigNamespaceSuffix, funcMap, gqt.LeftDelim, gqt.RightDelim)
+	configTemplates, err := gqttpl.AddTemplateByDir(root, ConfigNamespaceSuffix, funcMap, gqttpl.LeftDelim, gqttpl.RightDelim)
 	if err != nil {
 		return
 	}
@@ -62,8 +61,8 @@ func (r *RepositoryMeta) AddByDir(root string, funcMap template.FuncMap) (err er
 }
 
 func (r *RepositoryMeta) AddByNamespace(namespace string, content string, funcMap template.FuncMap) (err error) {
-	leftDelim := gqt.LeftDelim
-	rightDelim := gqt.RightDelim
+	leftDelim := gqttpl.LeftDelim
+	rightDelim := gqttpl.RightDelim
 	if strings.HasSuffix(namespace, MetaNameSpaceSuffix) {
 		leftDelim = MetaLeftDelim
 		rightDelim = MetaRightDelim

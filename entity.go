@@ -14,36 +14,39 @@ import (
 )
 
 type EntityElement struct {
-	Tables    []*Table
-	Name      string
-	Variables []*Variable
-	FullName  string
+	StructName string
+	Name       string
+	Variables  []*Variable
+	FullName   string
+	Type       string
+	//ImplementTplEntityInterface bool // 是否需要实现 gqttpl.TplEntityInterface 接口
 }
 
 const STRUCT_DEFINE_NANE_FORMAT = "%sEntity"
 
 //SQLEntity 根据数据表ddl和sql tpl 生成 sql tpl 调用的输入、输出实体
 func SQLEntity(sqlTplDefine *gqttpl.TPLDefine, tableList []*Table) (entityStruct string, err error) {
-	variableList := ParsSqlTplVariable(sqlTplDefine.Output, sqlTplDefine.Namespace)
-
-	structName := sqlTplDefine.FullnameCamel()
-	entityElement := &EntityElement{
-		Tables:    tableList,
-		Variables: variableList,
-		Name:      structName,
-		FullName:  fmt.Sprintf("%s.%s", sqlTplDefine.Namespace, sqlTplDefine.Name),
-	}
-	entityTplData, err := FormatEntityData(entityElement)
+	variableList := ParsSqlTplVariable(sqlTplDefine)
+	variableList, err = FormatVariableType(variableList, tableList)
 	if err != nil {
 		return
 	}
+	camelName := sqlTplDefine.FullnameCamel()
+	entityElement := &EntityElement{
+		Name:       camelName,
+		Type:       sqlTplDefine.Type(),
+		StructName: fmt.Sprintf(STRUCT_DEFINE_NANE_FORMAT, camelName),
+		//ImplementTplEntityInterface: sqlTplDefine.ISSQL(),
+		Variables: variableList,
+		FullName:  sqlTplDefine.Fullname(),
+	}
 
-	tp, err := template.New("").Parse(EntityTpl())
+	tp, err := template.New("").Parse(InputEntityTpl())
 	if err != nil {
 		return
 	}
 	buf := new(bytes.Buffer)
-	err = tp.Execute(buf, entityTplData)
+	err = tp.Execute(buf, entityElement)
 	if err != nil {
 		return
 	}
@@ -107,7 +110,7 @@ func (s *SQLTplNamespace) Filename() (out string) {
 	return
 }
 
-func ParseDirTplDefine(tplDir string, namespaceSuffix string) (tplDefineList []*gqttpl.TPLDefine, err error) {
+func ParseDirTplDefine(tplDir string, namespaceSuffix string, leftDelim string, rightDelim string) (tplDefineList []*gqttpl.TPLDefine, err error) {
 	allFileList, err := gqttpl.GetTplFilesByDir(tplDir, namespaceSuffix)
 	if err != nil {
 		return
@@ -125,11 +128,12 @@ func ParseDirTplDefine(tplDir string, namespaceSuffix string) (tplDefineList []*
 			}
 			namespace := gqttpl.FileName2Namespace(filename, tplDir)
 			tplDefine := &gqttpl.TPLDefine{
-				Name:      name,
-				Namespace: namespace,
-				Output:    tpl,
-				Type:      gqttpl.TPL_DEFINE_TYPE_TEXT,
-				Input:     nil,
+				LeftDelim:  leftDelim,
+				RightDelim: rightDelim,
+				Name:       name,
+				Namespace:  namespace,
+				Output:     tpl,
+				Input:      nil,
 			}
 			tplDefineList = append(tplDefineList, tplDefine)
 		}
@@ -140,6 +144,7 @@ func ParseDirTplDefine(tplDir string, namespaceSuffix string) (tplDefineList []*
 func ParseDefine(content string) (defineList []string) {
 	delim := "{{define "
 	delimLen := len(delim)
+	content = gqttpl.TrimSpaces(content) // 去除开头结尾的非有效字符
 	for {
 		index := strings.Index(content, delim)
 		if index >= 0 {
@@ -162,20 +167,17 @@ func ParseDefine(content string) (defineList []string) {
 }
 
 type EntityTplData struct {
-	StructName string
-	FullName   string
-	Attributes Variables
+	StructName                  string
+	FullName                    string
+	ImplementTplEntityInterface bool
+	Attributes                  Variables
 }
 
-func FormatEntityData(entityElement *EntityElement) (entityTplData *EntityTplData, err error) {
-	entityTplData = &EntityTplData{
-		StructName: fmt.Sprintf("%sEntity", entityElement.Name),
-		FullName:   entityElement.FullName,
-		Attributes: make(Variables, 0),
-	}
+func FormatVariableType(variableList []*Variable, tableList []*Table) (varaibles Variables, err error) {
+	varaibles = make(Variables, 0)
 	tableColumnMap := make(map[string]*Column)
 	columnNameMap := make(map[string]string)
-	for _, table := range entityElement.Tables {
+	for _, table := range tableList {
 		for _, column := range table.Columns { //todo 多表字段相同，类型不同时，只会取列表中最后一个
 			tableColumnMap[column.CamelName] = column
 			lname := strings.ToLower(column.CamelName)
@@ -183,13 +185,12 @@ func FormatEntityData(entityElement *EntityElement) (entityTplData *EntityTplDat
 		}
 
 	}
-
-	for _, variable := range entityElement.Variables { // 使用数据库字段定义校正变量类型
+	for _, variable := range variableList { // 使用数据库字段定义校正变量类型
 		name := variable.Name
 		tableColumn, ok := tableColumnMap[name]
 		if ok {
 			variable.Type = tableColumn.Type
-			entityTplData.Attributes = append(entityTplData.Attributes, variable)
+			varaibles = append(varaibles, variable)
 			continue
 		}
 
@@ -205,7 +206,7 @@ func FormatEntityData(entityElement *EntityElement) (entityTplData *EntityTplDat
 		if ok {
 			if suffix == listSuffix {
 				variable.Type = fmt.Sprintf("[]%s", tableColumn.Type) // 完善列表类型
-				entityTplData.Attributes = append(entityTplData.Attributes, variable)
+				varaibles = append(varaibles, variable)
 				continue
 			}
 		}
@@ -213,7 +214,7 @@ func FormatEntityData(entityElement *EntityElement) (entityTplData *EntityTplDat
 		typ := variableSuffix2Type(name)
 		if typ != "" {
 			variable.Type = typ
-			entityTplData.Attributes = append(entityTplData.Attributes, variable)
+			varaibles = append(varaibles, variable)
 			continue
 		}
 
@@ -223,9 +224,9 @@ func FormatEntityData(entityElement *EntityElement) (entityTplData *EntityTplDat
 			return
 		}
 		// 不属于数据表字段变量，直接添加
-		entityTplData.Attributes = append(entityTplData.Attributes, variable)
+		varaibles = append(varaibles, variable)
 	}
-	sort.Sort(entityTplData.Attributes)
+	sort.Sort(varaibles)
 	return
 }
 
@@ -265,17 +266,21 @@ func variableSuffix2Type(variableName string) (typ string) {
 	return
 }
 
-func EntityTpl() (tpl string) {
+func InputEntityTpl() (tpl string) {
 	tpl = `
 		type {{.StructName}} struct{
-			{{range .Attributes }}
-				{{.FieldName}} {{.Type}} 
+			{{range .Variables }}
+				{{.FieldName}} {{.Type}} {{.Tag}} 
 			{{end}}
 			gqttpl.TplEmptyEntity
 		}
 
 		func (t *{{.StructName}}) TplName() string{
 			return "{{.FullName}}"
+		}
+
+		func (t *{{.StructName}}) TplType() string{
+			return "{{.Type}}"
 		}
 	`
 	return
@@ -286,12 +291,17 @@ type Variable struct {
 	Name       string // 模板中的原始名称
 	FieldName  string // 当变量作为结构体的字段时，字段名称
 	Type       string
+	Tag        string
 	AllowEmpty bool
 }
 
 func (v *Variable) FullnameCamel() (fullnameCamel string) {
 	fullname := fmt.Sprintf("%s_%s", strings.ReplaceAll(v.Namespace, ".", "_"), v.Name)
 	fullnameCamel = ToCamel(fullname)
+	return
+}
+func (v *Variable) Fullname() (fullname string) {
+	fullname = fmt.Sprintf("%s.%s", v.Namespace, v.Name)
 	return
 }
 
@@ -320,9 +330,10 @@ func (v Variables) UniqueItems() (uniq []*Variable) {
 	return
 }
 
-func ParseTplVariable(sqlTpl string, namespace string) (variableList Variables) {
+func ParseTplVariable(tpl string, namespace string) (variableList Variables) {
 	variableList = make([]*Variable, 0)
-	byteArr := []byte(sqlTpl)
+	byteArr := []byte(tpl)
+	// template 模板变量提取
 	leftDelim := byte('{')
 	rightDelim := byte('}')
 	itemBegin := false
@@ -347,6 +358,8 @@ func ParseTplVariable(sqlTpl string, namespace string) (variableList Variables) 
 			item = append(item, c)
 		}
 	}
+
+	// parse define variable
 	for _, item := range itemArr {
 		variable, _ := parsePrefixVariable(item, byte('.'))
 		if variable.Name != "" {
@@ -355,11 +368,10 @@ func ParseTplVariable(sqlTpl string, namespace string) (variableList Variables) 
 			variableList = append(variableList, &variable)
 
 		}
-
 	}
 
 	// parse sub define variable
-	templateNameList := GetTemplateNames(sqlTpl)
+	templateNameList := GetTemplateNames(tpl)
 	for _, templateName := range templateNameList {
 		templateName = ToCamel(templateName)
 		variable := Variable{
@@ -372,16 +384,39 @@ func ParseTplVariable(sqlTpl string, namespace string) (variableList Variables) 
 	}
 
 	variableList = variableList.UniqueItems()
-
 	return
 }
 
-func ParsSqlTplVariable(sqlTpl string, namespace string) (variableList Variables) {
-	subVariableList := ParseTplVariable(sqlTpl, namespace)
-	for _, variable := range subVariableList {
+func ParseCurlTplVariable(tplDefine *gqttpl.TPLDefine) (variableList Variables) {
+	content := gqttpl.ToEOF(tplDefine.Content()) // 转换换行符
+	tplVariableList := ParseTplVariable(content, tplDefine.Namespace)
+	variableList = append(variableList, tplVariableList...)
+
+	if tplDefine.Type() == gqttpl.TPL_DEFINE_TYPE_CURL_RESPONSE { // parse curl response variable ,curl response 直接采用复制，所以确保 response body 本身符合go语法
+		index := strings.Index(content, gqttpl.HTTP_HEAD_BODY_DELIM)
+		if index < 0 {
+			return
+		}
+		body := content[index+len(gqttpl.HTTP_HEAD_BODY_DELIM):]
+		body = strings.ReplaceAll(body, tplDefine.LeftDelim, "")
+		body = strings.ReplaceAll(body, tplDefine.RightDelim, "")
+		variable := &Variable{
+			Namespace: tplDefine.Namespace,
+			Name:      "",
+			FieldName: "",
+			Type:      body,
+		}
 		variableList = append(variableList, variable)
+		return
 	}
-	byteArr := []byte(sqlTpl)
+	return
+}
+
+func ParsSqlTplVariable(tplDefine *gqttpl.TPLDefine) (variableList Variables) {
+	content := tplDefine.Content()
+	subVariableList := ParseTplVariable(content, tplDefine.Namespace)
+	variableList = append(variableList, subVariableList...)
+	byteArr := []byte(content)
 
 	// parse sql variable
 	sqlVariableDelim := byte(':')
@@ -392,12 +427,12 @@ func ParsSqlTplVariable(sqlTpl string, namespace string) (variableList Variables
 			break
 		}
 		variable.FieldName = variable.Name
-		variable.Namespace = namespace
+		variable.Namespace = tplDefine.Namespace
 		variableList = append(variableList, &variable)
 		pos += len(variable.Name)
 		byteArr = byteArr[pos:]
 	}
-	limitVariabeList := GetLimitVariable(sqlTpl, namespace)
+	limitVariabeList := GetLimitVariable(content, tplDefine.Namespace)
 	variableList = append(variableList, limitVariabeList...)
 	variableList = variableList.UniqueItems()
 	return
@@ -484,6 +519,7 @@ func GetDefineName(tplDefine string) (defineName string, err error) {
 	}
 	return
 }
+
 func GetDefineType(tplDefine string) (defineName string, err error) {
 	delim := []byte("{{define \"")
 	tplDefineByte := []byte(tplDefine)
