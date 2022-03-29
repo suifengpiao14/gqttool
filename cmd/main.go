@@ -7,6 +7,7 @@ import (
 	"io/fs"
 	"os"
 	"path"
+	"path/filepath"
 	"sort"
 	"strings"
 	"testing"
@@ -251,12 +252,37 @@ func saveFile(filename string, content string, force bool) (err error) {
 	if err != nil {
 		return
 	}
-	_, err = f.WriteString(content)
+	defer func() {
+		if f != nil {
+			f.Close()
+		}
+	}()
+	content = gqttpl.ToEOF(content)
+	lineArr := strings.Split(content, gqttpl.EOF)
+	newLineArr := make([]string, 0)
+	for _, line := range lineArr {
+		standLine := gqttpl.StandardizeSpaces(line)
+		if standLine == "" {
+			continue
+		}
+		newLineArr = append(newLineArr, line)
+	}
+	newContent := strings.Join(newLineArr, gqttpl.EOF)
+	_, err = f.WriteString(newContent)
 	if err != nil {
 		return
 	}
-	return
 
+	f.Close()
+	f = nil // 手动关闭不触发defer 中关闭
+	// 关闭文件后，格式化go文件
+	// Format Go source files
+	if filepath.Ext(filename) == ".go" {
+		if err := gqttool.FinalizeGoSource(filename); err != nil {
+			return err
+		}
+	}
+	return
 }
 
 func IsExist(path string) bool {

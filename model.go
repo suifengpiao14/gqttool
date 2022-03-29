@@ -106,6 +106,63 @@ func (c *Column) IsDefaultValueCurrentTimestamp() bool {
 	return strings.Contains(strings.ToLower(c.DefaultValue), DEFAULT_VALUE_CURRENT_TIMESTAMP) // 测试发现有 current_timestamp() 情况
 }
 
+type Enum struct {
+	ConstKey        string // 枚举类型定义 常量 名称
+	ConstValue      string // 枚举类型定义值
+	Title           string // 枚举类型 标题（中文）
+	ColumnNameCamel string //枚举类型分组（字段名，每个枚举字段有多个值，全表通用，需要分组）
+	Type            string // 类型 int-整型，string-字符串，默认string
+}
+
+type Enums []*Enum
+
+func (e Enums) Len() int { // 重写 Len() 方法
+	return len(e)
+}
+func (e Enums) Swap(i, j int) { // 重写 Swap() 方法
+	e[i], e[j] = e[j], e[i]
+}
+func (e Enums) Less(i, j int) bool { // 重写 Less() 方法， 从小到大排序
+	return e[i].ConstKey < e[j].ConstKey
+}
+
+//UniqueItems 去重
+func (e Enums) UniqueItems() (uniq Enums) {
+	emap := make(map[string]*Enum)
+	for _, enum := range e {
+		emap[enum.ConstKey] = enum
+	}
+	uniq = Enums{}
+	for _, enum := range emap {
+		uniq = append(uniq, enum)
+	}
+	return
+}
+
+//ColumnNameCamels 获取所有分组
+func (e Enums) ColumnNameCamels() (output []string) {
+	columnNameCamelMap := make(map[string]string)
+	for _, enum := range e {
+		columnNameCamelMap[enum.ColumnNameCamel] = enum.ColumnNameCamel
+	}
+	output = make([]string, 0)
+	for _, columnNameCamel := range columnNameCamelMap {
+		output = append(output, columnNameCamel)
+	}
+	return
+}
+
+//GetByGroup 通过分组名称获取enum
+func (e Enums) GetByColumnNameCamel(ColumnNameCamel string) (enums Enums) {
+	enums = Enums{}
+	for _, enum := range e {
+		if enum.ColumnNameCamel == ColumnNameCamel {
+			enums = append(enums, enum)
+		}
+	}
+	return
+}
+
 type Table struct {
 	TablePrefix  string
 	ColumnPrefix string
@@ -113,7 +170,7 @@ type Table struct {
 	PrimaryKey   string
 	DeleteColumn string
 	Columns      []*Column
-	EnumsConst   map[string]string
+	EnumsConst   Enums
 	*gqttpl.TplEmptyEntity
 }
 
@@ -247,7 +304,7 @@ func GenerateTable(ddlList []string, tableCfg *DatabaseConfig) (tables []*Table,
 			TablePrefix:  tableCfg.TablePrefix,
 			TableName:    tableName,
 			Columns:      make([]*Column, 0),
-			EnumsConst:   make(map[string]string),
+			EnumsConst:   Enums{},
 			DeleteColumn: tableCfg.DeletedAtColumn,
 		}
 		for _, indice := range tableDef.Indices {
@@ -277,12 +334,9 @@ func GenerateTable(ddlList []string, tableCfg *DatabaseConfig) (tables []*Table,
 				DefaultValue:  columnDef.DefaultValue,
 				OnUpdate:      columnDef.OnUpdate,
 			}
-			if len(columnDef.Elems) > 0 {
-				prefix := fmt.Sprintf("%s_%s", table.TableNameTrimPrefix(), columnPt.Name)
-				subEnumConst := enumsConst(prefix, columnDef.Elems)
-				for key, val := range subEnumConst {
-					table.EnumsConst[key] = val
-				}
+			if len(columnPt.Enums) > 0 {
+				subEnumConst := enumsConst(table.TableNameTrimPrefix(), columnPt)
+				table.EnumsConst = append(table.EnumsConst, subEnumConst...)
 			}
 			columnPt.OnCreate = columnPt.IsDefaultValueCurrentTimestamp() && !columnPt.OnUpdate    // 自动填充时间，但是更新时不变，认为是创建时间列
 			if table.DeleteColumn == columnPt.Name || columnPt.Name == DEFAULT_COLUMN_DELETED_AT { // 删除记录列，通过配置指定，或者列名称为 DEFAULT_COLUMN_DELETED_AT 的值
@@ -296,40 +350,90 @@ func GenerateTable(ddlList []string, tableCfg *DatabaseConfig) (tables []*Table,
 	return
 }
 
-func enumsConst(prefix string, enums []string) (enumsConst map[string]string) {
-	enumsConst = make(map[string]string)
-	for _, enum := range enums {
-		name := fmt.Sprintf("%s_%s", prefix, enum)
-		name = strings.ToUpper(name)
-		enumsConst[name] = enum
-	}
+func enumsConst(tablePrefix string, columnPt *Column) (enumsConsts Enums) {
+	prefix := fmt.Sprintf("%s_%s", tablePrefix, columnPt.Name)
+	enumsConsts = Enums{}
+	comment := strings.ReplaceAll(columnPt.Comment, " ", ",") // 替换中文逗号(兼容空格和逗号另种分割符号)
 
+	for _, constValue := range columnPt.Enums {
+		constKey := fmt.Sprintf("%s_%s", prefix, constValue)
+		valueFormat := fmt.Sprintf("%s-", constValue) // 枚举类型的comment 格式 value1-title1,value2-title2
+		index := strings.Index(comment, valueFormat)
+		if index < 0 {
+			err := errors.Errorf("column %s(enum) comment except contains %s-xxx,got:%s", columnPt.Name, constValue, comment)
+			panic(err)
+		}
+		title := comment[index+len(valueFormat):]
+		comIndex := strings.Index(title, ",")
+		if comIndex > -1 {
+			title = title[:comIndex]
+		} else {
+			title = strings.TrimRight(title, " )")
+		}
+		constKey = strings.ToUpper(constKey)
+		enumsConst := &Enum{
+			ConstKey:        constKey,
+			ConstValue:      constValue,
+			Title:           title,
+			ColumnNameCamel: columnPt.CamelName,
+			Type:            "string",
+		}
+		enumsConsts = append(enumsConsts, enumsConst)
+	}
 	return
 }
 
 func structTpl() string {
 	return `
-	{{if .EnumsConst}}
+	{{- $enumsConst :=.EnumsConst }}
+	{{if $enumsConst }}
 	const (
-		{{range $key, $value := .EnumsConst}}
-			{{$key}}="{{$value}}"
+		{{range $enumsConst}}
+			{{.ConstKey}}="{{.ConstValue}}"
 		{{end}}
 		)
 	{{end}}
-	type {{.TableNameCamel}}Model struct{
+	{{$modelName:= print .TableNameCamel "Model"}}
+	type {{$modelName}} struct{
 		{{range .Columns }} 
 		// {{.Comment}}
 		{{.CamelName}} {{.Type}} {{if .Tag}} {{.Tag}} {{end}}
 		{{end}}
 	}
-	func (t *{{.TableNameCamel}}Model) TableName()string{
+	func (t *{{$modelName}}) TableName()string{
 		return "{{.TableName}}"
 	}
-	func (t *{{.TableNameCamel}}Model) PrimaryKey()string{
+	func (t *{{$modelName}}) PrimaryKey()string{
 		return "{{.PrimaryKey}}"
 	}
-	func (t *{{.TableNameCamel}}Model) PrimaryKeyCamel()string{
+	func (t *{{$modelName}}) PrimaryKeyCamel()string{
 		return "{{.PrimaryKeyCamel}}"
 	}
+	{{- if $enumsConst}}
+		{{- range  $camelName :=$enumsConst.ColumnNameCamels }}
+				{{- /* 生成 enumMap 函数 */ -}}
+				{{- $enumMapFuncName:=print $camelName "TitleMap" }}
+				func (t *{{$modelName}}) {{$enumMapFuncName}}()map[string]string{
+					enumMap:=make(map[string]string)
+					{{- range $enum:= $enumsConst.GetByColumnNameCamel $camelName }}
+						enumMap[{{$enum.ConstKey}}]="{{$enum.Title}}"
+					{{- end }}
+					return enumMap
+				}
+
+				{{- /* 生成 枚举值获取标题 函数*/ -}}
+				{{$titleFuncName:=print  $camelName "Title"}}
+				func (t *{{$modelName}}) {{$titleFuncName}}()string{
+					enumMap:=t.{{$enumMapFuncName}}()
+					title,ok:=enumMap[t.{{$camelName}}]
+					if !ok{
+						msg:="func {{$titleFuncName}} not found title by key "+t.{{$camelName}}
+						panic(msg)
+					}
+					return title
+				}
+
+		{{- end }}
+	{{- end}}
 	`
 }
