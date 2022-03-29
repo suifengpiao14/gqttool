@@ -193,6 +193,21 @@ func (t *ParameterModel) PrimaryKey() string {
 func (t *ParameterModel) PrimaryKeyCamel() string {
 	return "ParameterID"
 }
+func (t *ParameterModel) DeprecatedTitleMap() map[string]string {
+	enumMap := make(map[string]string)
+	enumMap[PARAMETER_DEPRECATED_TRUE] = "是"
+	enumMap[PARAMETER_DEPRECATED_FALSE] = "否"
+	return enumMap
+}
+func (t *ParameterModel) DeprecatedTitle() string {
+	enumMap := t.DeprecatedTitleMap()
+	title, ok := enumMap[t.Deprecated]
+	if !ok {
+		msg := "func DeprecatedTitle not found title by key " + t.Deprecated
+		panic(msg)
+	}
+	return title
+}
 func (t *ParameterModel) RequiredTitleMap() map[string]string {
 	enumMap := make(map[string]string)
 	enumMap[PARAMETER_REQUIRED_TRUE] = "是"
@@ -303,21 +318,6 @@ func (t *ParameterModel) PositionTitle() string {
 	title, ok := enumMap[t.Position]
 	if !ok {
 		msg := "func PositionTitle not found title by key " + t.Position
-		panic(msg)
-	}
-	return title
-}
-func (t *ParameterModel) DeprecatedTitleMap() map[string]string {
-	enumMap := make(map[string]string)
-	enumMap[PARAMETER_DEPRECATED_TRUE] = "是"
-	enumMap[PARAMETER_DEPRECATED_FALSE] = "否"
-	return enumMap
-}
-func (t *ParameterModel) DeprecatedTitle() string {
-	enumMap := t.DeprecatedTitleMap()
-	title, ok := enumMap[t.Deprecated]
-	if !ok {
-		msg := "func DeprecatedTitle not found title by key " + t.Deprecated
 		panic(msg)
 	}
 	return title
@@ -520,38 +520,6 @@ func (t *ValidateSchemaModel) PrimaryKey() string {
 func (t *ValidateSchemaModel) PrimaryKeyCamel() string {
 	return "ValidateSchemaID"
 }
-func (t *ValidateSchemaModel) WriteOnlyTitleMap() map[string]string {
-	enumMap := make(map[string]string)
-	enumMap[VALIDATE_SCHEMA_WRITE_ONLY_TRUE] = "是"
-	enumMap[VALIDATE_SCHEMA_WRITE_ONLY_FALSE] = "否"
-	return enumMap
-}
-func (t *ValidateSchemaModel) WriteOnlyTitle() string {
-	enumMap := t.WriteOnlyTitleMap()
-	title, ok := enumMap[t.WriteOnly]
-	if !ok {
-		msg := "func WriteOnlyTitle not found title by key " + t.WriteOnly
-		panic(msg)
-	}
-	return title
-}
-func (t *ValidateSchemaModel) TypeTitleMap() map[string]string {
-	enumMap := make(map[string]string)
-	enumMap[VALIDATE_SCHEMA_TYPE_INTEGER] = "整型"
-	enumMap[VALIDATE_SCHEMA_TYPE_ARRAY] = "数组"
-	enumMap[VALIDATE_SCHEMA_TYPE_STRING] = "字符串"
-	enumMap[VALIDATE_SCHEMA_TYPE_OBJECT] = "对象"
-	return enumMap
-}
-func (t *ValidateSchemaModel) TypeTitle() string {
-	enumMap := t.TypeTitleMap()
-	title, ok := enumMap[t.Type]
-	if !ok {
-		msg := "func TypeTitle not found title by key " + t.Type
-		panic(msg)
-	}
-	return title
-}
 func (t *ValidateSchemaModel) RequiredTitleMap() map[string]string {
 	enumMap := make(map[string]string)
 	enumMap[VALIDATE_SCHEMA_REQUIRED_TRUE] = "是"
@@ -563,81 +531,6 @@ func (t *ValidateSchemaModel) RequiredTitle() string {
 	title, ok := enumMap[t.Required]
 	if !ok {
 		msg := "func RequiredTitle not found title by key " + t.Required
-		panic(msg)
-	}
-	return title
-}
-func (t *ValidateSchemaModel) NullableTitleMap() map[string]string {
-	enumMap := make(map[string]string)
-	enumMap[VALIDATE_SCHEMA_NULLABLE_TRUE] = "是"
-	enumMap[VALIDATE_SCHEMA_NULLABLE_FALSE] = "否"
-	return enumMap
-}
-func (t *ValidateSchemaModel) NullableTitle() string {
-	enumMap := t.NullableTitleMap()
-	title, ok := enumMap[t.Nullable]
-	if !ok {
-		msg := "func NullableTitle not found title by key " + t.Nullable
-		panic(msg)
-	}
-	return title
-}
-func (t *ValidateSchemaModel) ExclusiveMaximumTitleMap() map[string]string {
-	enumMap := make(map[string]string)
-	enumMap[VALIDATE_SCHEMA_EXCLUSIVE_MAXIMUM_TRUE] = "是"
-	enumMap[VALIDATE_SCHEMA_EXCLUSIVE_MAXIMUM_FALSE] = "否"
-	return enumMap
-}
-func (t *ValidateSchemaModel) ExclusiveMaximumTitle() string {
-	enumMap := t.ExclusiveMaximumTitleMap()
-	title, ok := enumMap[t.ExclusiveMaximum]
-	if !ok {
-		msg := "func ExclusiveMaximumTitle not found title by key " + t.ExclusiveMaximum
-		panic(msg)
-	}
-	return title
-}
-func (t *ValidateSchemaModel) UniqueItemsTitleMap() map[string]string {
-	enumMap := make(map[string]string)
-	enumMap[VALIDATE_SCHEMA_UNIQUE_ITEMS_TRUE] = "是"
-	enumMap[VALIDATE_SCHEMA_UNIQUE_ITEMS_FALSE] = "否"
-	return enumMap
-}
-func (t *ValidateSchemaModel) UniqueItemsTitle() string {
-	enumMap := t.UniqueItemsTitleMap()
-	title, ok := enumMap[t.UniqueItems]
-	if !ok {
-		msg := "func UniqueItemsTitle not found title by key " + t.UniqueItems
-		panic(msg)
-	}
-	return title
-}
-func (t *ValidateSchemaModel) DeprecatedTitleMap() map[string]string {
-	enumMap := make(map[string]string)
-	enumMap[VALIDATE_SCHEMA_DEPRECATED_TRUE] = "是"
-	enumMap[VALIDATE_SCHEMA_DEPRECATED_FALSE] = "否"
-	return enumMap
-}
-func (t *ValidateSchemaModel) DeprecatedTitle() string {
-	enumMap := t.DeprecatedTitleMap()
-	title, ok := enumMap[t.Deprecated]
-	if !ok {
-		msg := "func DeprecatedTitle not found title by key " + t.Deprecated
-		panic(msg)
-	}
-	return title
-}
-func (t *ValidateSchemaModel) ExclusiveMinimumTitleMap() map[string]string {
-	enumMap := make(map[string]string)
-	enumMap[VALIDATE_SCHEMA_EXCLUSIVE_MINIMUM_TRUE] = "是"
-	enumMap[VALIDATE_SCHEMA_EXCLUSIVE_MINIMUM_FALSE] = "否"
-	return enumMap
-}
-func (t *ValidateSchemaModel) ExclusiveMinimumTitle() string {
-	enumMap := t.ExclusiveMinimumTitleMap()
-	title, ok := enumMap[t.ExclusiveMinimum]
-	if !ok {
-		msg := "func ExclusiveMinimumTitle not found title by key " + t.ExclusiveMinimum
 		panic(msg)
 	}
 	return title
@@ -683,6 +576,113 @@ func (t *ValidateSchemaModel) ReadOnlyTitle() string {
 	title, ok := enumMap[t.ReadOnly]
 	if !ok {
 		msg := "func ReadOnlyTitle not found title by key " + t.ReadOnly
+		panic(msg)
+	}
+	return title
+}
+func (t *ValidateSchemaModel) WriteOnlyTitleMap() map[string]string {
+	enumMap := make(map[string]string)
+	enumMap[VALIDATE_SCHEMA_WRITE_ONLY_TRUE] = "是"
+	enumMap[VALIDATE_SCHEMA_WRITE_ONLY_FALSE] = "否"
+	return enumMap
+}
+func (t *ValidateSchemaModel) WriteOnlyTitle() string {
+	enumMap := t.WriteOnlyTitleMap()
+	title, ok := enumMap[t.WriteOnly]
+	if !ok {
+		msg := "func WriteOnlyTitle not found title by key " + t.WriteOnly
+		panic(msg)
+	}
+	return title
+}
+func (t *ValidateSchemaModel) DeprecatedTitleMap() map[string]string {
+	enumMap := make(map[string]string)
+	enumMap[VALIDATE_SCHEMA_DEPRECATED_TRUE] = "是"
+	enumMap[VALIDATE_SCHEMA_DEPRECATED_FALSE] = "否"
+	return enumMap
+}
+func (t *ValidateSchemaModel) DeprecatedTitle() string {
+	enumMap := t.DeprecatedTitleMap()
+	title, ok := enumMap[t.Deprecated]
+	if !ok {
+		msg := "func DeprecatedTitle not found title by key " + t.Deprecated
+		panic(msg)
+	}
+	return title
+}
+func (t *ValidateSchemaModel) NullableTitleMap() map[string]string {
+	enumMap := make(map[string]string)
+	enumMap[VALIDATE_SCHEMA_NULLABLE_TRUE] = "是"
+	enumMap[VALIDATE_SCHEMA_NULLABLE_FALSE] = "否"
+	return enumMap
+}
+func (t *ValidateSchemaModel) NullableTitle() string {
+	enumMap := t.NullableTitleMap()
+	title, ok := enumMap[t.Nullable]
+	if !ok {
+		msg := "func NullableTitle not found title by key " + t.Nullable
+		panic(msg)
+	}
+	return title
+}
+func (t *ValidateSchemaModel) ExclusiveMaximumTitleMap() map[string]string {
+	enumMap := make(map[string]string)
+	enumMap[VALIDATE_SCHEMA_EXCLUSIVE_MAXIMUM_TRUE] = "是"
+	enumMap[VALIDATE_SCHEMA_EXCLUSIVE_MAXIMUM_FALSE] = "否"
+	return enumMap
+}
+func (t *ValidateSchemaModel) ExclusiveMaximumTitle() string {
+	enumMap := t.ExclusiveMaximumTitleMap()
+	title, ok := enumMap[t.ExclusiveMaximum]
+	if !ok {
+		msg := "func ExclusiveMaximumTitle not found title by key " + t.ExclusiveMaximum
+		panic(msg)
+	}
+	return title
+}
+func (t *ValidateSchemaModel) ExclusiveMinimumTitleMap() map[string]string {
+	enumMap := make(map[string]string)
+	enumMap[VALIDATE_SCHEMA_EXCLUSIVE_MINIMUM_TRUE] = "是"
+	enumMap[VALIDATE_SCHEMA_EXCLUSIVE_MINIMUM_FALSE] = "否"
+	return enumMap
+}
+func (t *ValidateSchemaModel) ExclusiveMinimumTitle() string {
+	enumMap := t.ExclusiveMinimumTitleMap()
+	title, ok := enumMap[t.ExclusiveMinimum]
+	if !ok {
+		msg := "func ExclusiveMinimumTitle not found title by key " + t.ExclusiveMinimum
+		panic(msg)
+	}
+	return title
+}
+func (t *ValidateSchemaModel) UniqueItemsTitleMap() map[string]string {
+	enumMap := make(map[string]string)
+	enumMap[VALIDATE_SCHEMA_UNIQUE_ITEMS_TRUE] = "是"
+	enumMap[VALIDATE_SCHEMA_UNIQUE_ITEMS_FALSE] = "否"
+	return enumMap
+}
+func (t *ValidateSchemaModel) UniqueItemsTitle() string {
+	enumMap := t.UniqueItemsTitleMap()
+	title, ok := enumMap[t.UniqueItems]
+	if !ok {
+		msg := "func UniqueItemsTitle not found title by key " + t.UniqueItems
+		panic(msg)
+	}
+	return title
+}
+func (t *ValidateSchemaModel) TypeTitleMap() map[string]string {
+	enumMap := make(map[string]string)
+	enumMap[VALIDATE_SCHEMA_TYPE_INTEGER] = "整型"
+	enumMap[VALIDATE_SCHEMA_TYPE_ARRAY] = "数组"
+	enumMap[VALIDATE_SCHEMA_TYPE_STRING] = "字符串"
+	enumMap[VALIDATE_SCHEMA_TYPE_OBJECT] = "对象"
+	return enumMap
+}
+func (t *ValidateSchemaModel) TypeTitle() string {
+	enumMap := t.TypeTitleMap()
+	title, ok := enumMap[t.Type]
+	if !ok {
+		msg := "func TypeTitle not found title by key " + t.Type
 		panic(msg)
 	}
 	return title

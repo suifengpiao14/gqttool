@@ -8,7 +8,7 @@ import (
 )
 
 func TestRunCmdModel(t *testing.T) {
-	metaDir := "../example/template/"
+	metaDir := "../example"
 	modelFile := "../example/model.gen.go"
 	err := runCmdModel(metaDir, modelFile, true)
 	if err != nil {
