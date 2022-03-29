@@ -471,10 +471,10 @@ Example:
 	os.Exit(0)
 }
 func helpCURLEntity() {
-	fmt.Fprint(os.Stderr, `gqttool curlEntity is  generation sql template input args entity
+	fmt.Fprint(os.Stderr, `gqttool curlEntity is  generation curl template input args entity
 
 Usage:
-  gqttool curlEntity -sqlDir sqlsqlDir -entity entityFilename -force true
+  gqttool curlEntity -curlDir curlDir -entity entityFilename -force true
   
 
 Flags:
@@ -498,15 +498,18 @@ func help() {
 Usage:
   gqttool model  -metaDir metaDir -model modelFilename -force true
   gqttool sql -metaDir metaDir -sqlDir sqlTplSaveDir -force true
-  gqttool entity  -sqlDir sqlsqlDir -entity entityFilename -force true
+  gqttool sqlEntity  -sqlDir sqlsqlDir -entity entityFilename -force true
+  gqttool curlEntity -curlDir curlDir -entity entityFilename -force true
   
 Commands:
   model
   		Generate go struct from  mysql ddl
   sql
         Generate sql sql.tpl from mysql ddl and meta template
-  entity
-  		Generate sql.tpl input entity from mysql sqlsqlDir
+  sqlEntity
+  		Generate sql.tpl input entity from mysql
+  curlEntity
+  		Generate curl.tpl input entity from curl
 
 Flags:
   -force overwrite exists file
@@ -515,7 +518,9 @@ Flags:
   -model
          model filename
  -sqlDir 
-		sqlTpl file dir
+		sqlTpl file dir 
+ -curlDir 
+		curlTpl file dir
  -entity 
 		sqlTpl  argument entity filename
 

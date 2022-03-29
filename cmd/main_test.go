@@ -46,7 +46,7 @@ func TestRunCmdCRULEntity(*testing.T) {
 		panic(err)
 	}
 }
-func TestRunCmdJSQL(*testing.T) {
+func TestRunCmdSQL(*testing.T) {
 	metaDir := "../example/template/meta"
 	tplDir := "../example/template/sql"
 	err := runCmdSQL(metaDir, tplDir, true)
