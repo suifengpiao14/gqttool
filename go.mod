@@ -9,8 +9,8 @@ require (
 	github.com/iancoleman/strcase v0.2.0
 	github.com/pkg/errors v0.9.1
 	github.com/suifengpiao14/errorformatter v0.0.0-20220214013820-e0177a90fb70
-	github.com/suifengpiao14/gqt/v2 v2.0.0-20220328095318-532d2a943ffa
-	github.com/suifengpiao14/gqtcurl v0.0.0-20220328083028-a7a6f539c3a2
+	github.com/suifengpiao14/gqt/v2 v2.0.0-20220329154922-1d3f922a294a
+	github.com/suifengpiao14/gqtcurl v0.0.0-20220329105528-f9caddee1348
 )
 
 require (
@@ -24,7 +24,7 @@ require (
 	github.com/shirou/gopsutil v3.21.11+incompatible // indirect
 	github.com/sirupsen/logrus v1.8.1 // indirect
 	github.com/yusufpapurcu/wmi v1.2.2 // indirect
-	golang.org/x/sys v0.0.0-20220328115105-d36c6a25d886 // indirect
+	golang.org/x/sys v0.0.0-20220329152356-43be30ef3008 // indirect
 	golang.org/x/tools v0.1.10
 
 )
