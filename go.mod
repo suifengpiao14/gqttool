@@ -24,7 +24,7 @@ require (
 	github.com/shirou/gopsutil v3.21.11+incompatible // indirect
 	github.com/sirupsen/logrus v1.8.1 // indirect
 	github.com/yusufpapurcu/wmi v1.2.2 // indirect
-	golang.org/x/sys v0.0.0-20220329152356-43be30ef3008 // indirect
+	golang.org/x/sys v0.0.0-20220330033206-e17cdc41300f // indirect
 	golang.org/x/tools v0.1.10
 
 )
@@ -32,6 +32,6 @@ require (
 replace gorm.io/gorm => gorm.io/gorm v1.22.4
 
 //replace github.com/suifengpiao14/gqt/v2 => /Users/admin/Documents/go/gqt
-replace github.com/suifengpiao14/gqt/v2 => D:\\go\\gqt
+//replace github.com/suifengpiao14/gqt/v2 => D:\\go\\gqt
 
 //replace github.com/suifengpiao14/gqtcurl => D:\\go\\gqtcurl
