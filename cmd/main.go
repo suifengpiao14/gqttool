@@ -138,7 +138,7 @@ func runCmdSQL(metaDir string, sqlDir string, force bool) (err error) {
 		return
 	}
 	for _, sqlTplNamespace := range sqlTplNamespaceList {
-		filename := fmt.Sprintf("%s/%s.gen.sql.tpl", sqlDir, sqlTplNamespace.Filename())
+		filename := fmt.Sprintf("%s/%s.sql.tpl", sqlDir, sqlTplNamespace.Filename())
 		err = saveFile(filename, sqlTplNamespace.String(), force)
 		if err != nil {
 			return
