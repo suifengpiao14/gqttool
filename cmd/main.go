@@ -238,6 +238,8 @@ func GetFileContent(file string) (content string, err error) {
 
 }
 
+const TPL_DEFINE_END = "{{end}}"
+
 func saveFile(filename string, content string, force bool) (err error) {
 	if IsExist(filename) {
 		if !force {
@@ -265,10 +267,14 @@ func saveFile(filename string, content string, force bool) (err error) {
 		if standLine == "" {
 			continue
 		}
-		newLineArr = append(newLineArr, line)
+
+		if standLine == TPL_DEFINE_END { // 模板结尾增加空行
+			standLine = standLine + gqttpl.EOF
+		}
+		newLineArr = append(newLineArr, standLine)
 	}
-	newContent := strings.Join(newLineArr, gqttpl.EOF)
-	_, err = f.WriteString(newContent)
+	content = strings.Join(newLineArr, gqttpl.EOF)
+	_, err = f.WriteString(content)
 	if err != nil {
 		return
 	}
