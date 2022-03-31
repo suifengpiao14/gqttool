@@ -2,45 +2,45 @@ package example
 
 import "github.com/suifengpiao14/gqt/v2/gqttpl"
 
-type SQLAPIGenSQLDelEntity struct {
+type SQLAPISQLDelEntity struct {
 	APIID         string
 	OperatorIDInt int
 	OperatorStr   string
 	gqttpl.TplEmptyEntity
 }
 
-func (t *SQLAPIGenSQLDelEntity) TplName() string {
-	return "sql.api.gen.sql.Del"
+func (t *SQLAPISQLDelEntity) TplName() string {
+	return "sql.api.sql.Del"
 }
-func (t *SQLAPIGenSQLDelEntity) TplType() string {
+func (t *SQLAPISQLDelEntity) TplType() string {
 	return "sql_update"
 }
 
-type SQLAPIGenSQLGetAllByAPIIDListEntity struct {
+type SQLAPISQLGetAllByAPIIDListEntity struct {
 	APIIDList []string
 	gqttpl.TplEmptyEntity
 }
 
-func (t *SQLAPIGenSQLGetAllByAPIIDListEntity) TplName() string {
-	return "sql.api.gen.sql.GetAllByAPIIDList"
+func (t *SQLAPISQLGetAllByAPIIDListEntity) TplName() string {
+	return "sql.api.sql.GetAllByAPIIDList"
 }
-func (t *SQLAPIGenSQLGetAllByAPIIDListEntity) TplType() string {
+func (t *SQLAPISQLGetAllByAPIIDListEntity) TplType() string {
 	return "sql_select"
 }
 
-type SQLAPIGenSQLGetByAPIIDEntity struct {
+type SQLAPISQLGetByAPIIDEntity struct {
 	APIID string
 	gqttpl.TplEmptyEntity
 }
 
-func (t *SQLAPIGenSQLGetByAPIIDEntity) TplName() string {
-	return "sql.api.gen.sql.GetByAPIID"
+func (t *SQLAPISQLGetByAPIIDEntity) TplName() string {
+	return "sql.api.sql.GetByAPIID"
 }
-func (t *SQLAPIGenSQLGetByAPIIDEntity) TplType() string {
+func (t *SQLAPISQLGetByAPIIDEntity) TplType() string {
 	return "sql_select"
 }
 
-type SQLAPIGenSQLInsertEntity struct {
+type SQLAPISQLInsertEntity struct {
 	APIID       string
 	Description string
 	Name        string
@@ -52,52 +52,51 @@ type SQLAPIGenSQLInsertEntity struct {
 	gqttpl.TplEmptyEntity
 }
 
-func (t *SQLAPIGenSQLInsertEntity) TplName() string {
-	return "sql.api.gen.sql.Insert"
+func (t *SQLAPISQLInsertEntity) TplName() string {
+	return "sql.api.sql.Insert"
 }
-func (t *SQLAPIGenSQLInsertEntity) TplType() string {
+func (t *SQLAPISQLInsertEntity) TplType() string {
 	return "sql_insert"
 }
 
-type SQLAPIGenSQLPaginateEntity struct {
+type SQLAPISQLPaginateEntity struct {
 	Limit  int
 	Offset int
-	SQLAPIGenSQLPaginateWhereEntity
+	SQLAPISQLPaginateWhereEntity
 	gqttpl.TplEmptyEntity
 }
 
-func (t *SQLAPIGenSQLPaginateEntity) TplName() string {
-	return "sql.api.gen.sql.Paginate"
+func (t *SQLAPISQLPaginateEntity) TplName() string {
+	return "sql.api.sql.Paginate"
 }
-func (t *SQLAPIGenSQLPaginateEntity) TplType() string {
+func (t *SQLAPISQLPaginateEntity) TplType() string {
 	return "sql_select"
 }
 
-type SQLAPIGenSQLPaginateTotalEntity struct {
-	SQLAPIGenSQLPaginateWhereEntity
+type SQLAPISQLPaginateTotalEntity struct {
+	SQLAPISQLPaginateWhereEntity
 	gqttpl.TplEmptyEntity
 }
 
-func (t *SQLAPIGenSQLPaginateTotalEntity) TplName() string {
-	return "sql.api.gen.sql.PaginateTotal"
+func (t *SQLAPISQLPaginateTotalEntity) TplName() string {
+	return "sql.api.sql.PaginateTotal"
 }
-func (t *SQLAPIGenSQLPaginateTotalEntity) TplType() string {
+func (t *SQLAPISQLPaginateTotalEntity) TplType() string {
 	return "sql_select"
 }
 
-type SQLAPIGenSQLPaginateWhereEntity struct {
-	ID interface{}
+type SQLAPISQLPaginateWhereEntity struct {
 	gqttpl.TplEmptyEntity
 }
 
-func (t *SQLAPIGenSQLPaginateWhereEntity) TplName() string {
-	return "sql.api.gen.sql.PaginateWhere"
+func (t *SQLAPISQLPaginateWhereEntity) TplName() string {
+	return "sql.api.sql.PaginateWhere"
 }
-func (t *SQLAPIGenSQLPaginateWhereEntity) TplType() string {
+func (t *SQLAPISQLPaginateWhereEntity) TplType() string {
 	return "text"
 }
 
-type SQLAPIGenSQLUpdateEntity struct {
+type SQLAPISQLUpdateEntity struct {
 	APIID       string
 	Description string
 	Name        string
@@ -109,38 +108,50 @@ type SQLAPIGenSQLUpdateEntity struct {
 	gqttpl.TplEmptyEntity
 }
 
-func (t *SQLAPIGenSQLUpdateEntity) TplName() string {
-	return "sql.api.gen.sql.Update"
+func (t *SQLAPISQLUpdateEntity) TplName() string {
+	return "sql.api.sql.Update"
 }
-func (t *SQLAPIGenSQLUpdateEntity) TplType() string {
+func (t *SQLAPISQLUpdateEntity) TplType() string {
 	return "sql_update"
 }
 
-type SQLExampleGenSQLGetAllByExampleIDListEntity struct {
+type SQLExampleSQLDelEntity struct {
+	ExampleID string
+	gqttpl.TplEmptyEntity
+}
+
+func (t *SQLExampleSQLDelEntity) TplName() string {
+	return "sql.example.sql.Del"
+}
+func (t *SQLExampleSQLDelEntity) TplType() string {
+	return "sql_update"
+}
+
+type SQLExampleSQLGetAllByExampleIDListEntity struct {
 	ExampleIDList []string
 	gqttpl.TplEmptyEntity
 }
 
-func (t *SQLExampleGenSQLGetAllByExampleIDListEntity) TplName() string {
-	return "sql.example.gen.sql.GetAllByExampleIDList"
+func (t *SQLExampleSQLGetAllByExampleIDListEntity) TplName() string {
+	return "sql.example.sql.GetAllByExampleIDList"
 }
-func (t *SQLExampleGenSQLGetAllByExampleIDListEntity) TplType() string {
+func (t *SQLExampleSQLGetAllByExampleIDListEntity) TplType() string {
 	return "sql_select"
 }
 
-type SQLExampleGenSQLGetByExampleIDEntity struct {
+type SQLExampleSQLGetByExampleIDEntity struct {
 	ExampleID string
 	gqttpl.TplEmptyEntity
 }
 
-func (t *SQLExampleGenSQLGetByExampleIDEntity) TplName() string {
-	return "sql.example.gen.sql.GetByExampleID"
+func (t *SQLExampleSQLGetByExampleIDEntity) TplName() string {
+	return "sql.example.sql.GetByExampleID"
 }
-func (t *SQLExampleGenSQLGetByExampleIDEntity) TplType() string {
+func (t *SQLExampleSQLGetByExampleIDEntity) TplType() string {
 	return "sql_select"
 }
 
-type SQLExampleGenSQLInsertEntity struct {
+type SQLExampleSQLInsertEntity struct {
 	APIID     string
 	ExampleID string
 	Request   string
@@ -152,51 +163,51 @@ type SQLExampleGenSQLInsertEntity struct {
 	gqttpl.TplEmptyEntity
 }
 
-func (t *SQLExampleGenSQLInsertEntity) TplName() string {
-	return "sql.example.gen.sql.Insert"
+func (t *SQLExampleSQLInsertEntity) TplName() string {
+	return "sql.example.sql.Insert"
 }
-func (t *SQLExampleGenSQLInsertEntity) TplType() string {
+func (t *SQLExampleSQLInsertEntity) TplType() string {
 	return "sql_insert"
 }
 
-type SQLExampleGenSQLPaginateEntity struct {
+type SQLExampleSQLPaginateEntity struct {
 	Limit  int
 	Offset int
-	SQLExampleGenSQLPaginateWhereEntity
+	SQLExampleSQLPaginateWhereEntity
 	gqttpl.TplEmptyEntity
 }
 
-func (t *SQLExampleGenSQLPaginateEntity) TplName() string {
-	return "sql.example.gen.sql.Paginate"
+func (t *SQLExampleSQLPaginateEntity) TplName() string {
+	return "sql.example.sql.Paginate"
 }
-func (t *SQLExampleGenSQLPaginateEntity) TplType() string {
+func (t *SQLExampleSQLPaginateEntity) TplType() string {
 	return "sql_select"
 }
 
-type SQLExampleGenSQLPaginateTotalEntity struct {
-	SQLExampleGenSQLPaginateWhereEntity
+type SQLExampleSQLPaginateTotalEntity struct {
+	SQLExampleSQLPaginateWhereEntity
 	gqttpl.TplEmptyEntity
 }
 
-func (t *SQLExampleGenSQLPaginateTotalEntity) TplName() string {
-	return "sql.example.gen.sql.PaginateTotal"
+func (t *SQLExampleSQLPaginateTotalEntity) TplName() string {
+	return "sql.example.sql.PaginateTotal"
 }
-func (t *SQLExampleGenSQLPaginateTotalEntity) TplType() string {
+func (t *SQLExampleSQLPaginateTotalEntity) TplType() string {
 	return "sql_select"
 }
 
-type SQLExampleGenSQLPaginateWhereEntity struct {
+type SQLExampleSQLPaginateWhereEntity struct {
 	gqttpl.TplEmptyEntity
 }
 
-func (t *SQLExampleGenSQLPaginateWhereEntity) TplName() string {
-	return "sql.example.gen.sql.PaginateWhere"
+func (t *SQLExampleSQLPaginateWhereEntity) TplName() string {
+	return "sql.example.sql.PaginateWhere"
 }
-func (t *SQLExampleGenSQLPaginateWhereEntity) TplType() string {
+func (t *SQLExampleSQLPaginateWhereEntity) TplType() string {
 	return "text"
 }
 
-type SQLExampleGenSQLUpdateEntity struct {
+type SQLExampleSQLUpdateEntity struct {
 	APIID     string
 	ExampleID string
 	Request   string
@@ -208,38 +219,50 @@ type SQLExampleGenSQLUpdateEntity struct {
 	gqttpl.TplEmptyEntity
 }
 
-func (t *SQLExampleGenSQLUpdateEntity) TplName() string {
-	return "sql.example.gen.sql.Update"
+func (t *SQLExampleSQLUpdateEntity) TplName() string {
+	return "sql.example.sql.Update"
 }
-func (t *SQLExampleGenSQLUpdateEntity) TplType() string {
+func (t *SQLExampleSQLUpdateEntity) TplType() string {
 	return "sql_update"
 }
 
-type SQLMarkdownGenSQLGetAllByMarkdownIDListEntity struct {
+type SQLMarkdownSQLDelEntity struct {
+	MarkdownID string
+	gqttpl.TplEmptyEntity
+}
+
+func (t *SQLMarkdownSQLDelEntity) TplName() string {
+	return "sql.markdown.sql.Del"
+}
+func (t *SQLMarkdownSQLDelEntity) TplType() string {
+	return "sql_update"
+}
+
+type SQLMarkdownSQLGetAllByMarkdownIDListEntity struct {
 	MarkdownIDList []string
 	gqttpl.TplEmptyEntity
 }
 
-func (t *SQLMarkdownGenSQLGetAllByMarkdownIDListEntity) TplName() string {
-	return "sql.markdown.gen.sql.GetAllByMarkdownIDList"
+func (t *SQLMarkdownSQLGetAllByMarkdownIDListEntity) TplName() string {
+	return "sql.markdown.sql.GetAllByMarkdownIDList"
 }
-func (t *SQLMarkdownGenSQLGetAllByMarkdownIDListEntity) TplType() string {
+func (t *SQLMarkdownSQLGetAllByMarkdownIDListEntity) TplType() string {
 	return "sql_select"
 }
 
-type SQLMarkdownGenSQLGetByMarkdownIDEntity struct {
+type SQLMarkdownSQLGetByMarkdownIDEntity struct {
 	MarkdownID string
 	gqttpl.TplEmptyEntity
 }
 
-func (t *SQLMarkdownGenSQLGetByMarkdownIDEntity) TplName() string {
-	return "sql.markdown.gen.sql.GetByMarkdownID"
+func (t *SQLMarkdownSQLGetByMarkdownIDEntity) TplName() string {
+	return "sql.markdown.sql.GetByMarkdownID"
 }
-func (t *SQLMarkdownGenSQLGetByMarkdownIDEntity) TplType() string {
+func (t *SQLMarkdownSQLGetByMarkdownIDEntity) TplType() string {
 	return "sql_select"
 }
 
-type SQLMarkdownGenSQLInsertEntity struct {
+type SQLMarkdownSQLInsertEntity struct {
 	APIID      string
 	Content    string
 	Markdown   string
@@ -252,51 +275,51 @@ type SQLMarkdownGenSQLInsertEntity struct {
 	gqttpl.TplEmptyEntity
 }
 
-func (t *SQLMarkdownGenSQLInsertEntity) TplName() string {
-	return "sql.markdown.gen.sql.Insert"
+func (t *SQLMarkdownSQLInsertEntity) TplName() string {
+	return "sql.markdown.sql.Insert"
 }
-func (t *SQLMarkdownGenSQLInsertEntity) TplType() string {
+func (t *SQLMarkdownSQLInsertEntity) TplType() string {
 	return "sql_insert"
 }
 
-type SQLMarkdownGenSQLPaginateEntity struct {
+type SQLMarkdownSQLPaginateEntity struct {
 	Limit  int
 	Offset int
-	SQLMarkdownGenSQLPaginateWhereEntity
+	SQLMarkdownSQLPaginateWhereEntity
 	gqttpl.TplEmptyEntity
 }
 
-func (t *SQLMarkdownGenSQLPaginateEntity) TplName() string {
-	return "sql.markdown.gen.sql.Paginate"
+func (t *SQLMarkdownSQLPaginateEntity) TplName() string {
+	return "sql.markdown.sql.Paginate"
 }
-func (t *SQLMarkdownGenSQLPaginateEntity) TplType() string {
+func (t *SQLMarkdownSQLPaginateEntity) TplType() string {
 	return "sql_select"
 }
 
-type SQLMarkdownGenSQLPaginateTotalEntity struct {
-	SQLMarkdownGenSQLPaginateWhereEntity
+type SQLMarkdownSQLPaginateTotalEntity struct {
+	SQLMarkdownSQLPaginateWhereEntity
 	gqttpl.TplEmptyEntity
 }
 
-func (t *SQLMarkdownGenSQLPaginateTotalEntity) TplName() string {
-	return "sql.markdown.gen.sql.PaginateTotal"
+func (t *SQLMarkdownSQLPaginateTotalEntity) TplName() string {
+	return "sql.markdown.sql.PaginateTotal"
 }
-func (t *SQLMarkdownGenSQLPaginateTotalEntity) TplType() string {
+func (t *SQLMarkdownSQLPaginateTotalEntity) TplType() string {
 	return "sql_select"
 }
 
-type SQLMarkdownGenSQLPaginateWhereEntity struct {
+type SQLMarkdownSQLPaginateWhereEntity struct {
 	gqttpl.TplEmptyEntity
 }
 
-func (t *SQLMarkdownGenSQLPaginateWhereEntity) TplName() string {
-	return "sql.markdown.gen.sql.PaginateWhere"
+func (t *SQLMarkdownSQLPaginateWhereEntity) TplName() string {
+	return "sql.markdown.sql.PaginateWhere"
 }
-func (t *SQLMarkdownGenSQLPaginateWhereEntity) TplType() string {
+func (t *SQLMarkdownSQLPaginateWhereEntity) TplType() string {
 	return "text"
 }
 
-type SQLMarkdownGenSQLUpdateEntity struct {
+type SQLMarkdownSQLUpdateEntity struct {
 	APIID      string
 	Content    string
 	Markdown   string
@@ -309,357 +332,405 @@ type SQLMarkdownGenSQLUpdateEntity struct {
 	gqttpl.TplEmptyEntity
 }
 
-func (t *SQLMarkdownGenSQLUpdateEntity) TplName() string {
-	return "sql.markdown.gen.sql.Update"
+func (t *SQLMarkdownSQLUpdateEntity) TplName() string {
+	return "sql.markdown.sql.Update"
 }
-func (t *SQLMarkdownGenSQLUpdateEntity) TplType() string {
+func (t *SQLMarkdownSQLUpdateEntity) TplType() string {
 	return "sql_update"
 }
 
-type SQLParameterGenSQLGetAllByParameterIDListEntity struct {
-	ParameterIDList []string
-	gqttpl.TplEmptyEntity
-}
-
-func (t *SQLParameterGenSQLGetAllByParameterIDListEntity) TplName() string {
-	return "sql.parameter.gen.sql.GetAllByParameterIDList"
-}
-func (t *SQLParameterGenSQLGetAllByParameterIDListEntity) TplType() string {
-	return "sql_select"
-}
-
-type SQLParameterGenSQLGetByParameterIDEntity struct {
+type SQLParameterSQLDelEntity struct {
 	ParameterID string
 	gqttpl.TplEmptyEntity
 }
 
-func (t *SQLParameterGenSQLGetByParameterIDEntity) TplName() string {
-	return "sql.parameter.gen.sql.GetByParameterID"
+func (t *SQLParameterSQLDelEntity) TplName() string {
+	return "sql.parameter.sql.Del"
 }
-func (t *SQLParameterGenSQLGetByParameterIDEntity) TplType() string {
-	return "sql_select"
-}
-
-type SQLParameterGenSQLInsertEntity struct {
-	APIID            string
-	AllowEmptyValue  string
-	AllowReserved    string
-	Deprecated       string
-	Description      string
-	Example          string
-	Explode          string
-	FullName         string
-	HTTPStatus       string
-	Method           string
-	Name             string
-	ParameterID      string
-	Position         string
-	Required         string
-	Serialize        string
-	ServiceID        string
-	Tag              string
-	Title            string
-	Type             string
-	ValidateSchemaID string
-	gqttpl.TplEmptyEntity
-}
-
-func (t *SQLParameterGenSQLInsertEntity) TplName() string {
-	return "sql.parameter.gen.sql.Insert"
-}
-func (t *SQLParameterGenSQLInsertEntity) TplType() string {
-	return "sql_insert"
-}
-
-type SQLParameterGenSQLPaginateEntity struct {
-	Limit  int
-	Offset int
-	SQLParameterGenSQLPaginateWhereEntity
-	gqttpl.TplEmptyEntity
-}
-
-func (t *SQLParameterGenSQLPaginateEntity) TplName() string {
-	return "sql.parameter.gen.sql.Paginate"
-}
-func (t *SQLParameterGenSQLPaginateEntity) TplType() string {
-	return "sql_select"
-}
-
-type SQLParameterGenSQLPaginateTotalEntity struct {
-	SQLParameterGenSQLPaginateWhereEntity
-	gqttpl.TplEmptyEntity
-}
-
-func (t *SQLParameterGenSQLPaginateTotalEntity) TplName() string {
-	return "sql.parameter.gen.sql.PaginateTotal"
-}
-func (t *SQLParameterGenSQLPaginateTotalEntity) TplType() string {
-	return "sql_select"
-}
-
-type SQLParameterGenSQLPaginateWhereEntity struct {
-	gqttpl.TplEmptyEntity
-}
-
-func (t *SQLParameterGenSQLPaginateWhereEntity) TplName() string {
-	return "sql.parameter.gen.sql.PaginateWhere"
-}
-func (t *SQLParameterGenSQLPaginateWhereEntity) TplType() string {
-	return "text"
-}
-
-type SQLParameterGenSQLUpdateEntity struct {
-	APIID            string
-	AllowEmptyValue  string
-	AllowReserved    string
-	Deprecated       string
-	Description      string
-	Example          string
-	Explode          string
-	FullName         string
-	HTTPStatus       string
-	Method           string
-	Name             string
-	ParameterID      string
-	Position         string
-	Required         string
-	Serialize        string
-	ServiceID        string
-	Tag              string
-	Title            string
-	Type             string
-	ValidateSchemaID string
-	gqttpl.TplEmptyEntity
-}
-
-func (t *SQLParameterGenSQLUpdateEntity) TplName() string {
-	return "sql.parameter.gen.sql.Update"
-}
-func (t *SQLParameterGenSQLUpdateEntity) TplType() string {
+func (t *SQLParameterSQLDelEntity) TplType() string {
 	return "sql_update"
 }
 
-type SQLServerGenSQLGetAllByServerIDListEntity struct {
-	ServerIDList []string
+type SQLParameterSQLGetAllByParameterIDListEntity struct {
+	ParameterIDList []string
 	gqttpl.TplEmptyEntity
 }
 
-func (t *SQLServerGenSQLGetAllByServerIDListEntity) TplName() string {
-	return "sql.server.gen.sql.GetAllByServerIDList"
+func (t *SQLParameterSQLGetAllByParameterIDListEntity) TplName() string {
+	return "sql.parameter.sql.GetAllByParameterIDList"
 }
-func (t *SQLServerGenSQLGetAllByServerIDListEntity) TplType() string {
+func (t *SQLParameterSQLGetAllByParameterIDListEntity) TplType() string {
 	return "sql_select"
 }
 
-type SQLServerGenSQLGetByServerIDEntity struct {
+type SQLParameterSQLGetByParameterIDEntity struct {
+	ParameterID string
+	gqttpl.TplEmptyEntity
+}
+
+func (t *SQLParameterSQLGetByParameterIDEntity) TplName() string {
+	return "sql.parameter.sql.GetByParameterID"
+}
+func (t *SQLParameterSQLGetByParameterIDEntity) TplType() string {
+	return "sql_select"
+}
+
+type SQLParameterSQLInsertEntity struct {
+	APIID            string
+	AllowEmptyValue  string
+	AllowReserved    string
+	Deprecated       string
+	Description      string
+	Example          string
+	Explode          string
+	FullName         string
+	HTTPStatus       string
+	Method           string
+	Name             string
+	ParameterID      string
+	Position         string
+	Required         string
+	Serialize        string
+	ServiceID        string
+	Tag              string
+	Title            string
+	Type             string
+	ValidateSchemaID string
+	gqttpl.TplEmptyEntity
+}
+
+func (t *SQLParameterSQLInsertEntity) TplName() string {
+	return "sql.parameter.sql.Insert"
+}
+func (t *SQLParameterSQLInsertEntity) TplType() string {
+	return "sql_insert"
+}
+
+type SQLParameterSQLPaginateEntity struct {
+	Limit  int
+	Offset int
+	SQLParameterSQLPaginateWhereEntity
+	gqttpl.TplEmptyEntity
+}
+
+func (t *SQLParameterSQLPaginateEntity) TplName() string {
+	return "sql.parameter.sql.Paginate"
+}
+func (t *SQLParameterSQLPaginateEntity) TplType() string {
+	return "sql_select"
+}
+
+type SQLParameterSQLPaginateTotalEntity struct {
+	SQLParameterSQLPaginateWhereEntity
+	gqttpl.TplEmptyEntity
+}
+
+func (t *SQLParameterSQLPaginateTotalEntity) TplName() string {
+	return "sql.parameter.sql.PaginateTotal"
+}
+func (t *SQLParameterSQLPaginateTotalEntity) TplType() string {
+	return "sql_select"
+}
+
+type SQLParameterSQLPaginateWhereEntity struct {
+	gqttpl.TplEmptyEntity
+}
+
+func (t *SQLParameterSQLPaginateWhereEntity) TplName() string {
+	return "sql.parameter.sql.PaginateWhere"
+}
+func (t *SQLParameterSQLPaginateWhereEntity) TplType() string {
+	return "text"
+}
+
+type SQLParameterSQLUpdateEntity struct {
+	APIID            string
+	AllowEmptyValue  string
+	AllowReserved    string
+	Deprecated       string
+	Description      string
+	Example          string
+	Explode          string
+	FullName         string
+	HTTPStatus       string
+	Method           string
+	Name             string
+	ParameterID      string
+	Position         string
+	Required         string
+	Serialize        string
+	ServiceID        string
+	Tag              string
+	Title            string
+	Type             string
+	ValidateSchemaID string
+	gqttpl.TplEmptyEntity
+}
+
+func (t *SQLParameterSQLUpdateEntity) TplName() string {
+	return "sql.parameter.sql.Update"
+}
+func (t *SQLParameterSQLUpdateEntity) TplType() string {
+	return "sql_update"
+}
+
+type SQLServerSQLDelEntity struct {
 	ServerID string
 	gqttpl.TplEmptyEntity
 }
 
-func (t *SQLServerGenSQLGetByServerIDEntity) TplName() string {
-	return "sql.server.gen.sql.GetByServerID"
+func (t *SQLServerSQLDelEntity) TplName() string {
+	return "sql.server.sql.Del"
 }
-func (t *SQLServerGenSQLGetByServerIDEntity) TplType() string {
-	return "sql_select"
-}
-
-type SQLServerGenSQLInsertEntity struct {
-	Description  string
-	ExtensionIds string
-	Proxy        string
-	ServerID     string
-	ServiceID    string
-	URL          string
-	gqttpl.TplEmptyEntity
-}
-
-func (t *SQLServerGenSQLInsertEntity) TplName() string {
-	return "sql.server.gen.sql.Insert"
-}
-func (t *SQLServerGenSQLInsertEntity) TplType() string {
-	return "sql_insert"
-}
-
-type SQLServerGenSQLPaginateEntity struct {
-	Limit  int
-	Offset int
-	SQLServerGenSQLPaginateWhereEntity
-	gqttpl.TplEmptyEntity
-}
-
-func (t *SQLServerGenSQLPaginateEntity) TplName() string {
-	return "sql.server.gen.sql.Paginate"
-}
-func (t *SQLServerGenSQLPaginateEntity) TplType() string {
-	return "sql_select"
-}
-
-type SQLServerGenSQLPaginateTotalEntity struct {
-	SQLServerGenSQLPaginateWhereEntity
-	gqttpl.TplEmptyEntity
-}
-
-func (t *SQLServerGenSQLPaginateTotalEntity) TplName() string {
-	return "sql.server.gen.sql.PaginateTotal"
-}
-func (t *SQLServerGenSQLPaginateTotalEntity) TplType() string {
-	return "sql_select"
-}
-
-type SQLServerGenSQLPaginateWhereEntity struct {
-	gqttpl.TplEmptyEntity
-}
-
-func (t *SQLServerGenSQLPaginateWhereEntity) TplName() string {
-	return "sql.server.gen.sql.PaginateWhere"
-}
-func (t *SQLServerGenSQLPaginateWhereEntity) TplType() string {
-	return "text"
-}
-
-type SQLServerGenSQLUpdateEntity struct {
-	Description  string
-	ExtensionIds string
-	Proxy        string
-	ServerID     string
-	ServiceID    string
-	URL          string
-	gqttpl.TplEmptyEntity
-}
-
-func (t *SQLServerGenSQLUpdateEntity) TplName() string {
-	return "sql.server.gen.sql.Update"
-}
-func (t *SQLServerGenSQLUpdateEntity) TplType() string {
+func (t *SQLServerSQLDelEntity) TplType() string {
 	return "sql_update"
 }
 
-type SQLServiceGenSQLGetAllByServiceIDListEntity struct {
-	ServiceIDList []string
+type SQLServerSQLGetAllByServerIDListEntity struct {
+	ServerIDList []string
 	gqttpl.TplEmptyEntity
 }
 
-func (t *SQLServiceGenSQLGetAllByServiceIDListEntity) TplName() string {
-	return "sql.service.gen.sql.GetAllByServiceIDList"
+func (t *SQLServerSQLGetAllByServerIDListEntity) TplName() string {
+	return "sql.server.sql.GetAllByServerIDList"
 }
-func (t *SQLServiceGenSQLGetAllByServiceIDListEntity) TplType() string {
+func (t *SQLServerSQLGetAllByServerIDListEntity) TplType() string {
 	return "sql_select"
 }
 
-type SQLServiceGenSQLGetByServiceIDEntity struct {
+type SQLServerSQLGetByServerIDEntity struct {
+	ServerID string
+	gqttpl.TplEmptyEntity
+}
+
+func (t *SQLServerSQLGetByServerIDEntity) TplName() string {
+	return "sql.server.sql.GetByServerID"
+}
+func (t *SQLServerSQLGetByServerIDEntity) TplType() string {
+	return "sql_select"
+}
+
+type SQLServerSQLInsertEntity struct {
+	Description  string
+	ExtensionIds string
+	Proxy        string
+	ServerID     string
+	ServiceID    string
+	URL          string
+	gqttpl.TplEmptyEntity
+}
+
+func (t *SQLServerSQLInsertEntity) TplName() string {
+	return "sql.server.sql.Insert"
+}
+func (t *SQLServerSQLInsertEntity) TplType() string {
+	return "sql_insert"
+}
+
+type SQLServerSQLPaginateEntity struct {
+	Limit  int
+	Offset int
+	SQLServerSQLPaginateWhereEntity
+	gqttpl.TplEmptyEntity
+}
+
+func (t *SQLServerSQLPaginateEntity) TplName() string {
+	return "sql.server.sql.Paginate"
+}
+func (t *SQLServerSQLPaginateEntity) TplType() string {
+	return "sql_select"
+}
+
+type SQLServerSQLPaginateTotalEntity struct {
+	SQLServerSQLPaginateWhereEntity
+	gqttpl.TplEmptyEntity
+}
+
+func (t *SQLServerSQLPaginateTotalEntity) TplName() string {
+	return "sql.server.sql.PaginateTotal"
+}
+func (t *SQLServerSQLPaginateTotalEntity) TplType() string {
+	return "sql_select"
+}
+
+type SQLServerSQLPaginateWhereEntity struct {
+	gqttpl.TplEmptyEntity
+}
+
+func (t *SQLServerSQLPaginateWhereEntity) TplName() string {
+	return "sql.server.sql.PaginateWhere"
+}
+func (t *SQLServerSQLPaginateWhereEntity) TplType() string {
+	return "text"
+}
+
+type SQLServerSQLUpdateEntity struct {
+	Description  string
+	ExtensionIds string
+	Proxy        string
+	ServerID     string
+	ServiceID    string
+	URL          string
+	gqttpl.TplEmptyEntity
+}
+
+func (t *SQLServerSQLUpdateEntity) TplName() string {
+	return "sql.server.sql.Update"
+}
+func (t *SQLServerSQLUpdateEntity) TplType() string {
+	return "sql_update"
+}
+
+type SQLServiceSQLDelEntity struct {
 	ServiceID string
 	gqttpl.TplEmptyEntity
 }
 
-func (t *SQLServiceGenSQLGetByServiceIDEntity) TplName() string {
-	return "sql.service.gen.sql.GetByServiceID"
+func (t *SQLServiceSQLDelEntity) TplName() string {
+	return "sql.service.sql.Del"
 }
-func (t *SQLServiceGenSQLGetByServiceIDEntity) TplType() string {
-	return "sql_select"
-}
-
-type SQLServiceGenSQLInsertEntity struct {
-	ContactIds  string
-	Description string
-	License     string
-	Proxy       string
-	Security    string
-	ServiceID   string
-	Title       string
-	Variables   string
-	Version     string
-	gqttpl.TplEmptyEntity
-}
-
-func (t *SQLServiceGenSQLInsertEntity) TplName() string {
-	return "sql.service.gen.sql.Insert"
-}
-func (t *SQLServiceGenSQLInsertEntity) TplType() string {
-	return "sql_insert"
-}
-
-type SQLServiceGenSQLPaginateEntity struct {
-	Limit  int
-	Offset int
-	SQLServiceGenSQLPaginateWhereEntity
-	gqttpl.TplEmptyEntity
-}
-
-func (t *SQLServiceGenSQLPaginateEntity) TplName() string {
-	return "sql.service.gen.sql.Paginate"
-}
-func (t *SQLServiceGenSQLPaginateEntity) TplType() string {
-	return "sql_select"
-}
-
-type SQLServiceGenSQLPaginateTotalEntity struct {
-	SQLServiceGenSQLPaginateWhereEntity
-	gqttpl.TplEmptyEntity
-}
-
-func (t *SQLServiceGenSQLPaginateTotalEntity) TplName() string {
-	return "sql.service.gen.sql.PaginateTotal"
-}
-func (t *SQLServiceGenSQLPaginateTotalEntity) TplType() string {
-	return "sql_select"
-}
-
-type SQLServiceGenSQLPaginateWhereEntity struct {
-	gqttpl.TplEmptyEntity
-}
-
-func (t *SQLServiceGenSQLPaginateWhereEntity) TplName() string {
-	return "sql.service.gen.sql.PaginateWhere"
-}
-func (t *SQLServiceGenSQLPaginateWhereEntity) TplType() string {
-	return "text"
-}
-
-type SQLServiceGenSQLUpdateEntity struct {
-	ContactIds  string
-	Description string
-	License     string
-	Proxy       string
-	Security    string
-	ServiceID   string
-	Title       string
-	Variables   string
-	Version     string
-	gqttpl.TplEmptyEntity
-}
-
-func (t *SQLServiceGenSQLUpdateEntity) TplName() string {
-	return "sql.service.gen.sql.Update"
-}
-func (t *SQLServiceGenSQLUpdateEntity) TplType() string {
+func (t *SQLServiceSQLDelEntity) TplType() string {
 	return "sql_update"
 }
 
-type SQLValidateSchemaGenSQLGetAllByValidateSchemaIDListEntity struct {
-	ValidateSchemaIDList []string
+type SQLServiceSQLGetAllByServiceIDListEntity struct {
+	ServiceIDList []string
 	gqttpl.TplEmptyEntity
 }
 
-func (t *SQLValidateSchemaGenSQLGetAllByValidateSchemaIDListEntity) TplName() string {
-	return "sql.validate_schema.gen.sql.GetAllByValidateSchemaIDList"
+func (t *SQLServiceSQLGetAllByServiceIDListEntity) TplName() string {
+	return "sql.service.sql.GetAllByServiceIDList"
 }
-func (t *SQLValidateSchemaGenSQLGetAllByValidateSchemaIDListEntity) TplType() string {
+func (t *SQLServiceSQLGetAllByServiceIDListEntity) TplType() string {
 	return "sql_select"
 }
 
-type SQLValidateSchemaGenSQLGetByValidateSchemaIDEntity struct {
+type SQLServiceSQLGetByServiceIDEntity struct {
+	ServiceID string
+	gqttpl.TplEmptyEntity
+}
+
+func (t *SQLServiceSQLGetByServiceIDEntity) TplName() string {
+	return "sql.service.sql.GetByServiceID"
+}
+func (t *SQLServiceSQLGetByServiceIDEntity) TplType() string {
+	return "sql_select"
+}
+
+type SQLServiceSQLInsertEntity struct {
+	ContactIds  string
+	Description string
+	License     string
+	Proxy       string
+	Security    string
+	ServiceID   string
+	Title       string
+	Variables   string
+	Version     string
+	gqttpl.TplEmptyEntity
+}
+
+func (t *SQLServiceSQLInsertEntity) TplName() string {
+	return "sql.service.sql.Insert"
+}
+func (t *SQLServiceSQLInsertEntity) TplType() string {
+	return "sql_insert"
+}
+
+type SQLServiceSQLPaginateEntity struct {
+	Limit  int
+	Offset int
+	SQLServiceSQLPaginateWhereEntity
+	gqttpl.TplEmptyEntity
+}
+
+func (t *SQLServiceSQLPaginateEntity) TplName() string {
+	return "sql.service.sql.Paginate"
+}
+func (t *SQLServiceSQLPaginateEntity) TplType() string {
+	return "sql_select"
+}
+
+type SQLServiceSQLPaginateTotalEntity struct {
+	SQLServiceSQLPaginateWhereEntity
+	gqttpl.TplEmptyEntity
+}
+
+func (t *SQLServiceSQLPaginateTotalEntity) TplName() string {
+	return "sql.service.sql.PaginateTotal"
+}
+func (t *SQLServiceSQLPaginateTotalEntity) TplType() string {
+	return "sql_select"
+}
+
+type SQLServiceSQLPaginateWhereEntity struct {
+	gqttpl.TplEmptyEntity
+}
+
+func (t *SQLServiceSQLPaginateWhereEntity) TplName() string {
+	return "sql.service.sql.PaginateWhere"
+}
+func (t *SQLServiceSQLPaginateWhereEntity) TplType() string {
+	return "text"
+}
+
+type SQLServiceSQLUpdateEntity struct {
+	ContactIds  string
+	Description string
+	License     string
+	Proxy       string
+	Security    string
+	ServiceID   string
+	Title       string
+	Variables   string
+	Version     string
+	gqttpl.TplEmptyEntity
+}
+
+func (t *SQLServiceSQLUpdateEntity) TplName() string {
+	return "sql.service.sql.Update"
+}
+func (t *SQLServiceSQLUpdateEntity) TplType() string {
+	return "sql_update"
+}
+
+type SQLValidateSchemaSQLDelEntity struct {
 	ValidateSchemaID string
 	gqttpl.TplEmptyEntity
 }
 
-func (t *SQLValidateSchemaGenSQLGetByValidateSchemaIDEntity) TplName() string {
-	return "sql.validate_schema.gen.sql.GetByValidateSchemaID"
+func (t *SQLValidateSchemaSQLDelEntity) TplName() string {
+	return "sql.validate_schema.sql.Del"
 }
-func (t *SQLValidateSchemaGenSQLGetByValidateSchemaIDEntity) TplType() string {
+func (t *SQLValidateSchemaSQLDelEntity) TplType() string {
+	return "sql_update"
+}
+
+type SQLValidateSchemaSQLGetAllByValidateSchemaIDListEntity struct {
+	ValidateSchemaIDList []string
+	gqttpl.TplEmptyEntity
+}
+
+func (t *SQLValidateSchemaSQLGetAllByValidateSchemaIDListEntity) TplName() string {
+	return "sql.validate_schema.sql.GetAllByValidateSchemaIDList"
+}
+func (t *SQLValidateSchemaSQLGetAllByValidateSchemaIDListEntity) TplType() string {
 	return "sql_select"
 }
 
-type SQLValidateSchemaGenSQLInsertEntity struct {
+type SQLValidateSchemaSQLGetByValidateSchemaIDEntity struct {
+	ValidateSchemaID string
+	gqttpl.TplEmptyEntity
+}
+
+func (t *SQLValidateSchemaSQLGetByValidateSchemaIDEntity) TplName() string {
+	return "sql.validate_schema.sql.GetByValidateSchemaID"
+}
+func (t *SQLValidateSchemaSQLGetByValidateSchemaIDEntity) TplType() string {
+	return "sql_select"
+}
+
+type SQLValidateSchemaSQLInsertEntity struct {
 	AdditionalProperties string
 	AllOf                string
 	AllowEmptyValue      string
@@ -705,51 +776,51 @@ type SQLValidateSchemaGenSQLInsertEntity struct {
 	gqttpl.TplEmptyEntity
 }
 
-func (t *SQLValidateSchemaGenSQLInsertEntity) TplName() string {
-	return "sql.validate_schema.gen.sql.Insert"
+func (t *SQLValidateSchemaSQLInsertEntity) TplName() string {
+	return "sql.validate_schema.sql.Insert"
 }
-func (t *SQLValidateSchemaGenSQLInsertEntity) TplType() string {
+func (t *SQLValidateSchemaSQLInsertEntity) TplType() string {
 	return "sql_insert"
 }
 
-type SQLValidateSchemaGenSQLPaginateEntity struct {
+type SQLValidateSchemaSQLPaginateEntity struct {
 	Limit  int
 	Offset int
-	SQLValidateSchemaGenSQLPaginateWhereEntity
+	SQLValidateSchemaSQLPaginateWhereEntity
 	gqttpl.TplEmptyEntity
 }
 
-func (t *SQLValidateSchemaGenSQLPaginateEntity) TplName() string {
-	return "sql.validate_schema.gen.sql.Paginate"
+func (t *SQLValidateSchemaSQLPaginateEntity) TplName() string {
+	return "sql.validate_schema.sql.Paginate"
 }
-func (t *SQLValidateSchemaGenSQLPaginateEntity) TplType() string {
+func (t *SQLValidateSchemaSQLPaginateEntity) TplType() string {
 	return "sql_select"
 }
 
-type SQLValidateSchemaGenSQLPaginateTotalEntity struct {
-	SQLValidateSchemaGenSQLPaginateWhereEntity
+type SQLValidateSchemaSQLPaginateTotalEntity struct {
+	SQLValidateSchemaSQLPaginateWhereEntity
 	gqttpl.TplEmptyEntity
 }
 
-func (t *SQLValidateSchemaGenSQLPaginateTotalEntity) TplName() string {
-	return "sql.validate_schema.gen.sql.PaginateTotal"
+func (t *SQLValidateSchemaSQLPaginateTotalEntity) TplName() string {
+	return "sql.validate_schema.sql.PaginateTotal"
 }
-func (t *SQLValidateSchemaGenSQLPaginateTotalEntity) TplType() string {
+func (t *SQLValidateSchemaSQLPaginateTotalEntity) TplType() string {
 	return "sql_select"
 }
 
-type SQLValidateSchemaGenSQLPaginateWhereEntity struct {
+type SQLValidateSchemaSQLPaginateWhereEntity struct {
 	gqttpl.TplEmptyEntity
 }
 
-func (t *SQLValidateSchemaGenSQLPaginateWhereEntity) TplName() string {
-	return "sql.validate_schema.gen.sql.PaginateWhere"
+func (t *SQLValidateSchemaSQLPaginateWhereEntity) TplName() string {
+	return "sql.validate_schema.sql.PaginateWhere"
 }
-func (t *SQLValidateSchemaGenSQLPaginateWhereEntity) TplType() string {
+func (t *SQLValidateSchemaSQLPaginateWhereEntity) TplType() string {
 	return "text"
 }
 
-type SQLValidateSchemaGenSQLUpdateEntity struct {
+type SQLValidateSchemaSQLUpdateEntity struct {
 	AdditionalProperties string
 	AllOf                string
 	AllowEmptyValue      string
@@ -795,9 +866,9 @@ type SQLValidateSchemaGenSQLUpdateEntity struct {
 	gqttpl.TplEmptyEntity
 }
 
-func (t *SQLValidateSchemaGenSQLUpdateEntity) TplName() string {
-	return "sql.validate_schema.gen.sql.Update"
+func (t *SQLValidateSchemaSQLUpdateEntity) TplName() string {
+	return "sql.validate_schema.sql.Update"
 }
-func (t *SQLValidateSchemaGenSQLUpdateEntity) TplType() string {
+func (t *SQLValidateSchemaSQLUpdateEntity) TplType() string {
 	return "sql_update"
 }

@@ -9,7 +9,7 @@ select * from `t_markdown`  where `markdown_id` in ({{in . .MarkdownIDList}})  a
 {{define "PaginateTotal"}}
 select count(*) as `count` from `t_markdown`  where 1=1 {{template "PaginateWhere" .}}   and `deleted_at` is null;
 {{end}}
-  {{define "Paginate"}}
+{{define "Paginate"}}
 select * from `t_markdown`  where 1=1 {{template "PaginateWhere" .}}   and `deleted_at` is null order by `updated_at` desc  limit :Offset,:Limit ;
 {{end}}
 {{define "Insert"}}
@@ -27,4 +27,7 @@ insert into `t_markdown` (`markdown_id`,`service_id`,`api_id`,`name`,`title`,`ma
 {{if .Content}} {{$preComma.PreComma}} `content`=:Content {{end}} 
 {{if .OwnerID}} {{$preComma.PreComma}} `owner_id`=:OwnerID {{end}} 
 {{if .OwnerName}} {{$preComma.PreComma}} `owner_name`=:OwnerName {{end}}  where `markdown_id`=:MarkdownID;
+{{end}}
+{{define "Del"}}
+update `t_markdown` set `deleted_at`={{currentTime .}} where `markdown_id`=:MarkdownID;
 {{end}}

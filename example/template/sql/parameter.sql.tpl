@@ -9,7 +9,7 @@ select * from `t_parameter`  where `parameter_id` in ({{in . .ParameterIDList}})
 {{define "PaginateTotal"}}
 select count(*) as `count` from `t_parameter`  where 1=1 {{template "PaginateWhere" .}}   and `deleted_at` is null;
 {{end}}
-  {{define "Paginate"}}
+{{define "Paginate"}}
 select * from `t_parameter`  where 1=1 {{template "PaginateWhere" .}}   and `deleted_at` is null order by `updated_at` desc  limit :Offset,:Limit ;
 {{end}}
 {{define "Insert"}}
@@ -38,4 +38,7 @@ insert into `t_parameter` (`parameter_id`,`service_id`,`api_id`,`validate_schema
 {{if .AllowEmptyValue}} {{$preComma.PreComma}} `allow_empty_value`=:AllowEmptyValue {{end}} 
 {{if .AllowReserved}} {{$preComma.PreComma}} `allow_reserved`=:AllowReserved {{end}} 
 {{if .Description}} {{$preComma.PreComma}} `description`=:Description {{end}}  where `parameter_id`=:ParameterID;
+{{end}}
+{{define "Del"}}
+update `t_parameter` set `deleted_at`={{currentTime .}} where `parameter_id`=:ParameterID;
 {{end}}

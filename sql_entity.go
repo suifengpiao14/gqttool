@@ -96,13 +96,20 @@ type SQLTplNamespace struct {
 	Defines   []*gqttpl.TPLDefine
 }
 
-func (s *SQLTplNamespace) String() (out string) {
+func (s *SQLTplNamespace) String() string {
 	tplArr := make([]string, 0)
 	for _, define := range s.Defines {
 		tplArr = append(tplArr, define.Output)
 	}
-	out = strings.Join(tplArr, "\n")
-	return
+	str := strings.Join(tplArr, gqttpl.EOF)
+	tplDefineList := ParseDefine(str, "", gqttpl.LeftDelim, gqttpl.RightDelim)
+	tplDefineList = tplDefineList.UniqueItems() // 去重
+	newTplArr := make([]string, 0)
+	for _, tplDefine := range tplDefineList {
+		newTplArr = append(newTplArr, tplDefine.Output)
+	}
+	out := strings.Join(newTplArr, gqttpl.EOF)
+	return out
 }
 
 func (s *SQLTplNamespace) Filename() (out string) {
@@ -115,36 +122,25 @@ func ParseDirTplDefine(tplDir string, namespaceSuffix string, leftDelim string, 
 	if err != nil {
 		return
 	}
+	tplDefineList = make([]*gqttpl.TPLDefine, 0)
 	for _, filename := range allFileList {
 		b, err := os.ReadFile(filename)
 		if err != nil {
 			return nil, err
 		}
-		tplList := ParseDefine(string(b))
-		for _, tpl := range tplList {
-			name, err := GetDefineName(tpl)
-			if err != nil {
-				return nil, err
-			}
-			namespace := gqttpl.FileName2Namespace(filename, tplDir)
-			tplDefine := &gqttpl.TPLDefine{
-				LeftDelim:  leftDelim,
-				RightDelim: rightDelim,
-				Name:       name,
-				Namespace:  namespace,
-				Output:     tpl,
-				Input:      nil,
-			}
-			tplDefineList = append(tplDefineList, tplDefine)
-		}
+		namespace := gqttpl.FileName2Namespace(filename, tplDir)
+		subTplDefineList := ParseDefine(string(b), namespace, leftDelim, rightDelim)
+		tplDefineList = append(tplDefineList, subTplDefineList...)
 	}
 	return
 }
 
-func ParseDefine(content string) (defineList []string) {
-	delim := "{{define "
+func ParseDefine(content string, namespace string, leftDelim string, rightDelim string) (tplDefineList gqttpl.TPLDefineList) {
+	// 解析文本
+	delim := leftDelim + "define "
 	delimLen := len(delim)
 	content = gqttpl.TrimSpaces(content) // 去除开头结尾的非有效字符
+	defineList := make([]string, 0)
 	for {
 		index := strings.Index(content, delim)
 		if index >= 0 {
@@ -163,6 +159,27 @@ func ParseDefine(content string) (defineList []string) {
 			break
 		}
 	}
+
+	tplDefineList = gqttpl.TPLDefineList{}
+
+	// 格式化
+	for _, tpl := range defineList {
+		name, err := GetDefineName(tpl)
+		if err != nil {
+			panic(err)
+		}
+
+		tplDefine := &gqttpl.TPLDefine{
+			LeftDelim:  leftDelim,
+			RightDelim: rightDelim,
+			Name:       name,
+			Namespace:  namespace,
+			Output:     tpl,
+			Input:      nil,
+		}
+		tplDefineList = append(tplDefineList, tplDefine)
+	}
+
 	return
 }
 

@@ -9,7 +9,7 @@ select * from `t_service`  where `service_id` in ({{in . .ServiceIDList}})  and 
 {{define "PaginateTotal"}}
 select count(*) as `count` from `t_service`  where 1=1 {{template "PaginateWhere" .}}   and `deleted_at` is null;
 {{end}}
-  {{define "Paginate"}}
+{{define "Paginate"}}
 select * from `t_service`  where 1=1 {{template "PaginateWhere" .}}   and `deleted_at` is null order by `updated_at` desc  limit :Offset,:Limit ;
 {{end}}
 {{define "Insert"}}
@@ -27,4 +27,7 @@ insert into `t_service` (`service_id`,`title`,`description`,`version`,`contact_i
 {{if .Security}} {{$preComma.PreComma}} `security`=:Security {{end}} 
 {{if .Proxy}} {{$preComma.PreComma}} `proxy`=:Proxy {{end}} 
 {{if .Variables}} {{$preComma.PreComma}} `variables`=:Variables {{end}}  where `service_id`=:ServiceID;
+{{end}}
+{{define "Del"}}
+update `t_service` set `deleted_at`={{currentTime .}} where `service_id`=:ServiceID;
 {{end}}

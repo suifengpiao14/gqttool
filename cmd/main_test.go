@@ -33,10 +33,10 @@ func TestGeneratePackageName(t *testing.T) {
 }
 
 func TestRunCmdSQLEntity(*testing.T) {
-	// tplDir := "../example/template"
+	tplDir := "../example/template"
+	entity := "../example/sql.entity.gen.go"
+	// tplDir := "D:\\go\\docapi\\repository\\template"
 	// entity := "../example/sql.entity.gen.go"
-	tplDir := "D:\\go\\docapi\\repository\\template"
-	entity := "../example/tmp.sql.entity.gen.go"
 	err := runCmdSQLEntity(tplDir, entity, true)
 	if err != nil {
 		panic(err)

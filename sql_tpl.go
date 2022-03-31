@@ -12,7 +12,7 @@ func Backquote(s string) (out string) {
 	return
 }
 
-func GenerateSQLTpl(table *Table, repo *RepositoryMeta) (tplDefineList []*gqttpl.TPLDefine, err error) { // list 保证后面输出顺序
+func GenerateSQLTpl(table *Table, repo *RepositoryMeta) (tplDefineList gqttpl.TPLDefineList, err error) { // list 保证后面输出顺序
 	metaNamespaceList, err := repo.GetNamespaceBySufix(MetaNameSpaceSuffix, true)
 	if err != nil {
 		return
@@ -29,21 +29,20 @@ func GenerateSQLTpl(table *Table, repo *RepositoryMeta) (tplDefineList []*gqttpl
 			tableNamespace = namespace
 		}
 	}
-	tplDefineList = make([]*gqttpl.TPLDefine, 0)
+	tplDefineList = gqttpl.TPLDefineList{}
+	if tableNamespace != "" { // 确保单独文件定义的模板在前面，通用定义在后面
+		tableTplDefineList, err := repo.GetByNamespace(tableNamespace, table)
+		if err != nil {
+			return tplDefineList, err
+		}
+		tplDefineList = append(tplDefineList, tableTplDefineList...)
+	}
 	if sqlNamespace != "" {
 		sqlTplDefineList, err := repo.GetByNamespace(sqlNamespace, table)
 		if err != nil {
 			return tplDefineList, err
 		}
 		tplDefineList = append(tplDefineList, sqlTplDefineList...)
-	}
-
-	if tableNamespace != "" {
-		tableTplDefineList, err := repo.GetByNamespace(tableNamespace, table)
-		if err != nil {
-			return tplDefineList, err
-		}
-		tplDefineList = append(tplDefineList, tableTplDefineList...)
 	}
 	return
 }

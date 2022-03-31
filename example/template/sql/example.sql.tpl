@@ -9,7 +9,7 @@ select * from `t_example`  where `example_id` in ({{in . .ExampleIDList}})  and 
 {{define "PaginateTotal"}}
 select count(*) as `count` from `t_example`  where 1=1 {{template "PaginateWhere" .}}   and `deleted_at` is null;
 {{end}}
-  {{define "Paginate"}}
+{{define "Paginate"}}
 select * from `t_example`  where 1=1 {{template "PaginateWhere" .}}   and `deleted_at` is null order by `updated_at` desc  limit :Offset,:Limit ;
 {{end}}
 {{define "Insert"}}
@@ -26,4 +26,7 @@ insert into `t_example` (`example_id`,`service_id`,`api_id`,`tag`,`title`,`summa
 {{if .Summary}} {{$preComma.PreComma}} `summary`=:Summary {{end}} 
 {{if .Request}} {{$preComma.PreComma}} `request`=:Request {{end}} 
 {{if .Response}} {{$preComma.PreComma}} `response`=:Response {{end}}  where `example_id`=:ExampleID;
+{{end}}
+{{define "Del"}}
+update `t_example` set `deleted_at`={{currentTime .}} where `example_id`=:ExampleID;
 {{end}}

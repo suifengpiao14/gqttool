@@ -8,4 +8,8 @@
 
 [[tplInsert .]]
 [[tplUpdate .]]
+[[tplDel .]]
 
+{{define "Del"}}
+11111111111
+{{end}}

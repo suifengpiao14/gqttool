@@ -9,7 +9,7 @@ select * from `t_validate_schema`  where `validate_schema_id` in ({{in . .Valida
 {{define "PaginateTotal"}}
 select count(*) as `count` from `t_validate_schema`  where 1=1 {{template "PaginateWhere" .}}   and `deleted_at` is null;
 {{end}}
-  {{define "Paginate"}}
+{{define "Paginate"}}
 select * from `t_validate_schema`  where 1=1 {{template "PaginateWhere" .}}   and `deleted_at` is null order by `updated_at` desc  limit :Offset,:Limit ;
 {{end}}
 {{define "Insert"}}
@@ -60,4 +60,7 @@ insert into `t_validate_schema` (`validate_schema_id`,`service_id`,`description`
 {{if .ExternalPros}} {{$preComma.PreComma}} `external_pros`=:ExternalPros {{end}} 
 {{if .Extensions}} {{$preComma.PreComma}} `extensions`=:Extensions {{end}} 
 {{if .Summary}} {{$preComma.PreComma}} `summary`=:Summary {{end}}  where `validate_schema_id`=:ValidateSchemaID;
+{{end}}
+{{define "Del"}}
+update `t_validate_schema` set `deleted_at`={{currentTime .}} where `validate_schema_id`=:ValidateSchemaID;
 {{end}}

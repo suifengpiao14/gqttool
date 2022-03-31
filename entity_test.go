@@ -80,7 +80,7 @@ func TestParseDefine(t *testing.T) {
        where service_id=:ServiceID;
  {{end}}
 	`
-	defineList := ParseDefine(sqlTpl)
+	defineList := ParseDefine(sqlTpl, "", gqttpl.LeftDelim, gqttpl.RightDelim)
 	fmt.Println(defineList[2])
 
 }
@@ -184,7 +184,7 @@ select * from service where service_id=:ServiceID and  deleted_at is null;
 }
 
 func TestWhereConditon(t *testing.T) {
-	entity := example.SQLAPIGenSQLPaginateEntity{
+	entity := example.SQLAPISQLPaginateEntity{
 		Limit:  10,
 		Offset: 20,
 	}

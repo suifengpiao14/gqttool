@@ -1,3 +1,6 @@
+{{define "Del"}}
+update `t_api` set `deleted_at`={{currentTime .}},`operator_id`=:OperatorIDInt,`operator`=:OperatorStr where `api_id`=:APIID;
+{{end}}
 {{define "GetByAPIID"}}
 select * from `t_api`  where `api_id`=:APIID  and `deleted_at` is null;
 {{end}}
@@ -9,7 +12,7 @@ select * from `t_api`  where `api_id` in ({{in . .APIIDList}})  and `deleted_at`
 {{define "PaginateTotal"}}
 select count(*) as `count` from `t_api`  where 1=1 {{template "PaginateWhere" .}}   and `deleted_at` is null;
 {{end}}
-  {{define "Paginate"}}
+{{define "Paginate"}}
 select * from `t_api`  where 1=1 {{template "PaginateWhere" .}}   and `deleted_at` is null order by `updated_at` desc  limit :Offset,:Limit ;
 {{end}}
 {{define "Insert"}}
@@ -26,7 +29,4 @@ insert into `t_api` (`api_id`,`service_id`,`name`,`title`,`tags`,`uri`,`summary`
 {{if .URI}} {{$preComma.PreComma}} `uri`=:URI {{end}} 
 {{if .Summary}} {{$preComma.PreComma}} `summary`=:Summary {{end}} 
 {{if .Description}} {{$preComma.PreComma}} `description`=:Description {{end}}  where `api_id`=:APIID;
-{{end}}
-{{define "Del"}}
-update `t_api` set `deleted_at`={{currentTime .}},`operator_id`=:OperatorIDInt,`operator`=:OperatorStr where `api_id`=:APIID;
 {{end}}
