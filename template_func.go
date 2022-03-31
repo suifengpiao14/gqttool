@@ -2,6 +2,7 @@ package gqttool
 
 import (
 	"fmt"
+	"reflect"
 	"strings"
 	"text/template"
 
@@ -30,16 +31,18 @@ var MetaTemplatefuncMap = template.FuncMap{
 }
 
 func convertData2Table(data interface{}) (table *Table, err error) {
+	var ok bool
 	for {
-		dataI, ok := data.(*interface{})
+		table, ok = data.(*Table)
 		if ok {
-			data = *dataI
-		} else {
 			break
 		}
-	}
-	table, ok := data.(*Table)
-	if !ok {
+		rt := reflect.TypeOf(data)
+		if rt.Kind() == reflect.Ptr {
+			data = reflect.ValueOf(data).Elem().Interface()
+			continue
+		}
+		// 走到这里，说明数据类型不对
 		err = errors.Errorf("expected *gqttool.Table; got %#v ", data)
 		return nil, err
 	}

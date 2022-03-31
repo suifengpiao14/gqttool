@@ -1,31 +1,21 @@
-
 {{define "GetByParameterID"}}
 select * from `t_parameter`  where `parameter_id`=:ParameterID  and `deleted_at` is null;
 {{end}}
-
 {{define "GetAllByParameterIDList"}}
 select * from `t_parameter`  where `parameter_id` in ({{in . .ParameterIDList}})  and `deleted_at` is null;
 {{end}}
-
-
 {{define "PaginateWhere"}}
-  
 {{end}}
-
 {{define "PaginateTotal"}}
 select count(*) as `count` from `t_parameter`  where 1=1 {{template "PaginateWhere" .}}   and `deleted_at` is null;
 {{end}}
-
   {{define "Paginate"}}
 select * from `t_parameter`  where 1=1 {{template "PaginateWhere" .}}   and `deleted_at` is null order by `updated_at` desc  limit :Offset,:Limit ;
 {{end}}
-
-
 {{define "Insert"}}
 insert into `t_parameter` (`parameter_id`,`service_id`,`api_id`,`validate_schema_id`,`full_name`,`name`,`title`,`type`,`tag`,`method`,`http_status`,`position`,`example`,`deprecated`,`required`,`serialize`,`explode`,`allow_empty_value`,`allow_reserved`,`description`)values
  (:ParameterID,:ServiceID,:APIID,:ValidateSchemaID,:FullName,:Name,:Title,:Type,:Tag,:Method,:HTTPStatus,:Position,:Example,:Deprecated,:Required,:Serialize,:Explode,:AllowEmptyValue,:AllowReserved,:Description);
 {{end}}
-
 {{define "Update"}}
 {{$preComma:=newPreComma}}
  update `t_parameter` set {{if .ParameterID}} {{$preComma.PreComma}} `parameter_id`=:ParameterID {{end}} 
@@ -49,5 +39,3 @@ insert into `t_parameter` (`parameter_id`,`service_id`,`api_id`,`validate_schema
 {{if .AllowReserved}} {{$preComma.PreComma}} `allow_reserved`=:AllowReserved {{end}} 
 {{if .Description}} {{$preComma.PreComma}} `description`=:Description {{end}}  where `parameter_id`=:ParameterID;
 {{end}}
-
-

@@ -171,7 +171,7 @@ type Table struct {
 	DeleteColumn string
 	Columns      []*Column
 	EnumsConst   Enums
-	*gqttpl.TplEmptyEntity
+	gqttpl.TplEmptyEntity
 }
 
 //CamelName 删除表前缀，转换成 camel 格式

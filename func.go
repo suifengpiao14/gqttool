@@ -44,7 +44,11 @@ func GeneratePackageName(dstDir string) (packageName string, err error) {
 	}
 	absoluteDir := dstDir
 	if dstDir[0:1] != "/" {
-		absoluteDir, err = filepath.Abs(fmt.Sprintf("%s/%s", filepath.Dir(os.Args[0]), dstDir))
+		cwd, err := os.Getwd()
+		if err != nil {
+			return "", err
+		}
+		absoluteDir, err = filepath.Abs(fmt.Sprintf("%s/%s", cwd, dstDir))
 		if err != nil {
 			return "", err
 		}

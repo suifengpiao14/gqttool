@@ -1,31 +1,21 @@
-
 {{define "GetByServiceID"}}
 select * from `t_service`  where `service_id`=:ServiceID  and `deleted_at` is null;
 {{end}}
-
 {{define "GetAllByServiceIDList"}}
 select * from `t_service`  where `service_id` in ({{in . .ServiceIDList}})  and `deleted_at` is null;
 {{end}}
-
-
 {{define "PaginateWhere"}}
-  
 {{end}}
-
 {{define "PaginateTotal"}}
 select count(*) as `count` from `t_service`  where 1=1 {{template "PaginateWhere" .}}   and `deleted_at` is null;
 {{end}}
-
   {{define "Paginate"}}
 select * from `t_service`  where 1=1 {{template "PaginateWhere" .}}   and `deleted_at` is null order by `updated_at` desc  limit :Offset,:Limit ;
 {{end}}
-
-
 {{define "Insert"}}
 insert into `t_service` (`service_id`,`title`,`description`,`version`,`contact_ids`,`license`,`security`,`proxy`,`variables`)values
  (:ServiceID,:Title,:Description,:Version,:ContactIds,:License,:Security,:Proxy,:Variables);
 {{end}}
-
 {{define "Update"}}
 {{$preComma:=newPreComma}}
  update `t_service` set {{if .ServiceID}} {{$preComma.PreComma}} `service_id`=:ServiceID {{end}} 
@@ -38,5 +28,3 @@ insert into `t_service` (`service_id`,`title`,`description`,`version`,`contact_i
 {{if .Proxy}} {{$preComma.PreComma}} `proxy`=:Proxy {{end}} 
 {{if .Variables}} {{$preComma.PreComma}} `variables`=:Variables {{end}}  where `service_id`=:ServiceID;
 {{end}}
-
-

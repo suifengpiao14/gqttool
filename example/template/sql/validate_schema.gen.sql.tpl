@@ -1,31 +1,21 @@
-
 {{define "GetByValidateSchemaID"}}
 select * from `t_validate_schema`  where `validate_schema_id`=:ValidateSchemaID  and `deleted_at` is null;
 {{end}}
-
 {{define "GetAllByValidateSchemaIDList"}}
 select * from `t_validate_schema`  where `validate_schema_id` in ({{in . .ValidateSchemaIDList}})  and `deleted_at` is null;
 {{end}}
-
-
 {{define "PaginateWhere"}}
-  
 {{end}}
-
 {{define "PaginateTotal"}}
 select count(*) as `count` from `t_validate_schema`  where 1=1 {{template "PaginateWhere" .}}   and `deleted_at` is null;
 {{end}}
-
   {{define "Paginate"}}
 select * from `t_validate_schema`  where 1=1 {{template "PaginateWhere" .}}   and `deleted_at` is null order by `updated_at` desc  limit :Offset,:Limit ;
 {{end}}
-
-
 {{define "Insert"}}
 insert into `t_validate_schema` (`validate_schema_id`,`service_id`,`description`,`remark`,`type`,`example`,`deprecated`,`required`,`enum`,`enum_names`,`enum_titles`,`format`,`default`,`nullable`,`multiple_of`,`maxnum`,`exclusive_maximum`,`minimum`,`exclusive_minimum`,`max_length`,`min_length`,`pattern`,`max_items`,`min_items`,`unique_items`,`max_properties`,`min_properties`,`all_of`,`one_of`,`any_of`,`allow_empty_value`,`allow_reserved`,`not`,`additional_properties`,`discriminator`,`read_only`,`write_only`,`xml`,`external_docs`,`external_pros`,`extensions`,`summary`)values
  (:ValidateSchemaID,:ServiceID,:Description,:Remark,:Type,:Example,:Deprecated,:Required,:Enum,:EnumNames,:EnumTitles,:Format,:Default,:Nullable,:MultipleOf,:Maxnum,:ExclusiveMaximum,:Minimum,:ExclusiveMinimum,:MaxLength,:MinLength,:Pattern,:MaxItems,:MinItems,:UniqueItems,:MaxProperties,:MinProperties,:AllOf,:OneOf,:AnyOf,:AllowEmptyValue,:AllowReserved,:Not,:AdditionalProperties,:Discriminator,:ReadOnly,:WriteOnly,:XML,:ExternalDocs,:ExternalPros,:Extensions,:Summary);
 {{end}}
-
 {{define "Update"}}
 {{$preComma:=newPreComma}}
  update `t_validate_schema` set {{if .ValidateSchemaID}} {{$preComma.PreComma}} `validate_schema_id`=:ValidateSchemaID {{end}} 
@@ -71,5 +61,3 @@ insert into `t_validate_schema` (`validate_schema_id`,`service_id`,`description`
 {{if .Extensions}} {{$preComma.PreComma}} `extensions`=:Extensions {{end}} 
 {{if .Summary}} {{$preComma.PreComma}} `summary`=:Summary {{end}}  where `validate_schema_id`=:ValidateSchemaID;
 {{end}}
-
-

@@ -8,8 +8,10 @@ import (
 )
 
 func TestRunCmdModel(t *testing.T) {
-	metaDir := "../example"
-	modelFile := "../example/model.gen.go"
+	// metaDir := "../example"
+	// modelFile := "../example/model.gen.go"
+	metaDir := "d:\\go\\docapi\\repository\\template"
+	modelFile := "./tmp.model.gen.go"
 	err := runCmdModel(metaDir, modelFile, true)
 	if err != nil {
 		panic(err)
@@ -31,25 +33,29 @@ func TestGeneratePackageName(t *testing.T) {
 }
 
 func TestRunCmdSQLEntity(*testing.T) {
-	tplDir := "../example/template"
-	entity := "../example/sql.entity.gen.go"
+	// tplDir := "../example/template"
+	// entity := "../example/sql.entity.gen.go"
+	tplDir := "D:\\go\\docapi\\repository\\template"
+	entity := "../example/tmp.sql.entity.gen.go"
 	err := runCmdSQLEntity(tplDir, entity, true)
 	if err != nil {
 		panic(err)
 	}
 }
-func TestRunCmdCRULEntity(*testing.T) {
-	tplDir := "../example/template"
-	entity := "../example/curl.entity.gen.go"
-	err := runCmdCURLEntity(tplDir, entity, true)
-	if err != nil {
-		panic(err)
-	}
-}
+
 func TestRunCmdSQL(*testing.T) {
 	metaDir := "../example/template/meta"
 	tplDir := "../example/template/sql"
 	err := runCmdSQL(metaDir, tplDir, true)
+	if err != nil {
+		panic(err)
+	}
+}
+
+func TestRunCmdCRULEntity(*testing.T) {
+	tplDir := "../example/template"
+	entity := "../example/curl.entity.gen.go"
+	err := runCmdCURLEntity(tplDir, entity, true)
 	if err != nil {
 		panic(err)
 	}
