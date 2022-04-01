@@ -246,6 +246,9 @@ github.com/suifengpiao14/ddl-executor v0.0.0-20220226101520-ad1851f61cf7 h1:dzrP
 github.com/suifengpiao14/ddl-executor v0.0.0-20220226101520-ad1851f61cf7/go.mod h1:uEecs69IKjDiKwEczboNG1qOzoFeenUEEKYPjOGgfHI=
 github.com/suifengpiao14/errorformatter v0.0.0-20220214013820-e0177a90fb70 h1:dFguNu7VIZMpcsAybswvo4TVN+uKCmtadpoyZf0WNiE=
 github.com/suifengpiao14/errorformatter v0.0.0-20220214013820-e0177a90fb70/go.mod h1:d4GXPUb6d5XkO5+uuiLsw85g+S/fyv/JsbHtGIptZGY=
+github.com/suifengpiao14/gqt/v2 v2.0.0-20220328095318-532d2a943ffa/go.mod h1:4najawt9TpKzKkYkbLOX5QQBH53hoiQBCbyreOHI47w=
+github.com/suifengpiao14/gqt/v2 v2.0.0-20220331111943-caecc4fafb7a h1:kHvCrR4JU6Zf0McOH2+IfYtroGvhnSUjsI+XRc8L1Hc=
+github.com/suifengpiao14/gqt/v2 v2.0.0-20220331111943-caecc4fafb7a/go.mod h1:4najawt9TpKzKkYkbLOX5QQBH53hoiQBCbyreOHI47w=
 github.com/suifengpiao14/gqtcurl v0.0.0-20220329105528-f9caddee1348 h1:eGMn3yfYEp/B6bliVReWkZYaacgv3Yov+JNPypaaGkM=
 github.com/suifengpiao14/gqtcurl v0.0.0-20220329105528-f9caddee1348/go.mod h1:7fjDpkcpSnBDbK6mtdPmxXe+Q8ANer6O3klG85IBS9Q=
 github.com/tiancaiamao/appdash v0.0.0-20181126055449-889f96f722a2/go.mod h1:2PfKggNGDuadAa0LElHrByyrz4JPZ9fFx6Gs7nx7ZZU=
