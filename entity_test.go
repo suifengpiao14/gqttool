@@ -196,7 +196,7 @@ func TestWhereConditon(t *testing.T) {
 	if err != nil {
 		panic(err)
 	}
-	sqlRow, err := repo.GetSQLByTplEntity(&entity)
+	sqlRow, err := repo.GetSQL(&entity)
 	if err != nil {
 		panic(err)
 	}
