@@ -3,6 +3,7 @@ package gqttool
 import (
 	"bytes"
 	"fmt"
+	"regexp"
 	"strings"
 	"text/template"
 
@@ -354,7 +355,10 @@ func enumsConst(tablePrefix string, columnPt *Column) (enumsConsts Enums) {
 	prefix := fmt.Sprintf("%s_%s", tablePrefix, columnPt.Name)
 	enumsConsts = Enums{}
 	comment := strings.ReplaceAll(columnPt.Comment, " ", ",") // 替换中文逗号(兼容空格和逗号另种分割符号)
-
+	reg, err := regexp.Compile(`\W`)
+	if err != nil {
+		panic(err)
+	}
 	for _, constValue := range columnPt.Enums {
 		constKey := fmt.Sprintf("%s_%s", prefix, constValue)
 		valueFormat := fmt.Sprintf("%s-", constValue) // 枚举类型的comment 格式 value1-title1,value2-title2
@@ -370,6 +374,7 @@ func enumsConst(tablePrefix string, columnPt *Column) (enumsConsts Enums) {
 		} else {
 			title = strings.TrimRight(title, " )")
 		}
+		constKey = reg.ReplaceAllString(constKey, "_") //替换非字母字符
 		constKey = strings.ToUpper(constKey)
 		enumsConst := &Enum{
 			ConstKey:        constKey,

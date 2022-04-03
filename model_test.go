@@ -2,6 +2,7 @@ package gqttool
 
 import (
 	"fmt"
+	"regexp"
 	"testing"
 )
 
@@ -97,4 +98,14 @@ func GetDDL() (ddlList []string) {
 	ddlList = append(ddlList, ddlApi)
 	ddlList = append(ddlList, ddlSchema)
 	return
+}
+
+func TestRegW(t *testing.T) {
+	constValue := "application/json"
+	reg, err := regexp.Compile(`\W`)
+	if err != nil {
+		panic(err)
+	}
+	constValue = reg.ReplaceAllString(constValue, "_")
+	fmt.Println(constValue)
 }
