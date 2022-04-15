@@ -60,6 +60,14 @@ func TestRunCmdCRULEntity(*testing.T) {
 		panic(err)
 	}
 }
+func TestRunCmdCRULEntity1(*testing.T) {
+	tplDir := "../../reminder/internal/repository/template/"
+	entity := "curl.entity.gen.go"
+	err := runCmdCURLEntity(tplDir, entity, true)
+	if err != nil {
+		panic(err)
+	}
+}
 
 func TestGenerateModel(t *testing.T) {
 	repo := gqttool.NewRepositoryMeta()

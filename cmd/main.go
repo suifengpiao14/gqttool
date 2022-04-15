@@ -79,7 +79,7 @@ func main() {
 		}
 	case "curlEntity":
 		curlEntityCmd.Parse(args)
-		err = runCmdCURLEntity(sqlDir, entityFilename, force)
+		err = runCmdCURLEntity(curlDir, entityFilename, force)
 		if err != nil {
 			panic(err)
 		}
@@ -492,7 +492,7 @@ Flags:
 
 Example:
 
-  gqttool curlEntity -sqlDir template/sql -entity entity.gen.go -force true
+  gqttool curlEntity -curlDir template/curl -entity curl.entity.gen.go -force true
 
 `)
 	os.Exit(0)

@@ -4,36 +4,28 @@ import "github.com/suifengpiao14/gqt/v2/gqttpl"
 
 type CurlOrderCurlGetOrderByOrderNumberBodyEntity struct {
 	OrderNumber interface{}
-
-	ServiceID interface{}
-
+	ServiceID   interface{}
 	gqttpl.TplEmptyEntity
 }
 
 func (t *CurlOrderCurlGetOrderByOrderNumberBodyEntity) TplName() string {
 	return "curl.order.curl.GetOrderByOrderNumberBody"
 }
-
 func (t *CurlOrderCurlGetOrderByOrderNumberBodyEntity) TplType() string {
 	return "text"
 }
 
 type CurlOrderCurlGetOrderByOrderNumberEntity struct {
 	GetOrderByOrderNumberBody *CurlOrderCurlGetOrderByOrderNumberBodyEntity
-
 	CurlOrderCurlGetOrderByOrderNumberBodyEntity
-
 	SecretKey interface{}
-
 	ServiceID interface{}
-
 	gqttpl.TplEmptyEntity
 }
 
 func (t *CurlOrderCurlGetOrderByOrderNumberEntity) TplName() string {
 	return "curl.order.curl.GetOrderByOrderNumber"
 }
-
 func (t *CurlOrderCurlGetOrderByOrderNumberEntity) TplType() string {
 	return "curl_request"
 }
@@ -58,14 +50,12 @@ type CurlOrderCurlGetOrderByOrderNumberResponseEntity struct {
 	BrandId         string  `json:"brandId" njson:"_data._data.good.brandId"`
 	Business        string  `json:"business" njson:"_data._data.good.brandId"`
 	ResponseStatus
-
 	gqttpl.TplEmptyEntity
 }
 
 func (t *CurlOrderCurlGetOrderByOrderNumberResponseEntity) TplName() string {
 	return "curl.order.curl.GetOrderByOrderNumberResponse"
 }
-
 func (t *CurlOrderCurlGetOrderByOrderNumberResponseEntity) TplType() string {
 	return "curl_response"
 }
