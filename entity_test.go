@@ -6,7 +6,6 @@ import (
 
 	"github.com/suifengpiao14/gqt/v2"
 	"github.com/suifengpiao14/gqt/v2/gqttpl"
-	"github.com/suifengpiao14/gqtcurl"
 	"github.com/suifengpiao14/gqttool/example"
 )
 
@@ -203,21 +202,21 @@ func TestWhereConditon(t *testing.T) {
 	fmt.Println(sqlRow.SQL)
 }
 
-func TestCurlEntity(t *testing.T) {
-	repo := gqtcurl.NewRepositoryCURL()
-	err := repo.AddByDir("example/template", gqtcurl.TemplatefuncMap)
-	if err != nil {
-		panic(err)
-	}
-	CURLEntity := example.CurlOrderCurlGetOrderByOrderNumberEntity{
-		SecretKey: "mafera15478515",
-		ServiceID: "100354",
-	}
-	CURLEntity.OrderNumber = "15454"
-	curlRow, err := repo.GetCURLByTplEntity(&CURLEntity)
-	if err != nil {
-		panic(err)
-	}
-	fmt.Println(curlRow.RequestData)
+// func TestCurlEntity(t *testing.T) {
+// 	repo := gqtcurl.NewRepositoryCURL()
+// 	err := repo.AddByDir("example/template", gqtcurl.TemplatefuncMap)
+// 	if err != nil {
+// 		panic(err)
+// 	}
+// 	CURLEntity := example.CurlOrderCurlGetOrderByOrderNumberEntity{
+// 		SecretKey: "mafera15478515",
+// 		ServiceID: "100354",
+// 	}
+// 	CURLEntity.OrderNumber = "15454"
+// 	curlRow, err := repo.GetCURLByTplEntity(&CURLEntity)
+// 	if err != nil {
+// 		panic(err)
+// 	}
+// 	fmt.Println(curlRow.RequestData)
 
-}
+// }

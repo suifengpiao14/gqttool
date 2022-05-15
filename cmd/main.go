@@ -79,7 +79,7 @@ func main() {
 		}
 	case "curlEntity":
 		curlEntityCmd.Parse(args)
-		err = runCmdCURLEntity(sqlDir, entityFilename, force)
+		err = runCmdCURLEntity(curlDir, entityFilename, force)
 		if err != nil {
 			panic(err)
 		}
@@ -415,7 +415,7 @@ func helpModel() {
 	fmt.Fprint(os.Stderr, `gqttool model is generate go struct from mysql ddl
 
 Usage:
-  gqttool model -metaDir metaDir -model modelFilename -force true
+  gqttool model -metaDir template/meta -model model.gen.go -force true
 
 Flags:
   -force overwrite exists file
@@ -437,7 +437,7 @@ func helpSQL() {
 	fmt.Fprint(os.Stderr, `gqttool sql is  generation  sql from mysql ddl
 
 Usage:
-  gqttool sql -metaDir metaDirReadDir -sqlDir sqlTplSaveDir -force true
+  gqttool sql -metaDir template/meta -sqlDir template/gen -force true
   
 Flags:
   -force overwrite exists file
@@ -449,7 +449,7 @@ Flags:
 
 Example:
 
-  gqttool sql -metaDir template/meta -sqlDir template/sql -force true
+  gqttool sql -metaDir template/meta -sqlDir template/gen -force true
 
 `)
 	os.Exit(0)
@@ -459,7 +459,7 @@ func helpSQLEntity() {
 	fmt.Fprint(os.Stderr, `gqttool sqlEntity is  generation sql template input args entity
 
 Usage:
-  gqttool sqlEntity  -sqlDir sqlsqlDir -sqlEntity entityFilename -force true
+gqttool sqlEntity -sqlDir template -entity sql.entity.gen.go -force true
   
 
 Flags:
@@ -480,7 +480,7 @@ func helpCURLEntity() {
 	fmt.Fprint(os.Stderr, `gqttool curlEntity is  generation curl template input args entity
 
 Usage:
-  gqttool curlEntity -curlDir curlDir -entity entityFilename -force true
+   gqttool curlEntity -curlDir template -entity curl.entity.gen.go -force true
   
 
 Flags:
@@ -491,8 +491,7 @@ Flags:
 		sqlTpl  entity filename
 
 Example:
-
-  gqttool curlEntity -sqlDir template -entity curl.entity.gen.go -force true
+  gqttool curlEntity -curlDir template -entity curl.entity.gen.go -force true
 
 `)
 	os.Exit(0)
