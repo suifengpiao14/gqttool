@@ -471,7 +471,7 @@ Flags:
 
 Example:
 
-  gqttool sqlEntity -sqlDir template/sql -entity entity.gen.go -force true
+  gqttool sqlEntity -sqlDir template -entity sql.entity.gen.go -force true
 
 `)
 	os.Exit(0)
@@ -492,7 +492,7 @@ Flags:
 
 Example:
 
-  gqttool curlEntity -sqlDir template/sql -entity entity.gen.go -force true
+  gqttool curlEntity -sqlDir template -entity curl.entity.gen.go -force true
 
 `)
 	os.Exit(0)
