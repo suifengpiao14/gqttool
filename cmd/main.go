@@ -147,6 +147,35 @@ func runCmdSQL(metaDir string, sqlDir string, force bool) (err error) {
 	return
 }
 
+func runCmdAPISQL(metaDir string, apiSQLFile string, force bool) (err error) {
+	repo := gqttool.NewRepositoryMeta()
+	errChain := errorformatter.NewErrorChain()
+	var sqlTplNamespaceList []*gqttool.SQLTplNamespace
+	errChain.SetError(repo.AddByDir(metaDir, gqttool.MetaTemplatefuncMap)).
+		Run(func() (err error) {
+			sqlTplNamespaceList, err = GenerateSQL(repo)
+			return
+		})
+
+	err = errChain.Error()
+	if err != nil {
+		return
+	}
+	strArr := make([]string, 0)
+	gqttool.TplDefineNameWithTableName = true
+	for _, sqlTplNamespace := range sqlTplNamespaceList {
+		strArr = append(strArr, sqlTplNamespace.String())
+	}
+	gqttool.TplDefineNameWithTableName = false
+
+	filename := fmt.Sprintf("%s.sql", apiSQLFile)
+	err = saveFile(filename, strings.Join(strArr, gqttpl.EOF), force)
+	if err != nil {
+		return
+	}
+	return
+}
+
 func runCmdSQLEntity(sqlDir string, entityFilename string, force bool) (err error) {
 	repo := gqttool.NewRepositoryMeta()
 	errChain := errorformatter.NewErrorChain()

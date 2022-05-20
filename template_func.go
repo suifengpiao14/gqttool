@@ -30,6 +30,8 @@ var MetaTemplatefuncMap = template.FuncMap{
 	"tplDel":                    TplDel,
 }
 
+var TplDefineNameWithTableName bool
+
 func convertData2Table(data interface{}) (table *Table, err error) {
 	var ok bool
 	for {
@@ -55,7 +57,11 @@ func TplGetAllByPrimaryKeyList(data interface{}) (tpl string, err error) {
 		return
 	}
 	primaryKeyCamel := table.PrimaryKeyCamel()
-	name := fmt.Sprintf("GetAllBy%sList", primaryKeyCamel)
+	prefix := ""
+	if TplDefineNameWithTableName {
+		prefix = table.TableNameCamel()
+	}
+	name := fmt.Sprintf("%sGetAllBy%sList", prefix, primaryKeyCamel)
 	tpl = fmt.Sprintf("{{define \"%s\"}}\nselect * from `%s`  where `%s` in ({{in . .%sList}})", name, table.TableName, table.PrimaryKey, primaryKeyCamel)
 	if table.DeleteColumn != "" {
 		tpl = fmt.Sprintf("%s  and `%s` is null", tpl, table.DeleteColumn)
@@ -70,7 +76,11 @@ func TplGetByPrimaryKey(data interface{}) (tpl string, err error) {
 		return
 	}
 	primaryKeyCamel := table.PrimaryKeyCamel()
-	name := fmt.Sprintf("GetBy%s", primaryKeyCamel)
+	prefix := ""
+	if TplDefineNameWithTableName {
+		prefix = table.TableNameCamel()
+	}
+	name := fmt.Sprintf("%sGetBy%s", prefix, primaryKeyCamel)
 	tpl = fmt.Sprintf("{{define \"%s\"}}\nselect * from `%s`  where `%s`=:%s", name, table.TableName, table.PrimaryKey, primaryKeyCamel)
 	if table.DeleteColumn != "" {
 		tpl = fmt.Sprintf("%s  and `%s` is null", tpl, table.DeleteColumn)
@@ -79,10 +89,20 @@ func TplGetByPrimaryKey(data interface{}) (tpl string, err error) {
 	return
 }
 
-var tplPaginateWhereName = "PaginateWhere"
+func tplPaginateWhereName(tableNameCamel string) string {
+	prefix := ""
+	if TplDefineNameWithTableName {
+		prefix = tableNameCamel
+	}
+	return fmt.Sprintf("%sPaginateWhere", prefix)
+}
 
 func TplPaginateWhere(data interface{}) (tpl string, err error) {
-	tpl = fmt.Sprintf("{{define \"%s\"}}\n  ", tplPaginateWhereName)
+	table, err := convertData2Table(data)
+	if err != nil {
+		return
+	}
+	tpl = fmt.Sprintf("{{define \"%s\"}}\n  ", tplPaginateWhereName(table.TableNameCamel()))
 
 	tpl = tpl + "\n{{end}}\n"
 	return
@@ -93,8 +113,12 @@ func TplPaginateTotal(data interface{}) (tpl string, err error) {
 	if err != nil {
 		return
 	}
-	name := "PaginateTotal"
-	tpl = fmt.Sprintf("{{define \"%s\"}}\nselect count(*) as `count` from `%s`  where 1=1 {{template \"%s\" .}} ", name, table.TableName, tplPaginateWhereName)
+	prefix := ""
+	if TplDefineNameWithTableName {
+		prefix = table.TableNameCamel()
+	}
+	name := fmt.Sprintf("%sPaginateTotal", prefix)
+	tpl = fmt.Sprintf("{{define \"%s\"}}\nselect count(*) as `count` from `%s`  where 1=1 {{template \"%s\" .}} ", name, table.TableName, tplPaginateWhereName(table.TableNameCamel()))
 	if table.DeleteColumn != "" {
 		tpl = fmt.Sprintf("%s  and `%s` is null", tpl, table.DeleteColumn)
 	}
@@ -107,7 +131,11 @@ func TplPaginate(data interface{}) (tpl string, err error) {
 	if err != nil {
 		return
 	}
-	name := "Paginate"
+	prefix := ""
+	if TplDefineNameWithTableName {
+		prefix = table.TableNameCamel()
+	}
+	name := fmt.Sprintf("%sPaginate", prefix)
 	tpl = fmt.Sprintf("{{define \"%s\"}}\nselect * from `%s`  where 1=1 {{template \"%s\" .}} ", name, table.TableName, tplPaginateWhereName)
 	if table.DeleteColumn != "" {
 		tpl = fmt.Sprintf("%s  and `%s` is null", tpl, table.DeleteColumn)
@@ -126,7 +154,11 @@ func TplInsert(data interface{}) (tpl string, err error) {
 	if err != nil {
 		return
 	}
-	name := "Insert"
+	prefix := ""
+	if TplDefineNameWithTableName {
+		prefix = table.TableNameCamel()
+	}
+	name := fmt.Sprintf("%sInsert", prefix)
 	columns := make([]string, 0)
 	values := make([]string, 0)
 	for _, column := range table.Columns {
@@ -149,7 +181,11 @@ func TplUpdate(data interface{}) (tpl string, err error) {
 	if err != nil {
 		return
 	}
-	name := "Update"
+	prefix := ""
+	if TplDefineNameWithTableName {
+		prefix = table.TableNameCamel()
+	}
+	name := fmt.Sprintf("%sUpdate", prefix)
 	updataList := make([]string, 0)
 	for _, column := range table.Columns {
 		if isIgnoreColumn(column, table) {
@@ -168,7 +204,11 @@ func TplDel(data interface{}) (tpl string, err error) {
 	if err != nil {
 		return
 	}
-	name := "Del"
+	prefix := ""
+	if TplDefineNameWithTableName {
+		prefix = table.TableNameCamel()
+	}
+	name := fmt.Sprintf("%Del", prefix)
 	tpl = fmt.Sprintf("{{define \"%s\"}}\nupdate `%s` set `%s`={{currentTime .}} where `%s`=:%s;\n{{end}}\n", name, table.TableName, table.DeleteColumn, table.PrimaryKey, table.PrimaryKeyCamel())
 	return
 }
