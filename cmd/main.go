@@ -520,7 +520,6 @@ Flags:
 		sqlTpl  entity filename
 
 Example:
-
   gqttool curlEntity -curlDir template -entity curl.entity.gen.go -force true
 
 `)
