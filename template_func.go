@@ -136,7 +136,7 @@ func TplPaginate(data interface{}) (tpl string, err error) {
 		prefix = table.TableNameCamel()
 	}
 	name := fmt.Sprintf("%sPaginate", prefix)
-	tpl = fmt.Sprintf("{{define \"%s\"}}\nselect * from `%s`  where 1=1 {{template \"%s\" .}} ", name, table.TableName, tplPaginateWhereName)
+	tpl = fmt.Sprintf("{{define \"%s\"}}\nselect * from `%s`  where 1=1 {{template \"%s\" .}} ", name, table.TableName, tplPaginateWhereName(table.TableNameCamel()))
 	if table.DeleteColumn != "" {
 		tpl = fmt.Sprintf("%s  and `%s` is null", tpl, table.DeleteColumn)
 	}
