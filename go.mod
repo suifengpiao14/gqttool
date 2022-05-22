@@ -15,8 +15,8 @@ require (
 require (
 	github.com/BurntSushi/toml v1.0.0
 	github.com/cznic/mathutil v0.0.0-20181122101859-297441e03548 // indirect
-	github.com/iancoleman/orderedmap v0.2.0 // indirect
-	github.com/invopop/jsonschema v0.4.0 // indirect
+	github.com/iancoleman/orderedmap v0.2.0
+	github.com/invopop/jsonschema v0.4.0
 	github.com/jmoiron/sqlx v1.3.5 // indirect
 	github.com/pingcap/errors v0.11.4 // indirect
 	github.com/pingcap/parser v3.1.2+incompatible // indirect
@@ -36,7 +36,7 @@ require (
 
 )
 
-replace github.com/suifengpiao14/gqt/v2 => /Users/admin/Documents/go/gqt
+//replace github.com/suifengpiao14/gqt/v2 => /Users/admin/Documents/go/gqt
 
 //replace github.com/suifengpiao14/gqt/v2 => D:\\go\\gqt
 
