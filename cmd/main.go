@@ -475,9 +475,9 @@ type APIModel struct {
 	OutputSchema   string
 }
 
-const SourceInsertTpl = "insert into `source` (`source_id`,`source_type`,`config`) values('%s','%s','%s');"
-const TemplateInsertTpl = "insert into `template` (`template_id`,`type`,`title`,`description`,`source_id`,`tpl`) values('%s','SQL','%s','%s','%s','%s');"
-const ApiInsertTpl = "insert into `api` (`api_id`,`title`,`description`,`method`,`route`,`main_mame`,`exec`,`validate_schema`,`output_schema`) values('%s','%s','%s','%s','%s','%s','%s','%s','%s');"
+const SourceInsertTpl = "insert ignore into `source` (`source_id`,`source_type`,`config`) values('%s','%s','%s');"
+const TemplateInsertTpl = "insert ignore into `template` (`template_id`,`type`,`title`,`description`,`source_id`,`tpl`) values('%s','SQL','%s','%s','%s','%s');"
+const ApiInsertTpl = "insert ignore into `api` (`api_id`,`title`,`description`,`method`,`route`,`main_mame`,`exec`,`validate_schema`,`output_schema`) values('%s','%s','%s','%s','%s','%s','%s','%s','%s');"
 
 func GenerateAPISQL(rep *gqttool.RepositoryMeta, module string) (string, error) {
 	sqlTplNamespaceList, err := GenerateSQL(rep)
