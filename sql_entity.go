@@ -9,6 +9,8 @@ import (
 	"strings"
 	"text/template"
 
+	"github.com/iancoleman/orderedmap"
+	"github.com/invopop/jsonschema"
 	"github.com/pkg/errors"
 	"github.com/suifengpiao14/gqt/v2/gqttpl"
 )
@@ -26,21 +28,10 @@ const STRUCT_DEFINE_NANE_FORMAT = "%sEntity"
 
 //SQLEntity 根据数据表ddl和sql tpl 生成 sql tpl 调用的输入、输出实体
 func SQLEntity(sqlTplDefine *gqttpl.TPLDefine, tableList []*Table) (entityStruct string, err error) {
-	variableList := ParsSqlTplVariable(sqlTplDefine)
-	variableList, err = FormatVariableType(variableList, tableList)
+	entityElement, err := SQLEntityElement(sqlTplDefine, tableList)
 	if err != nil {
-		return
+		return "", err
 	}
-	camelName := sqlTplDefine.FullnameCamel()
-	entityElement := &EntityElement{
-		Name:       camelName,
-		Type:       sqlTplDefine.Type(),
-		StructName: fmt.Sprintf(STRUCT_DEFINE_NANE_FORMAT, camelName),
-		//ImplementTplEntityInterface: sqlTplDefine.ISSQL(),
-		Variables: variableList,
-		FullName:  sqlTplDefine.Fullname(),
-	}
-
 	tp, err := template.New("").Parse(InputEntityTpl())
 	if err != nil {
 		return
@@ -52,6 +43,45 @@ func SQLEntity(sqlTplDefine *gqttpl.TPLDefine, tableList []*Table) (entityStruct
 	}
 	entityStruct = buf.String()
 	return
+}
+
+func SQLEntityElement(sqlTplDefine *gqttpl.TPLDefine, tableList []*Table) (entityElement *EntityElement, err error) {
+	variableList := ParsSqlTplVariable(sqlTplDefine)
+	variableList, err = FormatVariableType(variableList, tableList)
+	if err != nil {
+		return nil, err
+	}
+	camelName := sqlTplDefine.FullnameCamel()
+	entityElement = &EntityElement{
+		Name:       camelName,
+		Type:       sqlTplDefine.Type(),
+		StructName: fmt.Sprintf(STRUCT_DEFINE_NANE_FORMAT, camelName),
+		//ImplementTplEntityInterface: sqlTplDefine.ISSQL(),
+		Variables: variableList,
+		FullName:  sqlTplDefine.Fullname(),
+	}
+	return entityElement, nil
+}
+
+func SqlTplDefine2Jsonschema(entityElement *EntityElement) (jsonschemaOut string, err error) {
+	properties := orderedmap.New()
+	schema := jsonschema.Schema{
+		ID:         jsonschema.ID(entityElement.FullName),
+		Properties: properties,
+	}
+	names := make([]string, 0)
+	for _, v := range entityElement.Variables {
+		name := fmt.Sprintf("%s%s", strings.ToLower(v.FieldName[0:1]), v.FieldName[1:])
+		subSchema := jsonschema.Schema{
+			Type: v.Type,
+		}
+		properties.Set(name, subSchema)
+		names = append(names, name)
+	}
+	schema.Required = names
+	b, err := schema.MarshalJSON()
+	jsonschemaOut = string(b)
+	return jsonschemaOut, err
 }
 
 func ParseSQLTPLTableName(sqlTpl string) (tableList []string, err error) {
@@ -93,6 +123,7 @@ func regexpMatch(s string, delim string) (matcheList []string, err error) {
 
 type SQLTplNamespace struct {
 	Namespace string
+	Table     *Table
 	Defines   []*gqttpl.TPLDefine
 }
 

@@ -208,7 +208,7 @@ func TplDel(data interface{}) (tpl string, err error) {
 	if TplDefineNameWithTableName {
 		prefix = table.TableNameCamel()
 	}
-	name := fmt.Sprintf("%Del", prefix)
+	name := fmt.Sprintf("%sDel", prefix)
 	tpl = fmt.Sprintf("{{define \"%s\"}}\nupdate `%s` set `%s`={{currentTime .}} where `%s`=:%s;\n{{end}}\n", name, table.TableName, table.DeleteColumn, table.PrimaryKey, table.PrimaryKeyCamel())
 	return
 }

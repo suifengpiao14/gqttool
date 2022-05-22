@@ -123,7 +123,7 @@ func (r *RepositoryMeta) GetDatabaseConfig() (cfg *DatabaseConfig, err error) {
 	}
 	namespace := namespaceList[0]
 	fullname := fmt.Sprintf("%s.%s", namespace, DatabaseConfigName)
-	tplDefine, err := r.GetTPLDefine(fullname, nil)
+	tplDefine, err := r.GetTPLDefine(fullname, &gqttpl.TplEmptyEntity{})
 	if err != nil {
 		return
 	}

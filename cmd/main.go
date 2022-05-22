@@ -8,10 +8,12 @@ import (
 	"os"
 	"path"
 	"path/filepath"
+	"regexp"
 	"sort"
 	"strings"
 	"testing"
 
+	"github.com/pkg/errors"
 	"github.com/suifengpiao14/errorformatter"
 	"github.com/suifengpiao14/gqt/v2/gqttpl"
 	"github.com/suifengpiao14/gqttool"
@@ -20,6 +22,8 @@ import (
 func main() {
 	var (
 		metaDir        string
+		sqlFile        string
+		module         string
 		modelFilename  string
 		sqlDir         string
 		curlDir        string
@@ -31,6 +35,8 @@ func main() {
 	modelCmd.Usage = helpModel
 	SQLCmd := flag.NewFlagSet("sql", flag.ExitOnError)
 	SQLCmd.Usage = helpSQL
+	APISQLCmd := flag.NewFlagSet("apiSql", flag.ExitOnError)
+	APISQLCmd.Usage = helpAPISQL
 	sqlEntityCmd := flag.NewFlagSet("sqlEntity", flag.ExitOnError)
 	sqlEntityCmd.Usage = helpSQLEntity
 	curlEntityCmd := flag.NewFlagSet("curlEntity", flag.ExitOnError)
@@ -38,6 +44,11 @@ func main() {
 	modelCmd.BoolVar(&force, "force", false, "overwrite exist file")
 	modelCmd.StringVar(&metaDir, "metaDir", "template/meta", "ddl/config file dir")
 	modelCmd.StringVar(&modelFilename, "model", "model.gen.go", "model file name")
+
+	APISQLCmd.BoolVar(&force, "force", false, "overwrite exist file")
+	APISQLCmd.StringVar(&metaDir, "metaDir", "template/meta", "ddl/config/sql template file dir")
+	APISQLCmd.StringVar(&sqlFile, "sqlFile", "doa.sql", "output sql file")
+	APISQLCmd.StringVar(&module, "module", "example", "crud module")
 
 	SQLCmd.BoolVar(&force, "force", false, "overwrite exist file")
 	SQLCmd.StringVar(&metaDir, "metaDir", "template/meta", "ddl/config/sql template file dir")
@@ -67,6 +78,12 @@ func main() {
 	case "sql":
 		SQLCmd.Parse(args)
 		err = runCmdSQL(metaDir, sqlDir, force)
+		if err != nil {
+			panic(err)
+		}
+	case "apiSql":
+		SQLCmd.Parse(args)
+		err = runCmdAPISQL(metaDir, sqlFile, module, force)
 		if err != nil {
 			panic(err)
 		}
@@ -147,29 +164,26 @@ func runCmdSQL(metaDir string, sqlDir string, force bool) (err error) {
 	return
 }
 
-func runCmdAPISQL(metaDir string, apiSQLFile string, force bool) (err error) {
+func runCmdAPISQL(metaDir string, apiSQLFile string, module string, force bool) (err error) {
 	repo := gqttool.NewRepositoryMeta()
 	errChain := errorformatter.NewErrorChain()
-	var sqlTplNamespaceList []*gqttool.SQLTplNamespace
+	var sqlRaws []string
 	errChain.SetError(repo.AddByDir(metaDir, gqttool.MetaTemplatefuncMap)).
 		Run(func() (err error) {
-			sqlTplNamespaceList, err = GenerateSQL(repo)
-			return
+			sqlRaw, err := GenerateAPISQL(repo, module)
+			if err != nil {
+				return err
+			}
+			sqlRaws = append(sqlRaws, sqlRaw)
+			return nil
 		})
 
 	err = errChain.Error()
 	if err != nil {
 		return
 	}
-	strArr := make([]string, 0)
-	gqttool.TplDefineNameWithTableName = true
-	for _, sqlTplNamespace := range sqlTplNamespaceList {
-		strArr = append(strArr, sqlTplNamespace.String())
-	}
-	gqttool.TplDefineNameWithTableName = false
-
 	filename := fmt.Sprintf("%s.sql", apiSQLFile)
-	err = saveFile(filename, strings.Join(strArr, gqttpl.EOF), force)
+	err = saveFile(filename, strings.Join(sqlRaws, gqttpl.EOF), force)
 	if err != nil {
 		return
 	}
@@ -383,8 +397,168 @@ func GenerateSQLEntity(rep *gqttool.RepositoryMeta, sqlTplDefineList []*gqttpl.T
 		entityList = append(entityList, entityStruct)
 
 	}
-
 	return
+}
+
+func GenerateSQLEntityStruct(rep *gqttool.RepositoryMeta, sqlTplDefineList []*gqttpl.TPLDefine) (entityElementList []*gqttool.EntityElement, err error) {
+	entityElementList = make([]*gqttool.EntityElement, 0)
+	ddlDefineList, err := rep.GetDDLTPLDefine()
+	if err != nil {
+		return
+	}
+	tableCfg, err := rep.GetDatabaseConfig()
+	if err != nil {
+		return
+	}
+	ddlList := make([]string, 0)
+	for _, ddlDefine := range ddlDefineList {
+		ddlList = append(ddlList, ddlDefine.Output)
+	}
+	tableList, err := gqttool.GenerateTable(ddlList, tableCfg)
+	if err != nil {
+		return
+	}
+	tableMap := make(map[string]*gqttool.Table)
+	for _, table := range tableList {
+		tableMap[table.TableName] = table
+	}
+
+	for _, sqlDefineTpl := range sqlTplDefineList {
+		tableNameList, err := gqttool.ParseSQLTPLTableName(sqlDefineTpl.Output)
+		if err != nil {
+			return nil, err
+		}
+		relationTableList := make([]*gqttool.Table, 0)
+		for _, tableName := range tableNameList {
+			table, ok := tableMap[tableName]
+			if ok {
+				relationTableList = append(relationTableList, table)
+			}
+		}
+
+		entityStruct, err := gqttool.SQLEntityElement(sqlDefineTpl, relationTableList)
+		if err != nil {
+			return nil, err
+		}
+		entityElementList = append(entityElementList, entityStruct)
+
+	}
+	return
+}
+
+type SourceModel struct {
+	SourceId   string
+	SourceType string
+	Config     string
+}
+
+type TemplateModel struct {
+	TemplateID  string
+	Type        string
+	Title       string
+	Description string
+	SourceID    string
+	Version     string
+	Tpl         string
+}
+
+type APIModel struct {
+	APIID          string
+	Title          string
+	Description    string
+	Method         string
+	Route          string
+	MainName       string
+	Exec           string
+	ValidateSchema string
+	InputSchema    string
+	OutputSchema   string
+}
+
+const SourceInsertTpl = "insert into `source` (`source_id`,`source_type`,`config`) values('%s','%s','%s');"
+const TemplateInsertTpl = "insert into `template` (`template_id`,`type`,`title`,`description`,`source_id`,`tpl`) values('%s','SQL','%s','%s','%s','%s');"
+const ApiInsertTpl = "insert into `api` (`api_id`,`title`,`description`,`method`,`route`,`main_mame`,`exec`,`validate_schema`,`output_schema`) values('%s','%s','%s','%s','%s','%s','%s','%s','%s');"
+
+func GenerateAPISQL(rep *gqttool.RepositoryMeta, module string) (string, error) {
+	sqlTplNamespaceList, err := GenerateSQL(rep)
+	if err != nil {
+		return "", err
+	}
+	var sqlRaws []string
+	sourceId := fmt.Sprintf("%s_db", module)
+	sourceType := "SQL"
+	config := `{"logLevel":"debug","dsn":"root:123456@tcp(mysql_address:3306)/database?charset=utf8&timeout=1s&readTimeout=5s&writeTimeout=5s&parseTime=False&loc=Local&multiStatements=true","timeout":30}`
+	sourceInsertSql := fmt.Sprintf(SourceInsertTpl, sourceId, sourceType, config)
+	sqlRaws = append(sqlRaws, sourceInsertSql)
+	for _, sqlTplNamespace := range sqlTplNamespaceList {
+		table := sqlTplNamespace.Table
+		entityStructList, err := GenerateSQLEntityStruct(rep, sqlTplNamespace.Defines)
+		if err != nil {
+			return "", err
+		}
+		entityStructMap := make(map[string]*gqttool.EntityElement)
+		for _, entityStruct := range entityStructList {
+			entityStructMap[entityStruct.Name] = entityStruct
+		}
+		for _, define := range sqlTplNamespace.Defines {
+			name, tpl := Define2Sql(define.Output)
+			templatId := fmt.Sprintf("%s%s%s", module, table.TableNameCamel(), name)
+			title := fmt.Sprintf("%s-%s-%s", module, table.TableName, name)
+			description := title
+			templateInsertSql := fmt.Sprintf(TemplateInsertTpl, templatId, title, description, sourceId, tpl)
+			sqlRaws = append(sqlRaws, templateInsertSql)
+			defineType := define.Type()
+			if defineType == gqttpl.TPL_DEFINE_TYPE_SQL_SELECT || defineType == gqttpl.TPL_DEFINE_TYPE_SQL_UPDATE || defineType == gqttpl.TPL_DEFINE_TYPE_SQL_INSERT {
+				entityStruct, ok := entityStructMap[define.FullnameCamel()]
+				if !ok {
+					err := errors.Errorf("not found tpl define struct:%s", define.FullnameCamel())
+					return "", err
+				}
+				validateSchema, err := gqttool.SqlTplDefine2Jsonschema(entityStruct)
+				if err != nil {
+					return "", err
+				}
+				outEntitySruct := &gqttool.EntityElement{}
+				outputSchema, err := gqttool.SqlTplDefine2Jsonschema(outEntitySruct)
+				if err != nil {
+					return "", err
+				}
+				exec, err := gqttool.GenerateExec(*entityStruct)
+				if err != nil {
+					return "", err
+				}
+				appId := fmt.Sprintf("%s-%s-%s", module, table.TableName, name)
+				apiModel := APIModel{
+					APIID:          appId,
+					Title:          appId,
+					Description:    appId,
+					Method:         "POST",
+					Route:          fmt.Sprintf("/api/%s/v1/%s/%s", module, table.TableNameCamel(), name),
+					MainName:       fmt.Sprintf("execAPI%s%s", table.TableNameCamel(), name),
+					Exec:           exec,
+					ValidateSchema: validateSchema,
+					OutputSchema:   outputSchema,
+				}
+				apiInsertSql := fmt.Sprintf(ApiInsertTpl, apiModel.APIID, apiModel.Title, apiModel.Description, apiModel.Method, apiModel.Route, apiModel.MainName, apiModel.Exec, apiModel.ValidateSchema, apiModel.OutputSchema)
+				sqlRaws = append(sqlRaws, templateInsertSql)
+				sqlRaws = append(sqlRaws, apiInsertSql)
+			}
+		}
+
+	}
+	return strings.Join(sqlRaws, gqttpl.EOF), nil
+}
+
+func Define2Sql(define string) (name string, sql string) {
+	define = gqttpl.StandardizeSpaces(define)
+	re := regexp.MustCompile(`\{\{define +"(\w+)"\}\}(.+)\{\{end\}\}`)
+	matched := re.FindStringSubmatch(define)
+	if len(matched) > 2 {
+		name = matched[1]
+		sql = gqttpl.StandardizeSpaces(matched[2])
+		return name, sql
+	}
+	return "", ""
 }
 
 func GenerateSQL(rep *gqttool.RepositoryMeta) (sqlTplNamespaceList []*gqttool.SQLTplNamespace, err error) {
@@ -407,7 +581,9 @@ func GenerateSQL(rep *gqttool.RepositoryMeta) (sqlTplNamespaceList []*gqttool.SQ
 
 	sqlTplNamespaceList = make([]*gqttool.SQLTplNamespace, 0)
 	for _, table := range tableList {
-		sqlTplNamespace := &gqttool.SQLTplNamespace{}
+		sqlTplNamespace := &gqttool.SQLTplNamespace{
+			Table: table,
+		}
 		sqlTplNamespace.Namespace = table.TableNameCamel()
 		sqlTplDefineList, err := gqttool.GenerateSQLTpl(table, rep)
 		if err != nil {
@@ -479,6 +655,28 @@ Flags:
 Example:
 
   gqttool sql -metaDir template/meta -sqlDir template/gen -force true
+
+`)
+	os.Exit(0)
+}
+
+func helpAPISQL() {
+	fmt.Fprint(os.Stderr, `gqttool apiSql is  generation  data manage plat api sql from mysql ddl
+
+Usage:
+  gqttool apiSql -metaDir template/meta -sqlFile template/gen -force true
+  
+Flags:
+  -force overwrite exists file
+  -metaDir
+        template meta dir
+
+  -sqlFile
+        save api sql file name
+
+Example:
+
+  gqttool apiSql -metaDir template/meta -sqlFile template/gen -force true
 
 `)
 	os.Exit(0)

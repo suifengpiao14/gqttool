@@ -10,6 +10,6 @@
 [[tplUpdate .]]
 [[tplDel .]]
 
-{{define "Del"}}
+{{define "[[.TableNameCamel]]Del1"}}
 11111111111
 {{end}}
