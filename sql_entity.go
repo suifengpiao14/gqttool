@@ -201,12 +201,10 @@ func ParseDefine(content string, namespace string, leftDelim string, rightDelim 
 		}
 
 		tplDefine := &gqttpl.TPLDefine{
-			LeftDelim:  leftDelim,
-			RightDelim: rightDelim,
-			Name:       name,
-			Namespace:  namespace,
-			Output:     tpl,
-			Input:      nil,
+			Name:      name,
+			Namespace: namespace,
+			Output:    tpl,
+			Input:     nil,
 		}
 		tplDefineList = append(tplDefineList, tplDefine)
 	}
@@ -446,8 +444,8 @@ func ParseCurlTplVariable(tplDefine *gqttpl.TPLDefine) (variableList Variables) 
 			return
 		}
 		body := content[index+len(gqttpl.HTTP_HEAD_BODY_DELIM):]
-		body = strings.ReplaceAll(body, tplDefine.LeftDelim, "")
-		body = strings.ReplaceAll(body, tplDefine.RightDelim, "")
+		body = strings.ReplaceAll(body, gqttpl.LeftDelim, "")
+		body = strings.ReplaceAll(body, gqttpl.RightDelim, "")
 		variable := &Variable{
 			Namespace: tplDefine.Namespace,
 			Name:      "",
