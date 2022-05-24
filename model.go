@@ -165,14 +165,16 @@ func (e Enums) GetByColumnNameCamel(ColumnNameCamel string) (enums Enums) {
 }
 
 type Table struct {
-	TablePrefix  string
-	ColumnPrefix string
-	TableName    string
-	PrimaryKey   string
-	DeleteColumn string
-	Columns      []*Column
-	EnumsConst   Enums
-	gqttpl.TplEmptyEntity
+	TablePrefix           string
+	ColumnPrefix          string
+	TableName             string
+	PrimaryKey            string
+	DeleteColumn          string
+	Columns               []*Column
+	EnumsConst            Enums
+	Comment               string
+	TableDef              *executor.TableDef
+	gqttpl.TplEmptyEntity // 方便将Table对象传入到模板中使用
 }
 
 //CamelName 删除表前缀，转换成 camel 格式
@@ -306,6 +308,7 @@ func GenerateTable(ddlList []string, tableCfg *DatabaseConfig) (tables []*Table,
 			TableName:    tableName,
 			Columns:      make([]*Column, 0),
 			EnumsConst:   Enums{},
+			Comment:      tableDef.Comment,
 			DeleteColumn: tableCfg.DeletedAtColumn,
 		}
 		for _, indice := range tableDef.Indices {

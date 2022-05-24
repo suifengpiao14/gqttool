@@ -23,7 +23,7 @@ func TestCrud(t *testing.T) {
 			panic(err)
 		}
 		for _, tplDefine := range tplDefineList {
-			fmt.Println(tplDefine.Output)
+			fmt.Println(tplDefine.Text)
 		}
 	}
 

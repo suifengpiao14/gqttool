@@ -4,12 +4,10 @@ import (
 	"bytes"
 	"fmt"
 	"text/template"
-
-	"github.com/suifengpiao14/gqt/v2/gqttpl"
 )
 
 //CURLEntity curl 请求体
-func CURLEntity(curlTplDefine *gqttpl.TPLDefine, curlTplDefineRelationList gqttpl.TPLDefineList) (entityStruct string, err error) {
+func CURLEntity(curlTplDefine *TPLDefineText, curlTplDefineRelationList TPLDefineTextList) (entityStruct string, err error) {
 	variableList := ParseCurlTplVariable(curlTplDefine)
 	aliasVariableList := make([]*Variable, 0)
 	for _, variable := range variableList {
@@ -37,9 +35,8 @@ func CURLEntity(curlTplDefine *gqttpl.TPLDefine, curlTplDefineRelationList gqttp
 		Name:       camelName,
 		Type:       curlTplDefine.Type(),
 		StructName: fmt.Sprintf(STRUCT_DEFINE_NANE_FORMAT, camelName),
-		//ImplementTplEntityInterface: curlTplDefine.Type() == gqttpl.TPL_DEFINE_TYPE_CURL_REQUEST,
-		Variables: variableList,
-		FullName:  curlTplDefine.Fullname(),
+		Variables:  variableList,
+		FullName:   curlTplDefine.Fullname(),
 	}
 	tp, err := template.New("").Parse(InputEntityTpl())
 	if err != nil {

@@ -12,7 +12,8 @@ func Backquote(s string) (out string) {
 	return
 }
 
-func GenerateSQLTpl(table *Table, repo *RepositoryMeta) (tplDefineList gqttpl.TPLDefineList, err error) { // list 保证后面输出顺序
+//GenerateSQLTpl 此处的模板，是以meta 模版为标准输出的，即分割符号为[[define "xxx"]]...[[end]],一个gqttpl.TPLDefine 中可能包含多个{{define "xxx"}}...{{end}}
+func GenerateSQLTpl(table *Table, repo *RepositoryMeta) (tplDefineTextList TPLDefineTextList, err error) { // list 保证后面输出顺序
 	metaNamespaceList, err := repo.GetNamespaceBySufix(MetaNameSpaceSuffix, true)
 	if err != nil {
 		return
@@ -29,20 +30,26 @@ func GenerateSQLTpl(table *Table, repo *RepositoryMeta) (tplDefineList gqttpl.TP
 			tableNamespace = namespace
 		}
 	}
-	tplDefineList = gqttpl.TPLDefineList{}
+	tplDefineTextList = TPLDefineTextList{}
 	if tableNamespace != "" { // 确保单独文件定义的模板在前面，通用定义在后面
 		tableTplDefineList, err := repo.GetByNamespace(tableNamespace, table)
 		if err != nil {
-			return tplDefineList, err
+			return tplDefineTextList, err
 		}
-		tplDefineList = append(tplDefineList, tableTplDefineList...)
+		for _, gqtDefine := range tableTplDefineList {
+			subTplDefineTextList := ManualParseDefine(gqtDefine.Output, "", gqttpl.LeftDelim, gqttpl.RightDelim)
+			tplDefineTextList = append(tplDefineTextList, subTplDefineTextList...)
+		}
 	}
 	if sqlNamespace != "" {
 		sqlTplDefineList, err := repo.GetByNamespace(sqlNamespace, table)
 		if err != nil {
-			return tplDefineList, err
+			return tplDefineTextList, err
 		}
-		tplDefineList = append(tplDefineList, sqlTplDefineList...)
+		for _, gqtDefine := range sqlTplDefineList {
+			subTplDefineTextList := ManualParseDefine(gqtDefine.Output, "", gqttpl.LeftDelim, gqttpl.RightDelim)
+			tplDefineTextList = append(tplDefineTextList, subTplDefineTextList...)
+		}
 	}
 	return
 }

@@ -30,8 +30,8 @@ func TestParsSqlTplVariable(t *testing.T) {
 	 {{if .Variables}} {{in . .List}} {{end}}
        where {{func .Func}} service_id=:ServiceID limit :Offset,:limit;
   `
-	tplDefine := &gqttpl.TPLDefine{
-		Output:    sqlTpl,
+	tplDefine := &TPLDefineText{
+		Text:      sqlTpl,
 		Namespace: "a",
 	}
 	veriableList := ParsSqlTplVariable(tplDefine)
@@ -79,7 +79,7 @@ func TestParseDefine(t *testing.T) {
        where service_id=:ServiceID;
  {{end}}
 	`
-	defineList := ParseDefine(sqlTpl, "", gqttpl.LeftDelim, gqttpl.RightDelim)
+	defineList := ManualParseDefine(sqlTpl, "", gqttpl.LeftDelim, gqttpl.RightDelim)
 	fmt.Println(defineList[2])
 
 }
@@ -101,8 +101,8 @@ func TestRepositoryEntity(t *testing.T) {
 	if err != nil {
 		panic(err)
 	}
-	sqlTplDefine := &gqttpl.TPLDefine{
-		Output:    ddlSqlTpl.SQLTpl,
+	sqlTplDefine := &TPLDefineText{
+		Text:      ddlSqlTpl.SQLTpl,
 		Name:      "test",
 		Namespace: "ddl",
 	}

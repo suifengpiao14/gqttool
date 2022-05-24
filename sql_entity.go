@@ -27,8 +27,8 @@ type EntityElement struct {
 const STRUCT_DEFINE_NANE_FORMAT = "%sEntity"
 
 //SQLEntity 根据数据表ddl和sql tpl 生成 sql tpl 调用的输入、输出实体
-func SQLEntity(sqlTplDefine *gqttpl.TPLDefine, tableList []*Table) (entityStruct string, err error) {
-	entityElement, err := SQLEntityElement(sqlTplDefine, tableList)
+func SQLEntity(sqltplDefineText *TPLDefineText, tableList []*Table) (entityStruct string, err error) {
+	entityElement, err := SQLEntityElement(sqltplDefineText, tableList)
 	if err != nil {
 		return "", err
 	}
@@ -45,33 +45,40 @@ func SQLEntity(sqlTplDefine *gqttpl.TPLDefine, tableList []*Table) (entityStruct
 	return
 }
 
-func SQLEntityElement(sqlTplDefine *gqttpl.TPLDefine, tableList []*Table) (entityElement *EntityElement, err error) {
-	variableList := ParsSqlTplVariable(sqlTplDefine)
+func SQLEntityElement(sqltplDefineText *TPLDefineText, tableList []*Table) (entityElement *EntityElement, err error) {
+	variableList := ParsSqlTplVariable(sqltplDefineText)
 	variableList, err = FormatVariableType(variableList, tableList)
 	if err != nil {
 		return nil, err
 	}
-	camelName := sqlTplDefine.FullnameCamel()
+	camelName := sqltplDefineText.FullnameCamel()
 	entityElement = &EntityElement{
 		Name:       camelName,
-		Type:       sqlTplDefine.Type(),
+		Type:       sqltplDefineText.Type(),
 		StructName: fmt.Sprintf(STRUCT_DEFINE_NANE_FORMAT, camelName),
-		//ImplementTplEntityInterface: sqlTplDefine.ISSQL(),
-		Variables: variableList,
-		FullName:  sqlTplDefine.Fullname(),
+		Variables:  variableList,
+		FullName:   sqltplDefineText.Fullname(),
 	}
 	return entityElement, nil
 }
 
 func SqlTplDefine2Jsonschema(entityElement *EntityElement) (jsonschemaOut string, err error) {
 	properties := orderedmap.New()
+	//{"$schema":"http://json-schema.org/draft-07/schema#","type":"object","properties":{},"required":[]}
 	schema := jsonschema.Schema{
+		Version:    "http://json-schema.org/draft-07/schema#",
+		Type:       "object",
 		ID:         jsonschema.ID(entityElement.FullName),
 		Properties: properties,
+		Required:   make([]string, 0),
 	}
 	names := make([]string, 0)
 	for _, v := range entityElement.Variables {
-		name := fmt.Sprintf("%s%s", strings.ToLower(v.FieldName[0:1]), v.FieldName[1:])
+		if v.FieldName == "" { // 过滤匿名字段
+			continue
+		}
+
+		name := gqttpl.ToLowerCamel(v.FieldName)
 		subSchema := jsonschema.Schema{
 			Type: v.Type,
 		}
@@ -124,20 +131,20 @@ func regexpMatch(s string, delim string) (matcheList []string, err error) {
 type SQLTplNamespace struct {
 	Namespace string
 	Table     *Table
-	Defines   []*gqttpl.TPLDefine
+	Defines   TPLDefineTextList
 }
 
-func (s *SQLTplNamespace) String() string {
+func (s *SQLTplNamespace) String() string { // 这个将第一次模板解析输出的内容，合并成字符串，然后解析出{{define "xxx"}}{{end}}模板
 	tplArr := make([]string, 0)
 	for _, define := range s.Defines {
-		tplArr = append(tplArr, define.Output)
+		tplArr = append(tplArr, define.Text)
 	}
 	str := strings.Join(tplArr, gqttpl.EOF)
-	tplDefineList := ParseDefine(str, "", gqttpl.LeftDelim, gqttpl.RightDelim)
+	tplDefineList := ManualParseDefine(str, "", gqttpl.LeftDelim, gqttpl.RightDelim)
 	tplDefineList = tplDefineList.UniqueItems() // 去重
 	newTplArr := make([]string, 0)
-	for _, tplDefine := range tplDefineList {
-		newTplArr = append(newTplArr, tplDefine.Output)
+	for _, tplDefineText := range tplDefineList {
+		newTplArr = append(newTplArr, tplDefineText.Text)
 	}
 	out := strings.Join(newTplArr, gqttpl.EOF)
 	return out
@@ -148,25 +155,25 @@ func (s *SQLTplNamespace) Filename() (out string) {
 	return
 }
 
-func ParseDirTplDefine(tplDir string, namespaceSuffix string, leftDelim string, rightDelim string) (tplDefineList []*gqttpl.TPLDefine, err error) {
+func ManualParseDirTplDefine(tplDir string, namespaceSuffix string, leftDelim string, rightDelim string) (tplDefineList TPLDefineTextList, err error) {
 	allFileList, err := gqttpl.GetTplFilesByDir(tplDir, namespaceSuffix)
 	if err != nil {
 		return
 	}
-	tplDefineList = make([]*gqttpl.TPLDefine, 0)
+	tplDefineList = make(TPLDefineTextList, 0)
 	for _, filename := range allFileList {
 		b, err := os.ReadFile(filename)
 		if err != nil {
 			return nil, err
 		}
 		namespace := gqttpl.FileName2Namespace(filename, tplDir)
-		subTplDefineList := ParseDefine(string(b), namespace, leftDelim, rightDelim)
+		subTplDefineList := ManualParseDefine(string(b), namespace, leftDelim, rightDelim)
 		tplDefineList = append(tplDefineList, subTplDefineList...)
 	}
 	return
 }
 
-func ParseDefine(content string, namespace string, leftDelim string, rightDelim string) (tplDefineList gqttpl.TPLDefineList) {
+func ManualParseDefine(content string, namespace string, leftDelim string, rightDelim string) (tplDefineList TPLDefineTextList) {
 	// 解析文本
 	delim := leftDelim + "define "
 	delimLen := len(delim)
@@ -191,7 +198,7 @@ func ParseDefine(content string, namespace string, leftDelim string, rightDelim 
 		}
 	}
 
-	tplDefineList = gqttpl.TPLDefineList{}
+	tplDefineList = TPLDefineTextList{}
 
 	// 格式化
 	for _, tpl := range defineList {
@@ -200,13 +207,12 @@ func ParseDefine(content string, namespace string, leftDelim string, rightDelim 
 			panic(err)
 		}
 
-		tplDefine := &gqttpl.TPLDefine{
+		tplDefineText := &TPLDefineText{
 			Name:      name,
 			Namespace: namespace,
-			Output:    tpl,
-			Input:     nil,
+			Text:      tpl,
 		}
-		tplDefineList = append(tplDefineList, tplDefine)
+		tplDefineList = append(tplDefineList, tplDefineText)
 	}
 
 	return
@@ -433,12 +439,12 @@ func ParseTplVariable(tpl string, namespace string) (variableList Variables) {
 	return
 }
 
-func ParseCurlTplVariable(tplDefine *gqttpl.TPLDefine) (variableList Variables) {
-	content := gqttpl.ToEOF(tplDefine.Content()) // 转换换行符
-	tplVariableList := ParseTplVariable(content, tplDefine.Namespace)
+func ParseCurlTplVariable(tplDefineText *TPLDefineText) (variableList Variables) {
+	content := gqttpl.ToEOF(tplDefineText.Content()) // 转换换行符
+	tplVariableList := ParseTplVariable(content, tplDefineText.Namespace)
 	variableList = append(variableList, tplVariableList...)
 
-	if tplDefine.Type() == gqttpl.TPL_DEFINE_TYPE_CURL_RESPONSE { // parse curl response variable ,curl response 直接采用复制，所以确保 response body 本身符合go语法
+	if tplDefineText.Type() == TPL_DEFINE_TYPE_CURL_RESPONSE { // parse curl response variable ,curl response 直接采用复制，所以确保 response body 本身符合go语法
 		index := strings.Index(content, gqttpl.HTTP_HEAD_BODY_DELIM)
 		if index < 0 {
 			return
@@ -447,7 +453,7 @@ func ParseCurlTplVariable(tplDefine *gqttpl.TPLDefine) (variableList Variables) 
 		body = strings.ReplaceAll(body, gqttpl.LeftDelim, "")
 		body = strings.ReplaceAll(body, gqttpl.RightDelim, "")
 		variable := &Variable{
-			Namespace: tplDefine.Namespace,
+			Namespace: tplDefineText.Namespace,
 			Name:      "",
 			FieldName: "",
 			Type:      body,
@@ -458,9 +464,9 @@ func ParseCurlTplVariable(tplDefine *gqttpl.TPLDefine) (variableList Variables) 
 	return
 }
 
-func ParsSqlTplVariable(tplDefine *gqttpl.TPLDefine) (variableList Variables) {
-	content := tplDefine.Content()
-	subVariableList := ParseTplVariable(content, tplDefine.Namespace)
+func ParsSqlTplVariable(tplDefineText *TPLDefineText) (variableList Variables) {
+	content := tplDefineText.Content()
+	subVariableList := ParseTplVariable(content, tplDefineText.Namespace)
 	variableList = append(variableList, subVariableList...)
 	byteArr := []byte(content)
 
@@ -473,12 +479,12 @@ func ParsSqlTplVariable(tplDefine *gqttpl.TPLDefine) (variableList Variables) {
 			break
 		}
 		variable.FieldName = variable.Name
-		variable.Namespace = tplDefine.Namespace
+		variable.Namespace = tplDefineText.Namespace
 		variableList = append(variableList, &variable)
 		pos += len(variable.Name)
 		byteArr = byteArr[pos:]
 	}
-	limitVariabeList := GetLimitVariable(content, tplDefine.Namespace)
+	limitVariabeList := GetLimitVariable(content, tplDefineText.Namespace)
 	variableList = append(variableList, limitVariabeList...)
 	variableList = variableList.UniqueItems()
 	return
@@ -542,9 +548,9 @@ func parsePrefixVariable(item []byte, variableStart byte) (variable Variable, po
 	return
 }
 
-func GetDefineName(tplDefine string) (defineName string, err error) {
+func GetDefineName(tplDefineText string) (defineName string, err error) {
 	delim := []byte("{{define \"")
-	tplDefineByte := []byte(tplDefine)
+	tplDefineByte := []byte(tplDefineText)
 	index := bytes.Index(tplDefineByte, delim)
 	nameByte := make([]byte, 0)
 	if index >= 0 {
@@ -566,9 +572,9 @@ func GetDefineName(tplDefine string) (defineName string, err error) {
 	return
 }
 
-func GetDefineType(tplDefine string) (defineName string, err error) {
+func GetDefineType(tplDefineText string) (defineName string, err error) {
 	delim := []byte("{{define \"")
-	tplDefineByte := []byte(tplDefine)
+	tplDefineByte := []byte(tplDefineText)
 	index := bytes.Index(tplDefineByte, delim)
 	nameByte := make([]byte, 0)
 	if index >= 0 {
