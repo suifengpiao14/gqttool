@@ -686,7 +686,7 @@ func helpAPISQL() {
 	fmt.Fprint(os.Stderr, `gqttool doaApi is  generation  data manage plat api sql from mysql ddl
 
 Usage:
-  gqttool doaApi -metaDir template/meta -sqlFile doa.sql -force true
+  gqttool doaApi -metaDir template/meta -sqlFile doa.sql -module example -force true
   
 Flags:
   -force overwrite exists file
@@ -698,7 +698,7 @@ Flags:
 
 Example:
 
-  gqttool doaApi -metaDir template/meta -sqlFile doa.sql -force true
+  gqttool doaApi -metaDir template/meta -sqlFile doa.sql -module example -force true
 
 `)
 	os.Exit(0)
@@ -754,7 +754,7 @@ Usage:
   gqttool sql -metaDir metaDir -sqlDir sqlTplSaveDir -force true
   gqttool sqlEntity  -sqlDir sqlsqlDir -entity entityFilename -force true
   gqttool curlEntity -curlDir curlDir -entity entityFilename -force true
-  gqttool doaApi -metaDir metaDir -sqlFile sqlFile -force true
+  gqttool doaApi -metaDir metaDir -sqlFile sqlFile -module example -force true
   
 Commands:
   model
