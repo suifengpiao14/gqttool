@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"strings"
 	"testing"
 
 	"github.com/suifengpiao14/gqttool"
@@ -91,4 +92,11 @@ func TestGenerateModel(t *testing.T) {
 		fmt.Printf("%#v", tableModel)
 	}
 
+}
+
+func TestHasPrefix(t *testing.T) {
+	prefix := "aa"
+	str := "aa"
+	bo := strings.HasPrefix(str, prefix)
+	fmt.Sprintln(bo)
 }

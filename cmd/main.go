@@ -81,8 +81,8 @@ func main() {
 		if err != nil {
 			panic(err)
 		}
-	case "apiSql":
-		SQLCmd.Parse(args)
+	case "doaApi":
+		APISQLCmd.Parse(args)
 		err = runCmdAPISQL(metaDir, sqlFile, module, force)
 		if err != nil {
 			panic(err)
@@ -469,6 +469,7 @@ type APIModel struct {
 	Method         string
 	Route          string
 	MainName       string
+	TemplateIDs    string
 	Exec           string
 	ValidateSchema string
 	InputSchema    string
@@ -477,7 +478,7 @@ type APIModel struct {
 
 const SourceInsertTpl = "insert ignore into `source` (`source_id`,`source_type`,`config`) values('%s','%s','%s');"
 const TemplateInsertTpl = "insert ignore into `template` (`template_id`,`type`,`title`,`description`,`source_id`,`tpl`) values('%s','SQL','%s','%s','%s','%s');"
-const ApiInsertTpl = "insert ignore into `api` (`api_id`,`title`,`description`,`method`,`route`,`main_name`,`exec`,`validate_schema`,`output_schema`) values('%s','%s','%s','%s','%s','%s','%s','%s','%s');"
+const ApiInsertTpl = "insert ignore into `api` (`api_id`,`title`,`description`,`method`,`route`,`main_name`,`template_ids`,`exec`,`validate_schema`,`output_schema`) values('%s','%s','%s','%s','%s','%s','%s','%s','%s','%s');"
 
 func GenerateAPISQL(rep *gqttool.RepositoryMeta, module string) (string, error) {
 	sqlTplNamespaceList, err := GenerateSQL(rep)
@@ -501,9 +502,17 @@ func GenerateAPISQL(rep *gqttool.RepositoryMeta, module string) (string, error) 
 			entityStructMap[entityStruct.Name] = entityStruct
 		}
 		for _, define := range sqlTplNamespace.Defines {
-			name, tpl := Define2Sql(define.Text)
+			name, tpl := define.Name, gqttpl.StandardizeSpaces(define.Text)
 			templatId := fmt.Sprintf("%s%s%s", module, table.TableNameCamel(), name)
-			title := fmt.Sprintf("%s-%s-%s", module, table.TableName, name)
+			tableName := table.TableNameCamel()
+			extraTranslatemap := make(map[string]string)
+			if table.Comment != "" {
+				extraTranslatemap = map[string]string{
+					tableName: table.Comment,
+				}
+			}
+			title := fmt.Sprintf("%s%s%s", module, tableName, name)
+			title = gqttool.Translate(title, extraTranslatemap)
 			description := title
 			templateInsertSql := fmt.Sprintf(TemplateInsertTpl, templatId, title, description, sourceId, tpl)
 			sqlRaws = append(sqlRaws, templateInsertSql)
@@ -514,28 +523,31 @@ func GenerateAPISQL(rep *gqttool.RepositoryMeta, module string) (string, error) 
 					err := errors.Errorf("not found tpl define struct:%s", define.FullnameCamel())
 					return "", err
 				}
-				validateSchema, err := gqttool.SqlTplDefine2Jsonschema(entityStruct)
-				if err != nil {
-					return "", err
-				}
+				relationEntityStructList := gqttool.GetSamePrefixEntityElements(entityStruct.Name, entityStructList)
 				outEntitySruct := &gqttool.EntityElement{}
-				outputSchema, err := gqttool.SqlTplDefine2Jsonschema(outEntitySruct)
+				outputSchema, err := gqttool.SqlTplDefine2Jsonschema(outEntitySruct.FullName, nil)
 				if err != nil {
 					return "", err
 				}
-				exec, err := gqttool.GenerateExec(*entityStruct)
+				templatIdArr := make([]string, 0)
+				for _, relationEntityStruct := range relationEntityStructList {
+					templatIdArr = append(templatIdArr, relationEntityStruct.Name)
+				}
+				templatIds := strings.Join(templatIdArr, ",")
+				mainName := fmt.Sprintf("execAPI%s%s", table.TableNameCamel(), name)
+				exec, apiSchema, err := gqttool.GenerateExec(mainName, relationEntityStructList)
 				if err != nil {
 					return "", err
 				}
 				appId := fmt.Sprintf("%s-%s-%s", module, table.TableName, name)
 				tableName := table.TableNameCamel()
-				title := fmt.Sprintf("%s%s%s", module, tableName, name)
 				extraTranslatemap := make(map[string]string)
 				if table.Comment != "" {
 					extraTranslatemap = map[string]string{
 						tableName: table.Comment,
 					}
 				}
+				title := fmt.Sprintf("%s%s%s", module, tableName, name)
 				title = gqttool.Translate(title, extraTranslatemap)
 
 				apiModel := APIModel{
@@ -543,13 +555,14 @@ func GenerateAPISQL(rep *gqttool.RepositoryMeta, module string) (string, error) 
 					Title:          title,
 					Description:    title,
 					Method:         "POST",
-					Route:          fmt.Sprintf("/api/%s/v1/%s/%s", module, table.TableNameCamel(), name),
-					MainName:       fmt.Sprintf("execAPI%s%s", table.TableNameCamel(), name),
+					Route:          fmt.Sprintf("/api/%s/v1/%s/%s", gqttool.SnakeCase(module), gqttool.SnakeCase(table.TableNameCamel()), gqttool.SnakeCase(name)),
+					MainName:       mainName,
 					Exec:           exec,
-					ValidateSchema: validateSchema,
+					TemplateIDs:    templatIds,
+					ValidateSchema: apiSchema,
 					OutputSchema:   outputSchema,
 				}
-				apiInsertSql := fmt.Sprintf(ApiInsertTpl, apiModel.APIID, apiModel.Title, apiModel.Description, apiModel.Method, apiModel.Route, apiModel.MainName, apiModel.Exec, apiModel.ValidateSchema, apiModel.OutputSchema)
+				apiInsertSql := fmt.Sprintf(ApiInsertTpl, apiModel.APIID, apiModel.Title, apiModel.Description, apiModel.Method, apiModel.Route, apiModel.MainName, apiModel.TemplateIDs, apiModel.Exec, apiModel.ValidateSchema, apiModel.OutputSchema)
 				sqlRaws = append(sqlRaws, apiInsertSql)
 			}
 		}
@@ -670,10 +683,10 @@ Example:
 }
 
 func helpAPISQL() {
-	fmt.Fprint(os.Stderr, `gqttool apiSql is  generation  data manage plat api sql from mysql ddl
+	fmt.Fprint(os.Stderr, `gqttool doaApi is  generation  data manage plat api sql from mysql ddl
 
 Usage:
-  gqttool apiSql -metaDir template/meta -sqlFile template/gen -force true
+  gqttool doaApi -metaDir template/meta -sqlFile doa.sql -force true
   
 Flags:
   -force overwrite exists file
@@ -681,11 +694,11 @@ Flags:
         template meta dir
 
   -sqlFile
-        save api sql file name
+        save doa api sql filename
 
 Example:
 
-  gqttool apiSql -metaDir template/meta -sqlFile template/gen -force true
+  gqttool doaApi -metaDir template/meta -sqlFile doa.sql -force true
 
 `)
 	os.Exit(0)
@@ -741,6 +754,7 @@ Usage:
   gqttool sql -metaDir metaDir -sqlDir sqlTplSaveDir -force true
   gqttool sqlEntity  -sqlDir sqlsqlDir -entity entityFilename -force true
   gqttool curlEntity -curlDir curlDir -entity entityFilename -force true
+  gqttool doaApi -metaDir metaDir -sqlFile sqlFile -force true
   
 Commands:
   model
@@ -751,6 +765,8 @@ Commands:
   		Generate sql.tpl input entity from mysql
   curlEntity
   		Generate curl.tpl input entity from curl
+  doaApi
+  		Generate doa api  from mysql ddl
 
 Flags:
   -force overwrite exists file
@@ -764,6 +780,8 @@ Flags:
 		curlTpl file dir
  -entity 
 		sqlTpl  argument entity filename
+ -sqlFile 
+ 		doa api sql filename
 
 Example:
 

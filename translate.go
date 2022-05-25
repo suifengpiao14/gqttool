@@ -20,15 +20,18 @@ func Translate(name string, extraMap map[string]string) string {
 	wordArr := strings.Split(snakeName, "_")
 	titleArr := make([]string, 0)
 	existsWordMap := make(map[string]string)
-	if extraMap !=nil{
-		for _,extra:=range
+	formatExtraMap := make(map[string]string)
+	if extraMap != nil {
+		for k, v := range extraMap {
+			formatExtraMap[SnakeCase(k)] = v
+		}
 	}
 	for _, word := range wordArr {
 		if _, ok := existsWordMap[word]; ok {
 			continue
 		}
-		if extraMap != nil {
-			title, ok := extraMap[word]
+		if formatExtraMap != nil {
+			title, ok := formatExtraMap[word]
 			if ok {
 				existsWordMap[word] = title
 				titleArr = append(titleArr, title)

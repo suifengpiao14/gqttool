@@ -24,6 +24,16 @@ type EntityElement struct {
 	//ImplementTplEntityInterface bool // 是否需要实现 gqttpl.TplEntityInterface 接口
 }
 
+func GetSamePrefixEntityElements(prefix string, entityElementList []*EntityElement) (samePrefixEntityElementList []*EntityElement) {
+	samePrefixEntityElementList = make([]*EntityElement, 0)
+	for _, entityElement := range entityElementList {
+		if strings.HasPrefix(entityElement.Name, prefix) {
+			samePrefixEntityElementList = append(samePrefixEntityElementList, entityElement)
+		}
+	}
+	return samePrefixEntityElementList
+}
+
 const STRUCT_DEFINE_NANE_FORMAT = "%sEntity"
 
 //SQLEntity 根据数据表ddl和sql tpl 生成 sql tpl 调用的输入、输出实体
@@ -62,26 +72,24 @@ func SQLEntityElement(sqltplDefineText *TPLDefineText, tableList []*Table) (enti
 	return entityElement, nil
 }
 
-func SqlTplDefine2Jsonschema(entityElement *EntityElement) (jsonschemaOut string, err error) {
+func SqlTplDefine2Jsonschema(id string, variables []*Variable) (jsonschemaOut string, err error) {
 	properties := orderedmap.New()
 	//{"$schema":"http://json-schema.org/draft-07/schema#","type":"object","properties":{},"required":[]}
 	schema := jsonschema.Schema{
 		Version:    "http://json-schema.org/draft-07/schema#",
 		Type:       "object",
-		ID:         jsonschema.ID(entityElement.FullName),
+		ID:         jsonschema.ID(id),
 		Properties: properties,
-		Required:   make([]string, 0),
 	}
 	names := make([]string, 0)
-	for _, v := range entityElement.Variables {
+	for _, v := range variables {
 		if v.FieldName == "" { // 过滤匿名字段
 			continue
 		}
 
-		name := gqttpl.ToLowerCamel(v.FieldName)
-		subSchema := jsonschema.Schema{
-			Type: v.Type,
-		}
+		name := v.FieldName
+		subSchema := v.Validate
+		subSchema.Type = v.Type
 		properties.Set(name, subSchema)
 		names = append(names, name)
 	}
@@ -343,6 +351,7 @@ type Variable struct {
 	Name       string // 模板中的原始名称
 	FieldName  string // 当变量作为结构体的字段时，字段名称
 	Type       string
+	Validate   jsonschema.Schema // 验证
 	Tag        string
 	AllowEmpty bool
 }
