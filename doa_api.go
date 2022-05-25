@@ -5,7 +5,7 @@ import (
 	"strings"
 )
 
-func GenerateExec(defineName string, relationEntityStructList []*EntityElement) (exec string, validateSchema string, err error) { //简单的getSet 以及调用当前模板
+func GenerateExec(defineName string, table *Table, relationEntityStructList []*EntityElement) (exec string, validateSchema string, err error) { //简单的getSet 以及调用当前模板
 	variableList := make([]*Variable, 0)
 	strArr := make([]string, 0)
 	strArr = append(strArr, fmt.Sprintf(`{{define "%s"}}`, defineName))
@@ -25,10 +25,18 @@ func GenerateExec(defineName string, relationEntityStructList []*EntityElement) 
 				}
 			}
 			variableMap[v.FieldName] = v.FieldName
+			fieldName := v.FieldName
+			column := table.GetColumnByCamelName(fieldName)
+			if table.DatabaseConfig.ColumnPrefix != "" && column != nil {
+				idx := strings.Index(v.FieldName, table.DatabaseConfig.ColumnPrefix)
+				if idx > -1 {
+					fieldName = v.FieldName[idx+1:]
+				}
+			}
 			cloneVariable := &Variable{ // 复制一份，不改原有的
 				Namespace:  v.Namespace,
 				Name:       v.Name,
-				FieldName:  v.FieldName,
+				FieldName:  fieldName,
 				Type:       "string", //接口统一使用string类型
 				Validate:   fieldValidate,
 				Tag:        v.Tag,

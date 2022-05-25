@@ -165,8 +165,7 @@ func (e Enums) GetByColumnNameCamel(ColumnNameCamel string) (enums Enums) {
 }
 
 type Table struct {
-	TablePrefix           string
-	ColumnPrefix          string
+	DatabaseConfig        DatabaseConfig
 	TableName             string
 	PrimaryKey            string
 	DeleteColumn          string
@@ -190,15 +189,15 @@ func (t *Table) SnakeCase() (snakeName string) {
 }
 func (t *Table) TableNameTrimPrefix() (name string) {
 	name = t.TableName
-	if t.TablePrefix != "" {
-		name = strings.TrimLeft(name, t.TablePrefix)
+	if t.DatabaseConfig.TablePrefix != "" {
+		name = strings.TrimLeft(name, t.DatabaseConfig.TablePrefix)
 	}
 	return
 }
 func (t *Table) PrimaryKeyCamel() (camelName string) {
 	primaryKey := t.PrimaryKey
-	if t.ColumnPrefix != "" {
-		primaryKey = strings.TrimLeft(primaryKey, t.TablePrefix)
+	if t.DatabaseConfig.ColumnPrefix != "" {
+		primaryKey = strings.TrimLeft(primaryKey, t.DatabaseConfig.TablePrefix)
 	}
 	camelName = ToCamel(primaryKey)
 	return
@@ -207,6 +206,15 @@ func (t *Table) PrimaryKeyCamel() (camelName string) {
 func (t *Table) CreatedAtColumn() (createdAtColumn *Column) {
 	for _, column := range t.Columns {
 		if column.OnCreate {
+			return column
+		}
+	}
+	return
+}
+
+func (t *Table) GetColumnByCamelName(camelName string) (column *Column) {
+	for _, column := range t.Columns {
+		if column.CamelName == camelName {
 			return column
 		}
 	}
@@ -304,12 +312,12 @@ func GenerateTable(ddlList []string, tableCfg *DatabaseConfig) (tables []*Table,
 		}
 
 		table := &Table{
-			TablePrefix:  tableCfg.TablePrefix,
-			TableName:    tableName,
-			Columns:      make([]*Column, 0),
-			EnumsConst:   Enums{},
-			Comment:      tableDef.Comment,
-			DeleteColumn: tableCfg.DeletedAtColumn,
+			DatabaseConfig: *tableCfg,
+			TableName:      tableName,
+			Columns:        make([]*Column, 0),
+			EnumsConst:     Enums{},
+			Comment:        tableDef.Comment,
+			DeleteColumn:   tableCfg.DeletedAtColumn,
 		}
 		for _, indice := range tableDef.Indices {
 			if indice.Name == "PRIMARY" {

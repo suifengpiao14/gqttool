@@ -535,7 +535,7 @@ func GenerateAPISQL(rep *gqttool.RepositoryMeta, module string) (string, error) 
 				}
 				templatIds := strings.Join(templatIdArr, ",")
 				mainName := fmt.Sprintf("execAPI%s%s", table.TableNameCamel(), name)
-				exec, apiSchema, err := gqttool.GenerateExec(mainName, relationEntityStructList)
+				exec, apiSchema, err := gqttool.GenerateExec(mainName, table, relationEntityStructList)
 				if err != nil {
 					return "", err
 				}
