@@ -2,6 +2,7 @@ package gqttool
 
 import (
 	"fmt"
+	"regexp"
 	"testing"
 )
 
@@ -13,4 +14,12 @@ func TestConvertData2Table(t *testing.T) {
 		panic(err)
 	}
 	fmt.Printf("%#v", newTable)
+}
+
+func TestRegexpInt(t *testing.T) {
+	re := regexp.MustCompile(`\d+`)
+	str := "20"
+	ok := re.MatchString(str)
+	fmt.Println(ok)
+	return
 }

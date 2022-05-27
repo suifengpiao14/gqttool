@@ -55,7 +55,7 @@ func TestRunCmdSQL(*testing.T) {
 func TestRunCmdAPISQL(*testing.T) {
 	metaDir := "../example/template/meta"
 	tplFile := "../example/template/doa.sql"
-	err := runCmdAPISQL(metaDir, tplFile, "test", true)
+	err := runCmdAPISQL(metaDir, tplFile, true)
 	if err != nil {
 		panic(err)
 	}

@@ -21,6 +21,7 @@ type EntityElement struct {
 	Variables  []*Variable
 	FullName   string
 	Type       string
+	OutEntity  *EntityElement // 输出对象
 	//ImplementTplEntityInterface bool // 是否需要实现 gqttpl.TplEntityInterface 接口
 }
 
@@ -72,7 +73,7 @@ func SQLEntityElement(sqltplDefineText *TPLDefineText, tableList []*Table) (enti
 	return entityElement, nil
 }
 
-func SqlTplDefine2Jsonschema(id string, variables []*Variable) (jsonschemaOut string, err error) {
+func SqlTplDefineVariable2Jsonschema(id string, variables []*Variable) (jsonschemaOut string, err error) {
 	properties := orderedmap.New()
 	//{"$schema":"http://json-schema.org/draft-07/schema#","type":"object","properties":{},"required":[]}
 	schema := jsonschema.Schema{

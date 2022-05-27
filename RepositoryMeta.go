@@ -16,9 +16,11 @@ type RepositoryMeta struct {
 }
 
 type DatabaseConfig struct {
-	TablePrefix     string `json:"tablePrefix"`
-	ColumnPrefix    string `json:"columnPrefix"`
-	DeletedAtColumn string `json:"deletedAtColumn"`
+	DatabaseName    string `mapstructure:"databaseName"`
+	LogLevel        string `mapstructure:"logLevel"`
+	TablePrefix     string `mapstructure:"tablePrefix"`
+	ColumnPrefix    string `mapstructure:"columnPrefix"`
+	DeletedAtColumn string `mapstructure:"deletedAtColumn"`
 }
 
 var MetaNameSpaceSuffix = gqttpl.MetaNamespaceSuffix
@@ -130,6 +132,13 @@ func (r *RepositoryMeta) GetDatabaseConfig() (cfg *DatabaseConfig, err error) {
 	_, err = toml.Decode(tplDefine.Output, cfg)
 	if err != nil {
 		return
+	}
+	if cfg.DatabaseName == "" {
+		err = errors.Errorf("database name required (will as module name)")
+		return
+	}
+	if cfg.LogLevel == "" {
+		cfg.LogLevel = "debug"
 	}
 	return
 }

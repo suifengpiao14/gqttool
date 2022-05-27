@@ -23,7 +23,6 @@ func main() {
 	var (
 		metaDir        string
 		sqlFile        string
-		module         string
 		modelFilename  string
 		sqlDir         string
 		curlDir        string
@@ -48,7 +47,6 @@ func main() {
 	APISQLCmd.BoolVar(&force, "force", false, "overwrite exist file")
 	APISQLCmd.StringVar(&metaDir, "metaDir", "template/meta", "ddl/config/sql template file dir")
 	APISQLCmd.StringVar(&sqlFile, "sqlFile", "doa.sql", "output sql file")
-	APISQLCmd.StringVar(&module, "module", "example", "crud module")
 
 	SQLCmd.BoolVar(&force, "force", false, "overwrite exist file")
 	SQLCmd.StringVar(&metaDir, "metaDir", "template/meta", "ddl/config/sql template file dir")
@@ -83,7 +81,7 @@ func main() {
 		}
 	case "doaApi":
 		APISQLCmd.Parse(args)
-		err = runCmdAPISQL(metaDir, sqlFile, module, force)
+		err = runCmdAPISQL(metaDir, sqlFile, force)
 		if err != nil {
 			panic(err)
 		}
@@ -164,13 +162,13 @@ func runCmdSQL(metaDir string, sqlDir string, force bool) (err error) {
 	return
 }
 
-func runCmdAPISQL(metaDir string, apiSQLFile string, module string, force bool) (err error) {
+func runCmdAPISQL(metaDir string, apiSQLFile string, force bool) (err error) {
 	repo := gqttool.NewRepositoryMeta()
 	errChain := errorformatter.NewErrorChain()
 	var sqlRaws []string
 	errChain.SetError(repo.AddByDir(metaDir, gqttool.MetaTemplatefuncMap)).
 		Run(func() (err error) {
-			sqlRaw, err := GenerateAPISQL(repo, module)
+			sqlRaw, err := GenerateAPISQL(repo)
 			if err != nil {
 				return err
 			}
@@ -480,15 +478,33 @@ const SourceInsertTpl = "insert ignore into `source` (`source_id`,`source_type`,
 const TemplateInsertTpl = "insert ignore into `template` (`template_id`,`type`,`title`,`description`,`source_id`,`tpl`) values('%s','SQL','%s','%s','%s','%s');"
 const ApiInsertTpl = "insert ignore into `api` (`api_id`,`title`,`description`,`method`,`route`,`main_name`,`template_ids`,`exec`,`validate_schema`,`output_schema`) values('%s','%s','%s','%s','%s','%s','%s','%s','%s','%s');"
 
-func GenerateAPISQL(rep *gqttool.RepositoryMeta, module string) (string, error) {
+func generateTemplateId(dbName string, tableName string, defineName string) (templateId string) {
+	templateId = fmt.Sprintf("%s%s%s", dbName, tableName, defineName)
+	return templateId
+}
+
+func GenerateAPISQL(rep *gqttool.RepositoryMeta) (string, error) {
 	sqlTplNamespaceList, err := GenerateSQL(rep)
 	if err != nil {
 		return "", err
 	}
 	var sqlRaws []string
-	sourceId := fmt.Sprintf("%s_db", module)
+	DatabaseConfig := gqttool.DatabaseConfig{
+		DatabaseName: "database_db",
+		LogLevel:     "debug",
+	}
+	if len(sqlTplNamespaceList) > 0 {
+		table := sqlTplNamespaceList[0].Table
+		if table != nil {
+			DatabaseConfig = table.DatabaseConfig
+		}
+
+	}
+	module := DatabaseConfig.DatabaseName
+	sourceId := DatabaseConfig.DatabaseName
+	moduleCamel := gqttool.ToCamel(module)
 	sourceType := "SQL"
-	config := `{"logLevel":"debug","dsn":"root:123456@tcp(mysql_address:3306)/database?charset=utf8&timeout=1s&readTimeout=5s&writeTimeout=5s&parseTime=False&loc=Local&multiStatements=true","timeout":30}`
+	config := fmt.Sprintf(`{"logLevel":"%s","dsn":"root:123456@tcp(mysql_address:3306)/%s?charset=utf8&timeout=1s&readTimeout=5s&writeTimeout=5s&parseTime=False&loc=Local&multiStatements=true","timeout":30}`, DatabaseConfig.LogLevel, DatabaseConfig.DatabaseName)
 	sourceInsertSql := fmt.Sprintf(SourceInsertTpl, sourceId, sourceType, config)
 	sqlRaws = append(sqlRaws, sourceInsertSql)
 	for _, sqlTplNamespace := range sqlTplNamespaceList {
@@ -503,7 +519,8 @@ func GenerateAPISQL(rep *gqttool.RepositoryMeta, module string) (string, error) 
 		}
 		for _, define := range sqlTplNamespace.Defines {
 			name, tpl := define.Name, gqttpl.StandardizeSpaces(define.Text)
-			templatId := fmt.Sprintf("%s%s%s", module, table.TableNameCamel(), name)
+			defineNameCamel := gqttool.ToCamel(define.Name)
+			templatId := generateTemplateId(moduleCamel, table.TableNameCamel(), defineNameCamel)
 			tableName := table.TableNameCamel()
 			extraTranslatemap := make(map[string]string)
 			if table.Comment != "" {
@@ -511,7 +528,7 @@ func GenerateAPISQL(rep *gqttool.RepositoryMeta, module string) (string, error) 
 					tableName: table.Comment,
 				}
 			}
-			title := fmt.Sprintf("%s%s%s", module, tableName, name)
+			title := fmt.Sprintf("%s%s%s", moduleCamel, tableName, name)
 			title = gqttool.Translate(title, extraTranslatemap)
 			description := title
 			templateInsertSql := fmt.Sprintf(TemplateInsertTpl, templatId, title, description, sourceId, tpl)
@@ -525,13 +542,14 @@ func GenerateAPISQL(rep *gqttool.RepositoryMeta, module string) (string, error) 
 				}
 				relationEntityStructList := gqttool.GetSamePrefixEntityElements(entityStruct.Name, entityStructList)
 				outEntitySruct := &gqttool.EntityElement{}
-				outputSchema, err := gqttool.SqlTplDefine2Jsonschema(outEntitySruct.FullName, nil)
+				outputSchema, err := gqttool.SqlTplDefineVariable2Jsonschema(outEntitySruct.FullName, nil)
 				if err != nil {
 					return "", err
 				}
 				templatIdArr := make([]string, 0)
 				for _, relationEntityStruct := range relationEntityStructList {
-					templatIdArr = append(templatIdArr, relationEntityStruct.Name)
+					tplId := generateTemplateId(moduleCamel, table.TableNameCamel(), gqttool.ToCamel(relationEntityStruct.Name)) // 这个地方的ID生成规则，必须和templateInsertSql 中 `template_id` 一致
+					templatIdArr = append(templatIdArr, tplId)
 				}
 				templatIds := strings.Join(templatIdArr, ",")
 				mainName := fmt.Sprintf("execAPI%s%s", table.TableNameCamel(), name)
@@ -686,7 +704,7 @@ func helpAPISQL() {
 	fmt.Fprint(os.Stderr, `gqttool doaApi is  generation  data manage plat api sql from mysql ddl
 
 Usage:
-  gqttool doaApi -metaDir template/meta -sqlFile doa.sql -module example -force true
+  gqttool doaApi -metaDir template/meta -sqlFile doa.sql  -force true
   
 Flags:
   -force overwrite exists file
@@ -698,7 +716,7 @@ Flags:
 
 Example:
 
-  gqttool doaApi -metaDir template/meta -sqlFile doa.sql -module example -force true
+  gqttool doaApi -metaDir template/meta -sqlFile doa.sql  -force true
 
 `)
 	os.Exit(0)
@@ -754,7 +772,7 @@ Usage:
   gqttool sql -metaDir metaDir -sqlDir sqlTplSaveDir -force true
   gqttool sqlEntity  -sqlDir sqlsqlDir -entity entityFilename -force true
   gqttool curlEntity -curlDir curlDir -entity entityFilename -force true
-  gqttool doaApi -metaDir metaDir -sqlFile sqlFile -module example -force true
+  gqttool doaApi -metaDir metaDir -sqlFile sqlFile -force true
   
 Commands:
   model

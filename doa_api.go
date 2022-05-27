@@ -3,10 +3,18 @@ package gqttool
 import (
 	"fmt"
 	"strings"
+
+	"github.com/invopop/jsonschema"
 )
 
+type SchemaProperty struct {
+	Name   string
+	Type   string
+	Schema jsonschema.Schema
+}
+
 func GenerateExec(defineName string, table *Table, relationEntityStructList []*EntityElement) (exec string, validateSchema string, err error) { //简单的getSet 以及调用当前模板
-	variableList := make([]*Variable, 0)
+	properties := make([]*Variable, 0)
 	strArr := make([]string, 0)
 	strArr = append(strArr, fmt.Sprintf(`{{define "%s"}}`, defineName))
 	variableMap := make(map[string]string)
@@ -21,7 +29,7 @@ func GenerateExec(defineName string, table *Table, relationEntityStructList []*E
 			fieldValidate := v.Validate
 			if v.Type == "int" { //接口字段统一使用string，这里增加数组验证
 				if fieldValidate.Pattern == "" {
-					fieldValidate.Pattern = `\d+`
+					fieldValidate.Format = `number`
 				}
 			}
 			variableMap[v.FieldName] = v.FieldName
@@ -52,10 +60,10 @@ func GenerateExec(defineName string, table *Table, relationEntityStructList []*E
 				wordArr[i] = fmt.Sprintf("%s%s", strings.ToUpper(word[:1]), word[1:])
 			}
 			cloneVariable.FieldName = strings.Join(wordArr, "")
-			variableList = append(variableList, cloneVariable)
+			properties = append(properties, cloneVariable)
 			fn := "getSetValue"
 			if v.Type == "int" {
-				fn = "getSetValueInt"
+				fn = "getSetValueNumber"
 			}
 			strArr = append(strArr, fmt.Sprintf(`{{%s . "%s" "input.%s"}}`, fn, v.FieldName, cloneVariable.FieldName))
 		}
@@ -65,7 +73,7 @@ func GenerateExec(defineName string, table *Table, relationEntityStructList []*E
 	}
 	strArr = append(strArr, "{{end}}")
 	exec = strings.Join(strArr, "\n")
-	validateSchema, err = SqlTplDefine2Jsonschema(defineName, variableList)
+	validateSchema, err = SqlTplDefineVariable2Jsonschema(defineName, properties)
 	if err != nil {
 		return "", "", err
 	}
