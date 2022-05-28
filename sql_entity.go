@@ -13,6 +13,7 @@ import (
 	"github.com/invopop/jsonschema"
 	"github.com/pkg/errors"
 	"github.com/suifengpiao14/gqt/v2/gqttpl"
+	"github.com/suifengpiao14/templatemap"
 )
 
 type EntityElement struct {
@@ -62,13 +63,26 @@ func SQLEntityElement(sqltplDefineText *TPLDefineText, tableList []*Table) (enti
 	if err != nil {
 		return nil, err
 	}
+	columnArr := ParseSQLSelectColumn(sqltplDefineText.Text)
+	columnList, err := FormatColumn(columnArr, tableList)
+	if err != nil {
+		return nil, err
+	}
 	camelName := sqltplDefineText.FullnameCamel()
+	outName := fmt.Sprintf("%sOut", camelName)
 	entityElement = &EntityElement{
 		Name:       camelName,
 		Type:       sqltplDefineText.Type(),
 		StructName: fmt.Sprintf(STRUCT_DEFINE_NANE_FORMAT, camelName),
 		Variables:  variableList,
 		FullName:   sqltplDefineText.Fullname(),
+		OutEntity: &EntityElement{
+			Name:       outName,
+			Type:       sqltplDefineText.Type(),
+			StructName: fmt.Sprintf(STRUCT_DEFINE_NANE_FORMAT, camelName),
+			Variables:  columnList,
+			FullName:   fmt.Sprintf("%s%sOut", sqltplDefineText.Namespace, sqltplDefineText.Name),
+		},
 	}
 	return entityElement, nil
 }
@@ -90,7 +104,7 @@ func SqlTplDefineVariable2Jsonschema(id string, variables []*Variable) (jsonsche
 
 		name := v.FieldName
 		subSchema := v.Validate
-		subSchema.Type = v.Type
+		subSchema.TypeValue = v.Type
 		properties.Set(name, subSchema)
 		names = append(names, name)
 	}
@@ -291,6 +305,43 @@ func FormatVariableType(variableList []*Variable, tableList []*Table) (varaibles
 	return
 }
 
+func FormatColumn(columns []string, tableList []*Table) (variables Variables, err error) {
+	allVariables := make(Variables, 0)
+	tableColumnMap := make(map[string]*Column)
+	columnNameMap := make(map[string]string)
+	for _, table := range tableList {
+		for _, column := range table.Columns { //todo 多表字段相同，类型不同时，只会取列表中最后一个
+			tableColumnMap[column.CamelName] = column
+			lname := strings.ToLower(column.CamelName)
+			columnNameMap[lname] = column.CamelName // 后续用于检测模板变量拼写错误
+			variable := &Variable{
+				Name:      column.Name,
+				FieldName: column.Name,
+				Type:      column.Type,
+			}
+			allVariables = append(allVariables, variable)
+		}
+
+	}
+	variables = make(Variables, 0)
+	for _, name := range columns { // 使用数据库字段定义校正变量类型
+		if name == "*" {
+			sort.Sort(allVariables)
+			return allVariables, nil
+		}
+		variable := &Variable{}
+		tableColumn, ok := tableColumnMap[name]
+		if ok {
+			variable.Name = name
+			variable.FieldName = name
+			variable.Type = tableColumn.Type
+			variables = append(variables, variable)
+		}
+	}
+	sort.Sort(variables)
+	return
+}
+
 type VariableSuffixType struct {
 	Suffix string
 	Type   string
@@ -352,7 +403,7 @@ type Variable struct {
 	Name       string // 模板中的原始名称
 	FieldName  string // 当变量作为结构体的字段时，字段名称
 	Type       string
-	Validate   jsonschema.Schema // 验证
+	Validate   templatemap.Schema // 验证
 	Tag        string
 	AllowEmpty bool
 }
@@ -472,6 +523,17 @@ func ParseCurlTplVariable(tplDefineText *TPLDefineText) (variableList Variables)
 		return
 	}
 	return
+}
+
+func ParseSQLSelectColumn(sql string) []string {
+	grep := regexp.MustCompile(`(?i)select(.+)from`)
+	match := grep.FindAllStringSubmatch(sql, -1)
+	if len(match) < 1 {
+		return make([]string, 0)
+	}
+	fieldStr := match[0][1]
+	out := strings.Split(gqttpl.StandardizeSpaces(fieldStr), ",")
+	return out
 }
 
 func ParsSqlTplVariable(tplDefineText *TPLDefineText) (variableList Variables) {

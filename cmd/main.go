@@ -541,11 +541,6 @@ func GenerateAPISQL(rep *gqttool.RepositoryMeta) (string, error) {
 					return "", err
 				}
 				relationEntityStructList := gqttool.GetSamePrefixEntityElements(entityStruct.Name, entityStructList)
-				outEntitySruct := &gqttool.EntityElement{}
-				outputSchema, err := gqttool.SqlTplDefineVariable2Jsonschema(outEntitySruct.FullName, nil)
-				if err != nil {
-					return "", err
-				}
 				templatIdArr := make([]string, 0)
 				for _, relationEntityStruct := range relationEntityStructList {
 					tplId := generateTemplateId(moduleCamel, table.TableNameCamel(), gqttool.ToCamel(relationEntityStruct.Name)) // 这个地方的ID生成规则，必须和templateInsertSql 中 `template_id` 一致
@@ -553,7 +548,7 @@ func GenerateAPISQL(rep *gqttool.RepositoryMeta) (string, error) {
 				}
 				templatIds := strings.Join(templatIdArr, ",")
 				mainName := fmt.Sprintf("execAPI%s%s", table.TableNameCamel(), name)
-				exec, apiSchema, err := gqttool.GenerateExec(mainName, table, relationEntityStructList)
+				exec, apiSchema, outputSchema, err := gqttool.GenerateExec(mainName, table, relationEntityStructList)
 				if err != nil {
 					return "", err
 				}

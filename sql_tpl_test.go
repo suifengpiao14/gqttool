@@ -28,3 +28,13 @@ func TestCrud(t *testing.T) {
 	}
 
 }
+
+func TestParseSQLSelectColumn(t *testing.T) {
+	sqlDefine := `
+	{{define "paginate"}}
+		select *,count(*) from t_api where 1=1;
+	{{end}}
+	`
+	fields := ParseSQLSelectColumn(sqlDefine)
+	fmt.Sprintln(fields)
+}
