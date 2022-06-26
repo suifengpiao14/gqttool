@@ -13,7 +13,7 @@ type SchemaProperty struct {
 	Schema jsonschema.Schema
 }
 
-func GenerateExec(defineName string, table *Table, relationEntityStructList []*EntityElement) (exec string, validateSchema string, outputSchema string, err error) { //简单的getSet 以及调用当前模板
+func GenerateExec(defineName string, table *Table, relationEntityStructList []*EntityElement) (exec string, input string, out string, err error) { //简单的getSet 以及调用当前模板
 	properties := make([]*Variable, 0)
 	strArr := make([]string, 0)
 	strArr = append(strArr, fmt.Sprintf(`{{define "%s"}}`, defineName))
@@ -27,7 +27,7 @@ func GenerateExec(defineName string, table *Table, relationEntityStructList []*E
 				continue
 			}
 			fieldValidate := v.Validate
-			if v.Type == "int" { //接口字段统一使用string，这里增加数组验证
+			if v.Type == "int" { //接口字段统一使用string，这里增加数字验证
 				if fieldValidate.Pattern == "" {
 					fieldValidate.Format = `number`
 				}
@@ -61,11 +61,6 @@ func GenerateExec(defineName string, table *Table, relationEntityStructList []*E
 			}
 			cloneVariable.FieldName = strings.Join(wordArr, "")
 			properties = append(properties, cloneVariable)
-			fn := "getSetValue"
-			if v.Type == "int" {
-				fn = "getSetValueNumber"
-			}
-			strArr = append(strArr, fmt.Sprintf(`{{%s . "%s" "input.%s"}}`, fn, v.FieldName, cloneVariable.FieldName))
 		}
 		if entityStruct.Type != TPL_DEFINE_TYPE_TEXT {
 			strArr = append(strArr, fmt.Sprintf(`{{execSQLTpl . "%s"}}`, entityStruct.Name))
@@ -73,7 +68,7 @@ func GenerateExec(defineName string, table *Table, relationEntityStructList []*E
 	}
 	strArr = append(strArr, "{{end}}")
 	exec = strings.Join(strArr, "\n")
-	validateSchema, err = SqlTplDefineVariable2Jsonschema(defineName, properties)
+	input, err = SqlTplDefineVariable2lineschema(defineName, properties)
 	if err != nil {
 		return "", "", "", err
 	}
@@ -122,10 +117,10 @@ func GenerateExec(defineName string, table *Table, relationEntityStructList []*E
 			outputVariables = append(outputVariables, cloneVariable)
 		}
 	}
-	outputSchema, err = SqlTplDefineVariable2Jsonschema(defineName, outputVariables)
+	out, err = SqlTplDefineVariable2lineschema(defineName, outputVariables)
 	if err != nil {
 		return "", "", "", err
 	}
 
-	return exec, validateSchema, outputSchema, nil
+	return exec, input, out, nil
 }

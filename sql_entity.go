@@ -87,6 +87,39 @@ func SQLEntityElement(sqltplDefineText *TPLDefineText, tableList []*Table) (enti
 	return entityElement, nil
 }
 
+func SqlTplDefineVariable2lineschema(id string, variables []*Variable) (lineschema string, err error) {
+	arr := make([]string, 0)
+	for _, v := range variables {
+		if v.FieldName == "" { // 过滤匿名字段
+			continue
+		}
+		kvArr := make([]string, 0)
+		kvArr = append(kvArr, fmt.Sprintf("fullname=%s", v.FieldName))
+		dst := ""
+		src := v.Validate.DataPathSrc
+		format := v.Validate.Format
+		if src != "" { //如果来源为空,说明fullname代表来源,那么dst就是字段名
+			dst = v.FieldName
+		}
+
+		if dst != "" {
+			kvArr = append(kvArr, fmt.Sprintf("dst=%s", dst))
+		}
+		if src != "" {
+			kvArr = append(kvArr, fmt.Sprintf("src=%s", src))
+		}
+		if format != "" {
+			kvArr = append(kvArr, fmt.Sprintf("format=%s", format))
+		}
+		kvArr = append(kvArr, "required")
+
+		line := strings.Join(kvArr, ",")
+		arr = append(arr, line)
+	}
+	lineschema = strings.Join(arr, "\n")
+	return lineschema, err
+}
+
 func SqlTplDefineVariable2Jsonschema(id string, variables []*Variable) (jsonschemaOut string, err error) {
 	properties := orderedmap.New()
 	//{"$schema":"http://json-schema.org/draft-07/schema#","type":"object","properties":{},"required":[]}

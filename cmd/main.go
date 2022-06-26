@@ -461,22 +461,20 @@ type TemplateModel struct {
 }
 
 type APIModel struct {
-	APIID          string
-	Title          string
-	Description    string
-	Method         string
-	Route          string
-	MainName       string
-	TemplateIDs    string
-	Exec           string
-	ValidateSchema string
-	InputSchema    string
-	OutputSchema   string
+	APIID       string
+	Title       string
+	Description string
+	Method      string
+	Route       string
+	TemplateIDs string
+	Exec        string
+	Input       string
+	Output      string
 }
 
 const SourceInsertTpl = "insert ignore into `source` (`source_id`,`source_type`,`config`) values('%s','%s','%s');"
 const TemplateInsertTpl = "insert ignore into `template` (`template_id`,`type`,`title`,`description`,`source_id`,`tpl`) values('%s','SQL','%s','%s','%s','%s');"
-const ApiInsertTpl = "insert ignore into `api` (`api_id`,`title`,`description`,`method`,`route`,`main_name`,`template_ids`,`exec`,`validate_schema`,`output_schema`) values('%s','%s','%s','%s','%s','%s','%s','%s','%s','%s');"
+const ApiInsertTpl = "insert ignore into `api` (`api_id`,`title`,`description`,`method`,`route`,`template_ids`,`exec`,`validate_schema`,`output_schema`) values('%s','%s','%s','%s','%s','%s','%s','%s','%s');"
 
 func generateTemplateId(dbName string, tableName string, defineName string) (templateId string) {
 	templateId = fmt.Sprintf("%s%s%s", dbName, tableName, defineName)
@@ -547,7 +545,7 @@ func GenerateAPISQL(rep *gqttool.RepositoryMeta) (string, error) {
 					templatIdArr = append(templatIdArr, tplId)
 				}
 				templatIds := strings.Join(templatIdArr, ",")
-				mainName := fmt.Sprintf("execAPI%s%s", table.TableNameCamel(), name)
+				mainName := "main"
 				exec, apiSchema, outputSchema, err := gqttool.GenerateExec(mainName, table, relationEntityStructList)
 				if err != nil {
 					return "", err
@@ -564,18 +562,17 @@ func GenerateAPISQL(rep *gqttool.RepositoryMeta) (string, error) {
 				title = gqttool.Translate(title, extraTranslatemap)
 
 				apiModel := APIModel{
-					APIID:          appId,
-					Title:          title,
-					Description:    title,
-					Method:         "POST",
-					Route:          fmt.Sprintf("/api/%s/v1/%s/%s", gqttool.SnakeCase(module), gqttool.SnakeCase(table.TableNameCamel()), gqttool.SnakeCase(name)),
-					MainName:       mainName,
-					Exec:           exec,
-					TemplateIDs:    templatIds,
-					ValidateSchema: apiSchema,
-					OutputSchema:   outputSchema,
+					APIID:       appId,
+					Title:       title,
+					Description: title,
+					Method:      "POST",
+					Route:       fmt.Sprintf("/api/%s/v1/%s/%s", gqttool.SnakeCase(module), gqttool.SnakeCase(table.TableNameCamel()), gqttool.SnakeCase(name)),
+					Exec:        exec,
+					TemplateIDs: templatIds,
+					Input:       apiSchema,
+					Output:      outputSchema,
 				}
-				apiInsertSql := fmt.Sprintf(ApiInsertTpl, apiModel.APIID, apiModel.Title, apiModel.Description, apiModel.Method, apiModel.Route, apiModel.MainName, apiModel.TemplateIDs, apiModel.Exec, apiModel.ValidateSchema, apiModel.OutputSchema)
+				apiInsertSql := fmt.Sprintf(ApiInsertTpl, apiModel.APIID, apiModel.Title, apiModel.Description, apiModel.Method, apiModel.Route, apiModel.TemplateIDs, apiModel.Exec, apiModel.Input, apiModel.Output)
 				sqlRaws = append(sqlRaws, apiInsertSql)
 			}
 		}
