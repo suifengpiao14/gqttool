@@ -56,6 +56,8 @@ github.com/envoyproxy/go-control-plane v0.9.10-0.20210907150352-cf90f659a021/go.
 github.com/envoyproxy/go-control-plane v0.10.2-0.20220325020618-49ff273808a1/go.mod h1:KJwIaB5Mv44NWtYuAOFCVOjcI94vtpEz2JU/D2v6IjE=
 github.com/envoyproxy/protoc-gen-validate v0.1.0/go.mod h1:iSmxcyjqTsJpI2R4NaDN7+kN2VEUnK/pcBlmesArF7c=
 github.com/etcd-io/gofail v0.0.0-20180808172546-51ce9a71510a/go.mod h1:49H/RkXP8pKaZy4h0d+NW16rSLhyVBt4o6VLJbmOqDE=
+github.com/evanphx/json-patch/v5 v5.6.0 h1:b91NhWfaz02IuVxO9faSllyAtNXHMPkC5J8sJCLunww=
+github.com/evanphx/json-patch/v5 v5.6.0/go.mod h1:G79N1coSVB93tBe7j6PhzjmR3/2VvlbKOFpnXhI9Bw4=
 github.com/fsnotify/fsnotify v1.4.7/go.mod h1:jwhsz4b93w/PPRr/qN1Yymfu8t87LnFCMoQvtojpjFo=
 github.com/getkin/kin-openapi v0.91.0/go.mod h1:660oXbgy5JFMKreazJaQTw7o+X00qeSyhcnluiMv+Xg=
 github.com/getkin/kin-openapi v0.94.0/go.mod h1:LWZfzOd7PRy8GJ1dJ6mCU6tNdSfOwRac1BUPam4aw6Q=
@@ -143,6 +145,7 @@ github.com/imdario/mergo v0.3.13/go.mod h1:4lJ1jqUDcsbIECGy0RUJAXNIhg+6ocWgb1ALK
 github.com/invopop/jsonschema v0.4.0 h1:Yuy/unfgCnfV5Wl7H0HgFufp/rlurqPOOuacqyByrws=
 github.com/invopop/jsonschema v0.4.0/go.mod h1:O9uiLokuu0+MGFlyiaqtWxwqJm41/+8Nj0lD7A36YH0=
 github.com/invopop/yaml v0.1.0/go.mod h1:2XuRLgs/ouIrW3XNzuNj7J3Nvu/Dig5MXvbCEdiBN3Q=
+github.com/jessevdk/go-flags v1.4.0/go.mod h1:4FA24M0QyGHXBuZZK/XkWh8h0e1EYbRYJSGM75WSRxI=
 github.com/jinzhu/copier v0.3.5 h1:GlvfUwHk62RokgqVNvYsku0TATCF7bAHVwEXoBh3iJg=
 github.com/jinzhu/copier v0.3.5/go.mod h1:DfbEm0FYsaqBcKcFuvmOZb218JkPGtvSHsKg8S8hyyg=
 github.com/jinzhu/inflection v1.0.0 h1:K317FqzuhWc8YvSVlFMCCUb36O/S9MCKRDI7QkRKD/E=
@@ -222,6 +225,7 @@ github.com/pingcap/tipb v0.0.0-20190107072121-abbec73437b7/go.mod h1:RtkHW8WbcNx
 github.com/pingcap/tipb v0.0.0-20220314125451-bfb5c2c55188 h1:+46isFI9fR9R+nJVDMI55tCC/TCwp+bvVA4HLGEv1rY=
 github.com/pingcap/tipb v0.0.0-20220314125451-bfb5c2c55188/go.mod h1:A7mrd7WHBl1o63LE2bIBGEJMTNWXqhgmYiOvMLxozfs=
 github.com/pkg/errors v0.8.0/go.mod h1:bwawxfHBFNV+L2hUp1rHADufV3IMtnDRdf1r5NINEl0=
+github.com/pkg/errors v0.8.1/go.mod h1:bwawxfHBFNV+L2hUp1rHADufV3IMtnDRdf1r5NINEl0=
 github.com/pkg/errors v0.9.1 h1:FEBLx1zS214owpjy7qsBeixbURkuhQAwrK5UwLGTwt4=
 github.com/pkg/errors v0.9.1/go.mod h1:bwawxfHBFNV+L2hUp1rHADufV3IMtnDRdf1r5NINEl0=
 github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZbAQM=
@@ -283,6 +287,8 @@ github.com/suifengpiao14/errorformatter v0.0.0-20220416163841-b70eec6abce2 h1:H/
 github.com/suifengpiao14/errorformatter v0.0.0-20220416163841-b70eec6abce2/go.mod h1:d4GXPUb6d5XkO5+uuiLsw85g+S/fyv/JsbHtGIptZGY=
 github.com/suifengpiao14/gqt/v2 v2.0.0-20220522153823-77b8f77dd37a h1:+01AoqVPLxsfi5T97ppoFjld2Nsn27foIlbCk2Nf8bM=
 github.com/suifengpiao14/gqt/v2 v2.0.0-20220522153823-77b8f77dd37a/go.mod h1:jsjAQB7N4qd+Juk60mMAKKldJztSn3/WxkkEHtLTm0Y=
+github.com/suifengpiao14/jsonschemaline v0.0.0-20220722081323-1b5544fdecf2 h1:NIBd4nvRRNTD4eQE+27u/7nTMFzWTI0uF8R4A9kVKNM=
+github.com/suifengpiao14/jsonschemaline v0.0.0-20220722081323-1b5544fdecf2/go.mod h1:R1QLL3QMpc2T0opNLkKHBW3/l7z4LxdzP/bFzgamn4M=
 github.com/suifengpiao14/templatemap v1.0.0 h1:79Yb+gA73TU3H+bFw6a89YYJGVvTET0rCI4qKQU5NV4=
 github.com/suifengpiao14/templatemap v1.0.0/go.mod h1:9ma1XSsuhro6cqg0aB8wJEC8y7zFKKJJ2+Q8Z+ipC1s=
 github.com/tiancaiamao/appdash v0.0.0-20181126055449-889f96f722a2/go.mod h1:2PfKggNGDuadAa0LElHrByyrz4JPZ9fFx6Gs7nx7ZZU=
@@ -327,6 +333,8 @@ goa.design/goa/v3 v3.6.2/go.mod h1:83kRxZirkLliAosKTdAOICV9sv7rd/6xIl1/RaicD8c=
 goa.design/goa/v3 v3.7.5/go.mod h1:OCCZWV0HyDl1bFeciHCWUhDB+hw3KzW6ROk3guu2ggQ=
 goa.design/goa/v3 v3.7.12 h1:h84o5FPqXeVUMBIGkxirBG47yQMGia/8sGEmsKI1B3E=
 goa.design/goa/v3 v3.7.12/go.mod h1:iAZRP2wqf2Fu++CWt7Qfoxe3iVMkKqlsFAEF2kcxs28=
+goa.design/goa/v3 v3.7.13 h1:4C1lF5dK/OjMJzzHLvSDUiSHD3rj7OkVxlxlOw6Yp24=
+goa.design/goa/v3 v3.7.13/go.mod h1:iAZRP2wqf2Fu++CWt7Qfoxe3iVMkKqlsFAEF2kcxs28=
 golang.org/x/crypto v0.0.0-20180904163835-0709b304e793/go.mod h1:6SG95UA2DQfeDnfUPMdvaQW0Q7yPrPDi9nlGo2tz2b4=
 golang.org/x/crypto v0.0.0-20190308221718-c2843e01d9a2/go.mod h1:djNgcEr1/C05ACkg1iLfiJU5Ep61QUkGW8qpdssI0+w=
 golang.org/x/crypto v0.0.0-20191011191535-87dc89f01550/go.mod h1:yigFU9vqHzYiE8UmvKecakEJjdnWj3jj499lnFckfCI=
@@ -398,6 +406,8 @@ golang.org/x/sys v0.0.0-20220317061510-51cd9980dadf/go.mod h1:oPkhp1MJrh7nUepCBc
 golang.org/x/sys v0.0.0-20220520151302-bc2c85ada10a/go.mod h1:oPkhp1MJrh7nUepCBck5+mAzfO9JrbApNNgaTdGDITg=
 golang.org/x/sys v0.0.0-20220715151400-c0bba94af5f8 h1:0A+M6Uqn+Eje4kHMK80dtF3JCXC4ykBgQG4Fe06QRhQ=
 golang.org/x/sys v0.0.0-20220715151400-c0bba94af5f8/go.mod h1:oPkhp1MJrh7nUepCBck5+mAzfO9JrbApNNgaTdGDITg=
+golang.org/x/sys v0.0.0-20220722155257-8c9f86f7a55f h1:v4INt8xihDGvnrfjMDVXGxw9wrfxYyCjk0KbXjhR55s=
+golang.org/x/sys v0.0.0-20220722155257-8c9f86f7a55f/go.mod h1:oPkhp1MJrh7nUepCBck5+mAzfO9JrbApNNgaTdGDITg=
 golang.org/x/term v0.0.0-20201126162022-7de9c90e9dd1/go.mod h1:bj7SfCRtBDWHUb9snDiAeCFNEtKQo2Wmx5Cou7ajbmo=
 golang.org/x/term v0.0.0-20210927222741-03fcf44c2211/go.mod h1:jbD1KX2456YbFQfuXm/mYQcufACuNUgVhRMnK/tPxf8=
 golang.org/x/text v0.0.0-20171214130843-f21a4dfb5e38/go.mod h1:NqM8EUOU14njkJ3fqMW+pc6Ldnwhi/IjpwHt7yyuwOQ=

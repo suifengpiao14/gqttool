@@ -13,6 +13,7 @@ import (
 	"github.com/invopop/jsonschema"
 	"github.com/pkg/errors"
 	"github.com/suifengpiao14/gqt/v2/gqttpl"
+	"github.com/suifengpiao14/jsonschemaline"
 	"github.com/suifengpiao14/templatemap"
 )
 
@@ -87,19 +88,27 @@ func SQLEntityElement(sqltplDefineText *TPLDefineText, tableList []*Table) (enti
 	return entityElement, nil
 }
 
-func SqlTplDefineVariable2lineschema(id string, variables []*Variable) (lineschema string, err error) {
+func SqlTplDefineVariable2lineschema(id string, variables []*Variable, direction string) (lineschema string, err error) {
 	arr := make([]string, 0)
+	if direction == jsonschemaline.LINE_SCHEMA_DIRECTION_IN {
+		arr = append(arr, fmt.Sprintf("version=http://json-schema.org/draft-07/schema,id=input,direction=%s", direction))
+	} else if direction == jsonschemaline.LINE_SCHEMA_DIRECTION_OUT {
+		arr = append(arr, fmt.Sprintf("version=http://json-schema.org/draft-07/schema,id=output,direction=%s", direction))
+	}
 	for _, v := range variables {
 		if v.FieldName == "" { // 过滤匿名字段
 			continue
 		}
 		kvArr := make([]string, 0)
+
 		kvArr = append(kvArr, fmt.Sprintf("fullname=%s", v.FieldName))
 		dst := ""
-		src := v.Validate.DataPathSrc
+		src := ""
 		format := v.Validate.Format
-		if src != "" { //如果来源为空,说明fullname代表来源,那么dst就是字段名
+		if direction == jsonschemaline.LINE_SCHEMA_DIRECTION_IN {
 			dst = v.FieldName
+		} else if direction == jsonschemaline.LINE_SCHEMA_DIRECTION_OUT {
+			src = v.Validate.DataPathSrc
 		}
 
 		if dst != "" {

@@ -25,11 +25,13 @@ require (
 	github.com/shirou/gopsutil v3.21.11+incompatible // indirect
 	github.com/sigurn/crc8 v0.0.0-20220107193325-2243fe600f9f // indirect
 	github.com/sirupsen/logrus v1.8.1 // indirect
+	github.com/suifengpiao14/jsonschemaline v0.0.0-20220722081323-1b5544fdecf2 // indirect
 	github.com/suifengpiao14/templatemap v1.0.0
 	github.com/yusufpapurcu/wmi v1.2.2 // indirect
-	goa.design/goa/v3 v3.7.12 // indirect
+	goa.design/goa/v3 v3.7.13 // indirect
 	golang.org/x/crypto v0.0.0-20220622213112-05595931fe9d // indirect
 	golang.org/x/sync v0.0.0-20220513210516-0976fa681c29 // indirect
+	golang.org/x/sys v0.0.0-20220722155257-8c9f86f7a55f // indirect
 	golang.org/x/tools v0.1.11
 	golang.org/x/xerrors v0.0.0-20220609144429-65e65417b02f // indirect
 	gorm.io/gorm v1.23.8 // indirect

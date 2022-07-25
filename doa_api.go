@@ -5,6 +5,7 @@ import (
 	"strings"
 
 	"github.com/invopop/jsonschema"
+	"github.com/suifengpiao14/jsonschemaline"
 )
 
 type SchemaProperty struct {
@@ -68,7 +69,7 @@ func GenerateExec(defineName string, table *Table, relationEntityStructList []*E
 	}
 	strArr = append(strArr, "{{end}}")
 	exec = strings.Join(strArr, "\n")
-	input, err = SqlTplDefineVariable2lineschema(defineName, properties)
+	input, err = SqlTplDefineVariable2lineschema(defineName, properties, jsonschemaline.LINE_SCHEMA_DIRECTION_IN)
 	if err != nil {
 		return "", "", "", err
 	}
@@ -117,7 +118,7 @@ func GenerateExec(defineName string, table *Table, relationEntityStructList []*E
 			outputVariables = append(outputVariables, cloneVariable)
 		}
 	}
-	out, err = SqlTplDefineVariable2lineschema(defineName, outputVariables)
+	out, err = SqlTplDefineVariable2lineschema(defineName, outputVariables, jsonschemaline.LINE_SCHEMA_DIRECTION_OUT)
 	if err != nil {
 		return "", "", "", err
 	}
