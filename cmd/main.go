@@ -474,7 +474,7 @@ type APIModel struct {
 
 const SourceInsertTpl = "insert ignore into `source` (`source_id`,`source_type`,`config`) values('%s','%s','%s');"
 const TemplateInsertTpl = "insert ignore into `template` (`template_id`,`type`,`title`,`description`,`source_id`,`tpl`) values('%s','SQL','%s','%s','%s','%s');"
-const ApiInsertTpl = "insert ignore into `api` (`api_id`,`title`,`description`,`method`,`route`,`template_ids`,`exec`,`validate_schema`,`output_schema`) values('%s','%s','%s','%s','%s','%s','%s','%s','%s');"
+const ApiInsertTpl = "insert ignore into `api` (`api_id`,`title`,`description`,`method`,`route`,`template_ids`,`exec`,`input`,`output`) values('%s','%s','%s','%s','%s','%s','%s','%s','%s');"
 
 func generateTemplateId(dbName string, tableName string, defineName string) (templateId string) {
 	templateId = fmt.Sprintf("%s%s%s", dbName, tableName, defineName)
@@ -546,7 +546,7 @@ func GenerateAPISQL(rep *gqttool.RepositoryMeta) (string, error) {
 				}
 				templatIds := strings.Join(templatIdArr, ",")
 				mainName := "main"
-				exec, apiSchema, outputSchema, err := gqttool.GenerateExec(mainName, table, relationEntityStructList)
+				exec, input, output, err := gqttool.GenerateExec(mainName, table, relationEntityStructList)
 				if err != nil {
 					return "", err
 				}
@@ -569,8 +569,8 @@ func GenerateAPISQL(rep *gqttool.RepositoryMeta) (string, error) {
 					Route:       fmt.Sprintf("/api/%s/v1/%s/%s", gqttool.SnakeCase(module), gqttool.SnakeCase(table.TableNameCamel()), gqttool.SnakeCase(name)),
 					Exec:        exec,
 					TemplateIDs: templatIds,
-					Input:       apiSchema,
-					Output:      outputSchema,
+					Input:       input,
+					Output:      output,
 				}
 				apiInsertSql := fmt.Sprintf(ApiInsertTpl, apiModel.APIID, apiModel.Title, apiModel.Description, apiModel.Method, apiModel.Route, apiModel.TemplateIDs, apiModel.Exec, apiModel.Input, apiModel.Output)
 				sqlRaws = append(sqlRaws, apiInsertSql)
