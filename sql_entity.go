@@ -106,7 +106,7 @@ func SqlTplDefineVariable2lineschema(id string, variables []*Variable, direction
 		src := ""
 		format := v.Validate.Format
 		if direction == jsonschemaline.LINE_SCHEMA_DIRECTION_IN {
-			dst = v.FieldName
+			dst = v.Name //此处使用驼峰,v.FieldName 被改成蛇型了
 		} else if direction == jsonschemaline.LINE_SCHEMA_DIRECTION_OUT {
 			src = v.Validate.DataPathSrc
 		}

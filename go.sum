@@ -285,8 +285,6 @@ github.com/suifengpiao14/ddl-executor v0.0.0-20220524105604-31a4142e615e/go.mod 
 github.com/suifengpiao14/errorformatter v0.0.0-20220404134538-d808a9e256e6/go.mod h1:d4GXPUb6d5XkO5+uuiLsw85g+S/fyv/JsbHtGIptZGY=
 github.com/suifengpiao14/errorformatter v0.0.0-20220416163841-b70eec6abce2 h1:H/GQiWO5noGy2WWurLtqHPCo/BPAWa0oxDW3rty2Tb0=
 github.com/suifengpiao14/errorformatter v0.0.0-20220416163841-b70eec6abce2/go.mod h1:d4GXPUb6d5XkO5+uuiLsw85g+S/fyv/JsbHtGIptZGY=
-github.com/suifengpiao14/gqt/v2 v2.0.0-20220522153823-77b8f77dd37a h1:+01AoqVPLxsfi5T97ppoFjld2Nsn27foIlbCk2Nf8bM=
-github.com/suifengpiao14/gqt/v2 v2.0.0-20220522153823-77b8f77dd37a/go.mod h1:jsjAQB7N4qd+Juk60mMAKKldJztSn3/WxkkEHtLTm0Y=
 github.com/suifengpiao14/jsonschemaline v0.0.0-20220722081323-1b5544fdecf2 h1:NIBd4nvRRNTD4eQE+27u/7nTMFzWTI0uF8R4A9kVKNM=
 github.com/suifengpiao14/jsonschemaline v0.0.0-20220722081323-1b5544fdecf2/go.mod h1:R1QLL3QMpc2T0opNLkKHBW3/l7z4LxdzP/bFzgamn4M=
 github.com/suifengpiao14/templatemap v1.0.0 h1:79Yb+gA73TU3H+bFw6a89YYJGVvTET0rCI4qKQU5NV4=
@@ -331,7 +329,6 @@ go.uber.org/multierr v1.1.0/go.mod h1:wR5kodmAFQ0UK8QlbwjlSNy0Z68gJhDJUG5sjR94q/
 go.uber.org/zap v1.9.1/go.mod h1:vwi/ZaCAaUcBkycHslxD9B2zi4UTXhF60s6SWpuDF0Q=
 goa.design/goa/v3 v3.6.2/go.mod h1:83kRxZirkLliAosKTdAOICV9sv7rd/6xIl1/RaicD8c=
 goa.design/goa/v3 v3.7.5/go.mod h1:OCCZWV0HyDl1bFeciHCWUhDB+hw3KzW6ROk3guu2ggQ=
-goa.design/goa/v3 v3.7.12 h1:h84o5FPqXeVUMBIGkxirBG47yQMGia/8sGEmsKI1B3E=
 goa.design/goa/v3 v3.7.12/go.mod h1:iAZRP2wqf2Fu++CWt7Qfoxe3iVMkKqlsFAEF2kcxs28=
 goa.design/goa/v3 v3.7.13 h1:4C1lF5dK/OjMJzzHLvSDUiSHD3rj7OkVxlxlOw6Yp24=
 goa.design/goa/v3 v3.7.13/go.mod h1:iAZRP2wqf2Fu++CWt7Qfoxe3iVMkKqlsFAEF2kcxs28=
@@ -404,7 +401,6 @@ golang.org/x/sys v0.0.0-20220227234510-4e6760a101f9/go.mod h1:oPkhp1MJrh7nUepCBc
 golang.org/x/sys v0.0.0-20220310020820-b874c991c1a5/go.mod h1:oPkhp1MJrh7nUepCBck5+mAzfO9JrbApNNgaTdGDITg=
 golang.org/x/sys v0.0.0-20220317061510-51cd9980dadf/go.mod h1:oPkhp1MJrh7nUepCBck5+mAzfO9JrbApNNgaTdGDITg=
 golang.org/x/sys v0.0.0-20220520151302-bc2c85ada10a/go.mod h1:oPkhp1MJrh7nUepCBck5+mAzfO9JrbApNNgaTdGDITg=
-golang.org/x/sys v0.0.0-20220715151400-c0bba94af5f8 h1:0A+M6Uqn+Eje4kHMK80dtF3JCXC4ykBgQG4Fe06QRhQ=
 golang.org/x/sys v0.0.0-20220715151400-c0bba94af5f8/go.mod h1:oPkhp1MJrh7nUepCBck5+mAzfO9JrbApNNgaTdGDITg=
 golang.org/x/sys v0.0.0-20220722155257-8c9f86f7a55f h1:v4INt8xihDGvnrfjMDVXGxw9wrfxYyCjk0KbXjhR55s=
 golang.org/x/sys v0.0.0-20220722155257-8c9f86f7a55f/go.mod h1:oPkhp1MJrh7nUepCBck5+mAzfO9JrbApNNgaTdGDITg=

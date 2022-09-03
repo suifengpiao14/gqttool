@@ -9,9 +9,9 @@ import (
 )
 
 func TestRunCmdModel(t *testing.T) {
-	// metaDir := "../example"
+	metaDir := "../example"
 	// modelFile := "../example/model.gen.go"
-	metaDir := "d:\\go\\docapi\\repository\\template"
+	//metaDir := "d:\\go\\docapi\\repository\\template"
 	modelFile := "./tmp.model.gen.go"
 	err := runCmdModel(metaDir, modelFile, true)
 	if err != nil {

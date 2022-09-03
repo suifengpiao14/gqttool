@@ -25,7 +25,7 @@ require (
 	github.com/shirou/gopsutil v3.21.11+incompatible // indirect
 	github.com/sigurn/crc8 v0.0.0-20220107193325-2243fe600f9f // indirect
 	github.com/sirupsen/logrus v1.8.1 // indirect
-	github.com/suifengpiao14/jsonschemaline v0.0.0-20220722081323-1b5544fdecf2 // indirect
+	github.com/suifengpiao14/jsonschemaline v0.0.0-20220722081323-1b5544fdecf2
 	github.com/suifengpiao14/templatemap v1.0.0
 	github.com/yusufpapurcu/wmi v1.2.2 // indirect
 	goa.design/goa/v3 v3.7.13 // indirect
@@ -41,7 +41,7 @@ require (
 replace github.com/bytewatch/ddl-executor => github.com/suifengpiao14/ddl-executor v0.0.0-20220524105604-31a4142e615e
 
 //replace github.com/suifengpiao14/templatemap => /Users/admin/Documents/go/templatemap
-//replace github.com/suifengpiao14/gqt/v2 => /Users/admin/Documents/go/gqt
+replace github.com/suifengpiao14/gqt/v2 => /Users/admin/Documents/go/gqt
 
 //replace github.com/suifengpiao14/gqt/v2 => D:\\go\\gqt
 
