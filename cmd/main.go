@@ -17,6 +17,7 @@ import (
 	"github.com/suifengpiao14/errorformatter"
 	"github.com/suifengpiao14/gqt/v2/gqttpl"
 	"github.com/suifengpiao14/gqttool"
+	"github.com/suifengpiao14/jsonschemaline"
 )
 
 func main() {
@@ -470,11 +471,13 @@ type APIModel struct {
 	Exec        string
 	Input       string
 	Output      string
+	InputTpl    string
+	OutputTpl   string
 }
 
 const SourceInsertTpl = "insert ignore into `source` (`source_id`,`source_type`,`config`) values('%s','%s','%s');"
 const TemplateInsertTpl = "insert ignore into `template` (`template_id`,`type`,`title`,`description`,`source_id`,`tpl`) values('%s','SQL','%s','%s','%s','%s');"
-const ApiInsertTpl = "insert ignore into `api` (`api_id`,`title`,`description`,`method`,`route`,`template_ids`,`exec`,`input`,`output`) values('%s','%s','%s','%s','%s','%s','%s','%s','%s');"
+const ApiInsertTpl = "insert ignore into `api` (`api_id`,`title`,`description`,`method`,`route`,`template_ids`,`exec`,`input`,`output`,`input_tpl`,`output_tpl`) values('%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s');"
 
 func generateTemplateId(dbName string, tableName string, defineName string) (templateId string) {
 	templateId = fmt.Sprintf("%s%s%s", dbName, tableName, defineName)
@@ -560,7 +563,24 @@ func GenerateAPISQL(rep *gqttool.RepositoryMeta) (string, error) {
 				}
 				title := fmt.Sprintf("%s%s%s", module, tableName, name)
 				title = gqttool.Translate(title, extraTranslatemap)
-
+				inputTpl := ""
+				outputTpl := ""
+				if input != "" {
+					lineschema, err := jsonschemaline.ParseJsonschemaline(input)
+					if err != nil {
+						return "", err
+					}
+					instructTpl := jsonschemaline.ParseInstructTp(*lineschema)
+					inputTpl = instructTpl.String()
+				}
+				if output != "" {
+					lineschema, err := jsonschemaline.ParseJsonschemaline(output)
+					if err != nil {
+						return "", err
+					}
+					instructTpl := jsonschemaline.ParseInstructTp(*lineschema)
+					outputTpl = instructTpl.String()
+				}
 				apiModel := APIModel{
 					APIID:       appId,
 					Title:       title,
@@ -571,8 +591,10 @@ func GenerateAPISQL(rep *gqttool.RepositoryMeta) (string, error) {
 					TemplateIDs: templatIds,
 					Input:       input,
 					Output:      output,
+					InputTpl:    inputTpl,
+					OutputTpl:   outputTpl,
 				}
-				apiInsertSql := fmt.Sprintf(ApiInsertTpl, apiModel.APIID, apiModel.Title, apiModel.Description, apiModel.Method, apiModel.Route, apiModel.TemplateIDs, apiModel.Exec, apiModel.Input, apiModel.Output)
+				apiInsertSql := fmt.Sprintf(ApiInsertTpl, apiModel.APIID, apiModel.Title, apiModel.Description, apiModel.Method, apiModel.Route, apiModel.TemplateIDs, apiModel.Exec, apiModel.Input, apiModel.Output, apiModel.InputTpl, apiModel.OutputTpl)
 				sqlRaws = append(sqlRaws, apiInsertSql)
 			}
 		}

@@ -24,8 +24,10 @@ require (
 	github.com/remyoudompheng/bigfft v0.0.0-20200410134404-eec4a21b6bb0 // indirect
 	github.com/shirou/gopsutil v3.21.11+incompatible // indirect
 	github.com/sirupsen/logrus v1.8.1 // indirect
-	github.com/suifengpiao14/jsonschemaline v0.0.0-20220722081323-1b5544fdecf2
+	github.com/suifengpiao14/jsonschemaline v0.0.3
 	github.com/suifengpiao14/templatemap v1.0.0
+	github.com/tidwall/gjson v1.14.3 // indirect
+	github.com/tidwall/sjson v1.2.5 // indirect
 	github.com/yusufpapurcu/wmi v1.2.2 // indirect
 	goa.design/goa/v3 v3.8.5 // indirect
 	golang.org/x/crypto v0.0.0-20220622213112-05595931fe9d // indirect
