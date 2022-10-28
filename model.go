@@ -334,13 +334,17 @@ func GenerateTable(ddlList []string, tableCfg *DatabaseConfig) (tables []*Table,
 				table.DeleteColumn = columnDef.Name
 			}
 
+			columnName := columnDef.Name
+			if tableCfg.ColumnPrefix != "" {
+				columnName = strings.TrimPrefix(columnName, tableCfg.ColumnPrefix)
+			}
 			columnPt := &Column{
-				CamelName:     ToCamel(columnDef.Name),
-				Name:          columnDef.Name,
+				CamelName:     ToCamel(columnName),
+				Name:          columnName,
 				Type:          goType,
 				Comment:       columnDef.Comment,
 				Nullable:      columnDef.Nullable,
-				Tag:           fmt.Sprintf("`json:\"%s\"`", ToLowerCamel(columnDef.Name)),
+				Tag:           fmt.Sprintf("`json:\"%s\" gorm:\"%s\"`", ToLowerCamel(columnName), columnDef.Name),
 				Enums:         columnDef.Elems,
 				AutoIncrement: columnDef.AutoIncrement,
 				DefaultValue:  columnDef.DefaultValue,
