@@ -6,7 +6,7 @@ import (
 	"strings"
 
 	"github.com/pkg/errors"
-	"github.com/suifengpiao14/gqt/v2/gqttpl"
+	"github.com/suifengpiao14/gqt/v2"
 )
 
 const (
@@ -46,44 +46,44 @@ func (d *TPLDefineText) FullnameCamel() (fullnameCamel string) {
 	return
 }
 
-//Content TPLDefine.Out 含有{{define ...{{end}} Content 在此基础上 去除 define标记
+// Content TPLDefine.Out 含有{{define ...{{end}} Content 在此基础上 去除 define标记
 func (d *TPLDefineText) Content() (content string) {
-	content = gqttpl.TrimSpaces(d.Text) // 去除开头结尾的非有效字符
-	index := strings.Index(content, gqttpl.RightDelim)
+	content = gqt.TrimSpaces(d.Text) // 去除开头结尾的非有效字符
+	index := strings.Index(content, gqt.RightDelim)
 	if index < 0 {
-		err := errors.Errorf("not found %sdefine \"xxx\" %s in tpl content %s", gqttpl.LeftDelim, gqttpl.RightDelim, content)
+		err := errors.Errorf("not found %sdefine \"xxx\" %s in tpl content %s", gqt.LeftDelim, gqt.RightDelim, content)
 		panic(err)
 	}
 
-	endTag := fmt.Sprintf("%send%s", gqttpl.LeftDelim, gqttpl.RightDelim)
+	endTag := fmt.Sprintf("%send%s", gqt.LeftDelim, gqt.RightDelim)
 	endIndex := strings.Index(content, endTag)
 	if endIndex < 0 {
-		err := errors.Errorf("not found %send%s in tpl content %s", gqttpl.LeftDelim, gqttpl.RightDelim, content)
+		err := errors.Errorf("not found %send%s in tpl content %s", gqt.LeftDelim, gqt.RightDelim, content)
 		panic(err)
 	}
-	content = content[index+len(gqttpl.RightDelim) : len(content)-len(endTag)]
-	content = gqttpl.TrimSpaces(content)
+	content = content[index+len(gqt.RightDelim) : len(content)-len(endTag)]
+	content = gqt.TrimSpaces(content)
 	return
 }
 
 func (d *TPLDefineText) ContentFirstLine(s string) (firstLine string) {
-	re, err := regexp.Compile(fmt.Sprintf("%s.*%s", gqttpl.LeftDelim, gqttpl.RightDelim))
+	re, err := regexp.Compile(fmt.Sprintf("%s.*%s", gqt.LeftDelim, gqt.RightDelim))
 	if err != nil {
 		panic(err)
 	}
 	for {
-		firstLineIndex := strings.Index(s, gqttpl.EOF)
+		firstLineIndex := strings.Index(s, gqt.EOF)
 		if firstLineIndex < 0 {
 			firstLine = s
 			break
 		}
 		firstLine = s[:firstLineIndex]
 		firstLine = re.ReplaceAllString(firstLine, "") // 删除template 模板变量，防止第一行为模板变量行，如果为模板变量则取下一行
-		firstLine = gqttpl.TrimSpaces(firstLine)
+		firstLine = gqt.TrimSpaces(firstLine)
 		if firstLine != "" {
 			break
 		}
-		s = s[firstLineIndex+len(gqttpl.EOF):] // 更新s 再次获取
+		s = s[firstLineIndex+len(gqt.EOF):] // 更新s 再次获取
 	}
 	return
 }
@@ -100,7 +100,7 @@ func (d *TPLDefineText) TypeTitle() (title string) {
 	return mapConfig[typ]
 }
 
-//Type 判断 tpl define 属于那种类型
+// Type 判断 tpl define 属于那种类型
 func (d *TPLDefineText) Type() (typ string) {
 	if d.typ != "" {
 		return d.typ
@@ -164,21 +164,21 @@ func (d *TPLDefineText) Type() (typ string) {
 	return
 }
 
-//判断是否为CURL 类型
+// 判断是否为CURL 类型
 func (d *TPLDefineText) ISCURL() (yes bool) {
 	typ := d.Type()
 	yes = (typ == TPL_DEFINE_TYPE_CURL_REQUEST) || (typ == TPL_DEFINE_TYPE_CURL_RESPONSE)
 	return
 }
 
-//判断是否为SQL 类型
+// 判断是否为SQL 类型
 func (d *TPLDefineText) ISSQL() (yes bool) {
 	typ := d.Type()
 	yes = (typ == TPL_DEFINE_TYPE_SQL_SELECT) || (typ == TPL_DEFINE_TYPE_SQL_UPDATE) || (typ == TPL_DEFINE_TYPE_SQL_INSERT)
 	return
 }
 
-//Tag TPLDefine 标签 namespace 的后缀（curl、sql、ddl、meta）
+// Tag TPLDefine 标签 namespace 的后缀（curl、sql、ddl、meta）
 func (d *TPLDefineText) Tag() (tag string) {
 	lastIndex := strings.Index(d.Namespace, ".")
 	tag = d.Namespace

@@ -5,7 +5,6 @@ import (
 	"testing"
 
 	"github.com/suifengpiao14/gqt/v2"
-	"github.com/suifengpiao14/gqt/v2/gqttpl"
 	"github.com/suifengpiao14/gqttool/example"
 )
 
@@ -79,7 +78,7 @@ func TestParseDefine(t *testing.T) {
        where service_id=:ServiceID;
  {{end}}
 	`
-	defineList := ManualParseDefine(sqlTpl, "", gqttpl.LeftDelim, gqttpl.RightDelim)
+	defineList := ManualParseDefine(sqlTpl, "", gqt.LeftDelim, gqt.RightDelim)
 	fmt.Println(defineList[2])
 
 }

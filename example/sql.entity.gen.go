@@ -1,12 +1,12 @@
 package example
 
-import "github.com/suifengpiao14/gqt/v2/gqttpl"
+import "github.com/suifengpiao14/gqt/v2"
 
 type SQLAPISQLDelEntity struct {
 	APIID         string
 	OperatorIDInt int
 	OperatorStr   string
-	gqttpl.TplEmptyEntity
+	gqt.TplEmptyEntity
 }
 
 func (t *SQLAPISQLDelEntity) TplName() string {
@@ -18,7 +18,7 @@ func (t *SQLAPISQLDelEntity) TplType() string {
 
 type SQLAPISQLGetAllByAPIIDListEntity struct {
 	APIIDList []string
-	gqttpl.TplEmptyEntity
+	gqt.TplEmptyEntity
 }
 
 func (t *SQLAPISQLGetAllByAPIIDListEntity) TplName() string {
@@ -30,7 +30,7 @@ func (t *SQLAPISQLGetAllByAPIIDListEntity) TplType() string {
 
 type SQLAPISQLGetByAPIIDEntity struct {
 	APIID string
-	gqttpl.TplEmptyEntity
+	gqt.TplEmptyEntity
 }
 
 func (t *SQLAPISQLGetByAPIIDEntity) TplName() string {
@@ -49,7 +49,7 @@ type SQLAPISQLInsertEntity struct {
 	Tags        string
 	Title       string
 	URI         string
-	gqttpl.TplEmptyEntity
+	gqt.TplEmptyEntity
 }
 
 func (t *SQLAPISQLInsertEntity) TplName() string {
@@ -63,7 +63,7 @@ type SQLAPISQLPaginateEntity struct {
 	Limit  int
 	Offset int
 	SQLAPISQLPaginateWhereEntity
-	gqttpl.TplEmptyEntity
+	gqt.TplEmptyEntity
 }
 
 func (t *SQLAPISQLPaginateEntity) TplName() string {
@@ -75,7 +75,7 @@ func (t *SQLAPISQLPaginateEntity) TplType() string {
 
 type SQLAPISQLPaginateTotalEntity struct {
 	SQLAPISQLPaginateWhereEntity
-	gqttpl.TplEmptyEntity
+	gqt.TplEmptyEntity
 }
 
 func (t *SQLAPISQLPaginateTotalEntity) TplName() string {
@@ -86,7 +86,7 @@ func (t *SQLAPISQLPaginateTotalEntity) TplType() string {
 }
 
 type SQLAPISQLPaginateWhereEntity struct {
-	gqttpl.TplEmptyEntity
+	gqt.TplEmptyEntity
 }
 
 func (t *SQLAPISQLPaginateWhereEntity) TplName() string {
@@ -105,7 +105,7 @@ type SQLAPISQLUpdateEntity struct {
 	Tags        string
 	Title       string
 	URI         string
-	gqttpl.TplEmptyEntity
+	gqt.TplEmptyEntity
 }
 
 func (t *SQLAPISQLUpdateEntity) TplName() string {
@@ -117,7 +117,7 @@ func (t *SQLAPISQLUpdateEntity) TplType() string {
 
 type SQLExampleSQLDelEntity struct {
 	ExampleID string
-	gqttpl.TplEmptyEntity
+	gqt.TplEmptyEntity
 }
 
 func (t *SQLExampleSQLDelEntity) TplName() string {
@@ -129,7 +129,7 @@ func (t *SQLExampleSQLDelEntity) TplType() string {
 
 type SQLExampleSQLGetAllByExampleIDListEntity struct {
 	ExampleIDList []string
-	gqttpl.TplEmptyEntity
+	gqt.TplEmptyEntity
 }
 
 func (t *SQLExampleSQLGetAllByExampleIDListEntity) TplName() string {
@@ -141,7 +141,7 @@ func (t *SQLExampleSQLGetAllByExampleIDListEntity) TplType() string {
 
 type SQLExampleSQLGetByExampleIDEntity struct {
 	ExampleID string
-	gqttpl.TplEmptyEntity
+	gqt.TplEmptyEntity
 }
 
 func (t *SQLExampleSQLGetByExampleIDEntity) TplName() string {
@@ -160,7 +160,7 @@ type SQLExampleSQLInsertEntity struct {
 	Summary   string
 	Tag       string
 	Title     string
-	gqttpl.TplEmptyEntity
+	gqt.TplEmptyEntity
 }
 
 func (t *SQLExampleSQLInsertEntity) TplName() string {
@@ -174,7 +174,7 @@ type SQLExampleSQLPaginateEntity struct {
 	Limit  int
 	Offset int
 	SQLExampleSQLPaginateWhereEntity
-	gqttpl.TplEmptyEntity
+	gqt.TplEmptyEntity
 }
 
 func (t *SQLExampleSQLPaginateEntity) TplName() string {
@@ -186,7 +186,7 @@ func (t *SQLExampleSQLPaginateEntity) TplType() string {
 
 type SQLExampleSQLPaginateTotalEntity struct {
 	SQLExampleSQLPaginateWhereEntity
-	gqttpl.TplEmptyEntity
+	gqt.TplEmptyEntity
 }
 
 func (t *SQLExampleSQLPaginateTotalEntity) TplName() string {
@@ -197,7 +197,7 @@ func (t *SQLExampleSQLPaginateTotalEntity) TplType() string {
 }
 
 type SQLExampleSQLPaginateWhereEntity struct {
-	gqttpl.TplEmptyEntity
+	gqt.TplEmptyEntity
 }
 
 func (t *SQLExampleSQLPaginateWhereEntity) TplName() string {
@@ -216,7 +216,7 @@ type SQLExampleSQLUpdateEntity struct {
 	Summary   string
 	Tag       string
 	Title     string
-	gqttpl.TplEmptyEntity
+	gqt.TplEmptyEntity
 }
 
 func (t *SQLExampleSQLUpdateEntity) TplName() string {
@@ -228,7 +228,7 @@ func (t *SQLExampleSQLUpdateEntity) TplType() string {
 
 type SQLMarkdownSQLDelEntity struct {
 	MarkdownID string
-	gqttpl.TplEmptyEntity
+	gqt.TplEmptyEntity
 }
 
 func (t *SQLMarkdownSQLDelEntity) TplName() string {
@@ -240,7 +240,7 @@ func (t *SQLMarkdownSQLDelEntity) TplType() string {
 
 type SQLMarkdownSQLGetAllByMarkdownIDListEntity struct {
 	MarkdownIDList []string
-	gqttpl.TplEmptyEntity
+	gqt.TplEmptyEntity
 }
 
 func (t *SQLMarkdownSQLGetAllByMarkdownIDListEntity) TplName() string {
@@ -252,7 +252,7 @@ func (t *SQLMarkdownSQLGetAllByMarkdownIDListEntity) TplType() string {
 
 type SQLMarkdownSQLGetByMarkdownIDEntity struct {
 	MarkdownID string
-	gqttpl.TplEmptyEntity
+	gqt.TplEmptyEntity
 }
 
 func (t *SQLMarkdownSQLGetByMarkdownIDEntity) TplName() string {
@@ -272,7 +272,7 @@ type SQLMarkdownSQLInsertEntity struct {
 	OwnerName  string
 	ServiceID  string
 	Title      string
-	gqttpl.TplEmptyEntity
+	gqt.TplEmptyEntity
 }
 
 func (t *SQLMarkdownSQLInsertEntity) TplName() string {
@@ -286,7 +286,7 @@ type SQLMarkdownSQLPaginateEntity struct {
 	Limit  int
 	Offset int
 	SQLMarkdownSQLPaginateWhereEntity
-	gqttpl.TplEmptyEntity
+	gqt.TplEmptyEntity
 }
 
 func (t *SQLMarkdownSQLPaginateEntity) TplName() string {
@@ -298,7 +298,7 @@ func (t *SQLMarkdownSQLPaginateEntity) TplType() string {
 
 type SQLMarkdownSQLPaginateTotalEntity struct {
 	SQLMarkdownSQLPaginateWhereEntity
-	gqttpl.TplEmptyEntity
+	gqt.TplEmptyEntity
 }
 
 func (t *SQLMarkdownSQLPaginateTotalEntity) TplName() string {
@@ -309,7 +309,7 @@ func (t *SQLMarkdownSQLPaginateTotalEntity) TplType() string {
 }
 
 type SQLMarkdownSQLPaginateWhereEntity struct {
-	gqttpl.TplEmptyEntity
+	gqt.TplEmptyEntity
 }
 
 func (t *SQLMarkdownSQLPaginateWhereEntity) TplName() string {
@@ -329,7 +329,7 @@ type SQLMarkdownSQLUpdateEntity struct {
 	OwnerName  string
 	ServiceID  string
 	Title      string
-	gqttpl.TplEmptyEntity
+	gqt.TplEmptyEntity
 }
 
 func (t *SQLMarkdownSQLUpdateEntity) TplName() string {
@@ -341,7 +341,7 @@ func (t *SQLMarkdownSQLUpdateEntity) TplType() string {
 
 type SQLServerSQLDelEntity struct {
 	ServerID string
-	gqttpl.TplEmptyEntity
+	gqt.TplEmptyEntity
 }
 
 func (t *SQLServerSQLDelEntity) TplName() string {
@@ -353,7 +353,7 @@ func (t *SQLServerSQLDelEntity) TplType() string {
 
 type SQLServerSQLGetAllByServerIDListEntity struct {
 	ServerIDList []string
-	gqttpl.TplEmptyEntity
+	gqt.TplEmptyEntity
 }
 
 func (t *SQLServerSQLGetAllByServerIDListEntity) TplName() string {
@@ -365,7 +365,7 @@ func (t *SQLServerSQLGetAllByServerIDListEntity) TplType() string {
 
 type SQLServerSQLGetByServerIDEntity struct {
 	ServerID string
-	gqttpl.TplEmptyEntity
+	gqt.TplEmptyEntity
 }
 
 func (t *SQLServerSQLGetByServerIDEntity) TplName() string {
@@ -382,7 +382,7 @@ type SQLServerSQLInsertEntity struct {
 	ServerID     string
 	ServiceID    string
 	URL          string
-	gqttpl.TplEmptyEntity
+	gqt.TplEmptyEntity
 }
 
 func (t *SQLServerSQLInsertEntity) TplName() string {
@@ -396,7 +396,7 @@ type SQLServerSQLPaginateEntity struct {
 	Limit  int
 	Offset int
 	SQLServerSQLPaginateWhereEntity
-	gqttpl.TplEmptyEntity
+	gqt.TplEmptyEntity
 }
 
 func (t *SQLServerSQLPaginateEntity) TplName() string {
@@ -408,7 +408,7 @@ func (t *SQLServerSQLPaginateEntity) TplType() string {
 
 type SQLServerSQLPaginateTotalEntity struct {
 	SQLServerSQLPaginateWhereEntity
-	gqttpl.TplEmptyEntity
+	gqt.TplEmptyEntity
 }
 
 func (t *SQLServerSQLPaginateTotalEntity) TplName() string {
@@ -419,7 +419,7 @@ func (t *SQLServerSQLPaginateTotalEntity) TplType() string {
 }
 
 type SQLServerSQLPaginateWhereEntity struct {
-	gqttpl.TplEmptyEntity
+	gqt.TplEmptyEntity
 }
 
 func (t *SQLServerSQLPaginateWhereEntity) TplName() string {
@@ -436,7 +436,7 @@ type SQLServerSQLUpdateEntity struct {
 	ServerID     string
 	ServiceID    string
 	URL          string
-	gqttpl.TplEmptyEntity
+	gqt.TplEmptyEntity
 }
 
 func (t *SQLServerSQLUpdateEntity) TplName() string {
@@ -448,7 +448,7 @@ func (t *SQLServerSQLUpdateEntity) TplType() string {
 
 type SQLServiceSQLDelEntity struct {
 	ServiceID string
-	gqttpl.TplEmptyEntity
+	gqt.TplEmptyEntity
 }
 
 func (t *SQLServiceSQLDelEntity) TplName() string {
@@ -460,7 +460,7 @@ func (t *SQLServiceSQLDelEntity) TplType() string {
 
 type SQLServiceSQLGetAllByServiceIDListEntity struct {
 	ServiceIDList []string
-	gqttpl.TplEmptyEntity
+	gqt.TplEmptyEntity
 }
 
 func (t *SQLServiceSQLGetAllByServiceIDListEntity) TplName() string {
@@ -472,7 +472,7 @@ func (t *SQLServiceSQLGetAllByServiceIDListEntity) TplType() string {
 
 type SQLServiceSQLGetByServiceIDEntity struct {
 	ServiceID string
-	gqttpl.TplEmptyEntity
+	gqt.TplEmptyEntity
 }
 
 func (t *SQLServiceSQLGetByServiceIDEntity) TplName() string {
@@ -492,7 +492,7 @@ type SQLServiceSQLInsertEntity struct {
 	Title       string
 	Variables   string
 	Version     string
-	gqttpl.TplEmptyEntity
+	gqt.TplEmptyEntity
 }
 
 func (t *SQLServiceSQLInsertEntity) TplName() string {
@@ -506,7 +506,7 @@ type SQLServiceSQLPaginateEntity struct {
 	Limit  int
 	Offset int
 	SQLServiceSQLPaginateWhereEntity
-	gqttpl.TplEmptyEntity
+	gqt.TplEmptyEntity
 }
 
 func (t *SQLServiceSQLPaginateEntity) TplName() string {
@@ -518,7 +518,7 @@ func (t *SQLServiceSQLPaginateEntity) TplType() string {
 
 type SQLServiceSQLPaginateTotalEntity struct {
 	SQLServiceSQLPaginateWhereEntity
-	gqttpl.TplEmptyEntity
+	gqt.TplEmptyEntity
 }
 
 func (t *SQLServiceSQLPaginateTotalEntity) TplName() string {
@@ -529,7 +529,7 @@ func (t *SQLServiceSQLPaginateTotalEntity) TplType() string {
 }
 
 type SQLServiceSQLPaginateWhereEntity struct {
-	gqttpl.TplEmptyEntity
+	gqt.TplEmptyEntity
 }
 
 func (t *SQLServiceSQLPaginateWhereEntity) TplName() string {
@@ -549,7 +549,7 @@ type SQLServiceSQLUpdateEntity struct {
 	Title       string
 	Variables   string
 	Version     string
-	gqttpl.TplEmptyEntity
+	gqt.TplEmptyEntity
 }
 
 func (t *SQLServiceSQLUpdateEntity) TplName() string {
@@ -561,7 +561,7 @@ func (t *SQLServiceSQLUpdateEntity) TplType() string {
 
 type SQLValidateSchemaSQLDelEntity struct {
 	ValidateSchemaID string
-	gqttpl.TplEmptyEntity
+	gqt.TplEmptyEntity
 }
 
 func (t *SQLValidateSchemaSQLDelEntity) TplName() string {
@@ -573,7 +573,7 @@ func (t *SQLValidateSchemaSQLDelEntity) TplType() string {
 
 type SQLValidateSchemaSQLGetAllByValidateSchemaIDListEntity struct {
 	ValidateSchemaIDList []string
-	gqttpl.TplEmptyEntity
+	gqt.TplEmptyEntity
 }
 
 func (t *SQLValidateSchemaSQLGetAllByValidateSchemaIDListEntity) TplName() string {
@@ -585,7 +585,7 @@ func (t *SQLValidateSchemaSQLGetAllByValidateSchemaIDListEntity) TplType() strin
 
 type SQLValidateSchemaSQLGetByValidateSchemaIDEntity struct {
 	ValidateSchemaID string
-	gqttpl.TplEmptyEntity
+	gqt.TplEmptyEntity
 }
 
 func (t *SQLValidateSchemaSQLGetByValidateSchemaIDEntity) TplName() string {
@@ -638,7 +638,7 @@ type SQLValidateSchemaSQLInsertEntity struct {
 	ValidateSchemaID     string
 	WriteOnly            string
 	XML                  string
-	gqttpl.TplEmptyEntity
+	gqt.TplEmptyEntity
 }
 
 func (t *SQLValidateSchemaSQLInsertEntity) TplName() string {
@@ -652,7 +652,7 @@ type SQLValidateSchemaSQLPaginateEntity struct {
 	Limit  int
 	Offset int
 	SQLValidateSchemaSQLPaginateWhereEntity
-	gqttpl.TplEmptyEntity
+	gqt.TplEmptyEntity
 }
 
 func (t *SQLValidateSchemaSQLPaginateEntity) TplName() string {
@@ -664,7 +664,7 @@ func (t *SQLValidateSchemaSQLPaginateEntity) TplType() string {
 
 type SQLValidateSchemaSQLPaginateTotalEntity struct {
 	SQLValidateSchemaSQLPaginateWhereEntity
-	gqttpl.TplEmptyEntity
+	gqt.TplEmptyEntity
 }
 
 func (t *SQLValidateSchemaSQLPaginateTotalEntity) TplName() string {
@@ -675,7 +675,7 @@ func (t *SQLValidateSchemaSQLPaginateTotalEntity) TplType() string {
 }
 
 type SQLValidateSchemaSQLPaginateWhereEntity struct {
-	gqttpl.TplEmptyEntity
+	gqt.TplEmptyEntity
 }
 
 func (t *SQLValidateSchemaSQLPaginateWhereEntity) TplName() string {
@@ -728,7 +728,7 @@ type SQLValidateSchemaSQLUpdateEntity struct {
 	ValidateSchemaID     string
 	WriteOnly            string
 	XML                  string
-	gqttpl.TplEmptyEntity
+	gqt.TplEmptyEntity
 }
 
 func (t *SQLValidateSchemaSQLUpdateEntity) TplName() string {

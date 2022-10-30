@@ -8,12 +8,12 @@ import (
 	"text/template"
 
 	"github.com/pkg/errors"
-	"github.com/suifengpiao14/gqt/v2/gqttpl"
+	"github.com/suifengpiao14/gqt/v2"
 
 	executor "github.com/bytewatch/ddl-executor"
 )
 
-//map for converting mysql type to golang types
+// map for converting mysql type to golang types
 var typeForMysqlToGo = map[string]string{
 	"int":                "int",
 	"integer":            "int",
@@ -127,7 +127,7 @@ func (e Enums) Less(i, j int) bool { // 重写 Less() 方法， 从小到大排�
 	return e[i].ConstKey < e[j].ConstKey
 }
 
-//UniqueItems 去重
+// UniqueItems 去重
 func (e Enums) UniqueItems() (uniq Enums) {
 	emap := make(map[string]*Enum)
 	for _, enum := range e {
@@ -140,7 +140,7 @@ func (e Enums) UniqueItems() (uniq Enums) {
 	return
 }
 
-//ColumnNameCamels 获取所有分组
+// ColumnNameCamels 获取所有分组
 func (e Enums) ColumnNameCamels() (output []string) {
 	columnNameCamelMap := make(map[string]string)
 	for _, enum := range e {
@@ -153,7 +153,7 @@ func (e Enums) ColumnNameCamels() (output []string) {
 	return
 }
 
-//GetByGroup 通过分组名称获取enum
+// GetByGroup 通过分组名称获取enum
 func (e Enums) GetByColumnNameCamel(ColumnNameCamel string) (enums Enums) {
 	enums = Enums{}
 	for _, enum := range e {
@@ -165,18 +165,18 @@ func (e Enums) GetByColumnNameCamel(ColumnNameCamel string) (enums Enums) {
 }
 
 type Table struct {
-	DatabaseConfig        DatabaseConfig
-	TableName             string
-	PrimaryKey            string
-	DeleteColumn          string
-	Columns               []*Column
-	EnumsConst            Enums
-	Comment               string
-	TableDef              *executor.TableDef
-	gqttpl.TplEmptyEntity // 方便将Table对象传入到模板中使用
+	DatabaseConfig     DatabaseConfig
+	TableName          string
+	PrimaryKey         string
+	DeleteColumn       string
+	Columns            []*Column
+	EnumsConst         Enums
+	Comment            string
+	TableDef           *executor.TableDef
+	gqt.TplEmptyEntity // 方便将Table对象传入到模板中使用
 }
 
-//CamelName 删除表前缀，转换成 camel 格式
+// CamelName 删除表前缀，转换成 camel 格式
 func (t *Table) TableNameCamel() (camelName string) {
 	name := t.TableNameTrimPrefix()
 	camelName = ToCamel(name)

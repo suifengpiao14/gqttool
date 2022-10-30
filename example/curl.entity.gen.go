@@ -1,11 +1,11 @@
 package example
 
-import "github.com/suifengpiao14/gqt/v2/gqttpl"
+import "github.com/suifengpiao14/gqt/v2"
 
 type CurlOrderCurlGetOrderByOrderNumberBodyEntity struct {
 	OrderNumber interface{}
 	ServiceID   interface{}
-	gqttpl.TplEmptyEntity
+	gqt.TplEmptyEntity
 }
 
 func (t *CurlOrderCurlGetOrderByOrderNumberBodyEntity) TplName() string {
@@ -20,7 +20,7 @@ type CurlOrderCurlGetOrderByOrderNumberEntity struct {
 	CurlOrderCurlGetOrderByOrderNumberBodyEntity
 	SecretKey interface{}
 	ServiceID interface{}
-	gqttpl.TplEmptyEntity
+	gqt.TplEmptyEntity
 }
 
 func (t *CurlOrderCurlGetOrderByOrderNumberEntity) TplName() string {
@@ -50,7 +50,7 @@ type CurlOrderCurlGetOrderByOrderNumberResponseEntity struct {
 	BrandId         string  `json:"brandId" njson:"_data._data.good.brandId"`
 	Business        string  `json:"business" njson:"_data._data.good.brandId"`
 	ResponseStatus
-	gqttpl.TplEmptyEntity
+	gqt.TplEmptyEntity
 }
 
 func (t *CurlOrderCurlGetOrderByOrderNumberResponseEntity) TplName() string {

@@ -15,7 +15,7 @@ import (
 
 	"github.com/pkg/errors"
 	"github.com/suifengpiao14/errorformatter"
-	"github.com/suifengpiao14/gqt/v2/gqttpl"
+	"github.com/suifengpiao14/gqt/v2"
 	"github.com/suifengpiao14/gqttool"
 	"github.com/suifengpiao14/jsonschemaline"
 )
@@ -182,7 +182,7 @@ func runCmdAPISQL(metaDir string, apiSQLFile string, force bool) (err error) {
 		return
 	}
 	filename := fmt.Sprintf("%s.sql", apiSQLFile)
-	err = saveFile(filename, strings.Join(sqlRaws, gqttpl.EOF), force)
+	err = saveFile(filename, strings.Join(sqlRaws, gqt.EOF), force)
 	if err != nil {
 		return
 	}
@@ -196,7 +196,7 @@ func runCmdSQLEntity(sqlDir string, entityFilename string, force bool) (err erro
 	var sqlTplDefineList = make([]*gqttool.TPLDefineText, 0)
 	errChain.SetError(repo.AddByDir(sqlDir, gqttool.MetaTemplatefuncMap)).
 		Run(func() (err error) {
-			sqlTplDefineList, err = gqttool.ManualParseDirTplDefine(sqlDir, gqttpl.SQLNamespaceSuffix, gqttpl.LeftDelim, gqttpl.RightDelim)
+			sqlTplDefineList, err = gqttool.ManualParseDirTplDefine(sqlDir, gqt.SQLNamespaceSuffix, gqt.LeftDelim, gqt.RightDelim)
 			return
 		}).
 		Run(func() (err error) {
@@ -216,7 +216,7 @@ func runCmdSQLEntity(sqlDir string, entityFilename string, force bool) (err erro
 		return
 	}
 	packageLine := fmt.Sprintf("package %s", packageName)
-	importLine := `import "github.com/suifengpiao14/gqt/v2/gqttpl"`
+	importLine := `import "github.com/suifengpiao14/gqt/v2"`
 	contentArr = append(contentArr, packageLine)
 	contentArr = append(contentArr, importLine)
 	contentArr = append(contentArr, entityList...)
@@ -235,7 +235,7 @@ func runCmdCURLEntity(curlDir string, entityFilename string, force bool) (err er
 	var tplDefineList = make(gqttool.TPLDefineTextList, 0)
 	errChain.SetError(repo.AddByDir(curlDir, gqttool.MetaTemplatefuncMap)).
 		Run(func() (err error) {
-			tplDefineList, err = gqttool.ManualParseDirTplDefine(curlDir, gqttpl.CURLNamespaceSuffix, gqttpl.LeftDelim, gqttpl.RightDelim)
+			tplDefineList, err = gqttool.ManualParseDirTplDefine(curlDir, gqt.CURLNamespaceSuffix, gqt.LeftDelim, gqt.RightDelim)
 			return
 		}).
 		Run(func() (err error) {
@@ -255,7 +255,7 @@ func runCmdCURLEntity(curlDir string, entityFilename string, force bool) (err er
 		return
 	}
 	packageLine := fmt.Sprintf("package %s", packageName)
-	importLine := `import "github.com/suifengpiao14/gqt/v2/gqttpl"`
+	importLine := `import "github.com/suifengpiao14/gqt/v2"`
 	contentArr = append(contentArr, packageLine)
 	contentArr = append(contentArr, importLine)
 	contentArr = append(contentArr, entityList...)
@@ -301,21 +301,21 @@ func saveFile(filename string, content string, force bool) (err error) {
 			f.Close()
 		}
 	}()
-	content = gqttpl.ToEOF(content)
-	lineArr := strings.Split(content, gqttpl.EOF)
+	content = gqt.ToEOF(content)
+	lineArr := strings.Split(content, gqt.EOF)
 	newLineArr := make([]string, 0)
 	for _, line := range lineArr {
-		standLine := gqttpl.StandardizeSpaces(line)
+		standLine := gqt.StandardizeSpaces(line)
 		if standLine == "" {
 			continue
 		}
 
 		if standLine == TPL_DEFINE_END { // 模板结尾增加空行
-			standLine = standLine + gqttpl.EOF
+			standLine = standLine + gqt.EOF
 		}
 		newLineArr = append(newLineArr, standLine)
 	}
-	content = strings.Join(newLineArr, gqttpl.EOF)
+	content = strings.Join(newLineArr, gqt.EOF)
 	_, err = f.WriteString(content)
 	if err != nil {
 		return
@@ -519,7 +519,7 @@ func GenerateAPISQL(rep *gqttool.RepositoryMeta) (string, error) {
 			entityStructMap[entityStruct.Name] = entityStruct
 		}
 		for _, define := range sqlTplNamespace.Defines {
-			name, tpl := define.Name, gqttpl.StandardizeSpaces(define.Text)
+			name, tpl := define.Name, gqt.StandardizeSpaces(define.Text)
 			defineNameCamel := gqttool.ToCamel(define.Name)
 			templatId := generateTemplateId(moduleCamel, table.TableNameCamel(), defineNameCamel)
 			tableName := table.TableNameCamel()
@@ -600,16 +600,16 @@ func GenerateAPISQL(rep *gqttool.RepositoryMeta) (string, error) {
 		}
 
 	}
-	return strings.Join(sqlRaws, gqttpl.EOF), nil
+	return strings.Join(sqlRaws, gqt.EOF), nil
 }
 
 func Define2Sql(define string) (name string, sql string) {
-	define = gqttpl.StandardizeSpaces(define)
+	define = gqt.StandardizeSpaces(define)
 	re := regexp.MustCompile(`\{\{define +"(\w+)"\}\}(.+)\{\{end\}\}`)
 	matched := re.FindStringSubmatch(define)
 	if len(matched) > 2 {
 		name = matched[1]
-		sql = gqttpl.StandardizeSpaces(matched[2])
+		sql = gqt.StandardizeSpaces(matched[2])
 		return name, sql
 	}
 	return "", ""

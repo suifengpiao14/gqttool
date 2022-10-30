@@ -8,7 +8,7 @@ import (
 
 	"github.com/BurntSushi/toml"
 	"github.com/pkg/errors"
-	"github.com/suifengpiao14/gqt/v2/gqttpl"
+	"github.com/suifengpiao14/gqt/v2"
 )
 
 type RepositoryMeta struct {
@@ -23,12 +23,12 @@ type DatabaseConfig struct {
 	DeletedAtColumn string `mapstructure:"deletedAtColumn"`
 }
 
-var MetaNameSpaceSuffix = gqttpl.MetaNamespaceSuffix
+var MetaNameSpaceSuffix = gqt.MetaNamespaceSuffix
 var MetaLeftDelim = "[["
 var MetaRightDelim = "]]"
 
-var DDLNamespaceSuffix = gqttpl.DDLNamespaceSuffix
-var ConfigNamespaceSuffix = gqttpl.ConfigNamespaceSuffix
+var DDLNamespaceSuffix = gqt.DDLNamespaceSuffix
+var ConfigNamespaceSuffix = gqt.ConfigNamespaceSuffix
 
 // ddl namespace sufix . define name prefix
 var DatabaseConfigName = "database"
@@ -40,11 +40,11 @@ func NewRepositoryMeta() *RepositoryMeta {
 }
 
 func (r *RepositoryMeta) AddByDir(root string, funcMap template.FuncMap) (err error) {
-	r.templates, err = gqttpl.AddTemplateByDir(root, MetaNameSpaceSuffix, funcMap, MetaLeftDelim, MetaRightDelim)
+	r.templates, err = gqt.AddTemplateByDir(root, MetaNameSpaceSuffix, funcMap, MetaLeftDelim, MetaRightDelim)
 	if err != nil {
 		return
 	}
-	ddlTemplates, err := gqttpl.AddTemplateByDir(root, DDLNamespaceSuffix, funcMap, gqttpl.LeftDelim, gqttpl.RightDelim)
+	ddlTemplates, err := gqt.AddTemplateByDir(root, DDLNamespaceSuffix, funcMap, gqt.LeftDelim, gqt.RightDelim)
 	if err != nil {
 		return
 	}
@@ -52,7 +52,7 @@ func (r *RepositoryMeta) AddByDir(root string, funcMap template.FuncMap) (err er
 	for fullname, tpl := range ddlTemplates {
 		r.templates[fullname] = tpl
 	}
-	configTemplates, err := gqttpl.AddTemplateByDir(root, ConfigNamespaceSuffix, funcMap, gqttpl.LeftDelim, gqttpl.RightDelim)
+	configTemplates, err := gqt.AddTemplateByDir(root, ConfigNamespaceSuffix, funcMap, gqt.LeftDelim, gqt.RightDelim)
 	if err != nil {
 		return
 	}
@@ -63,13 +63,13 @@ func (r *RepositoryMeta) AddByDir(root string, funcMap template.FuncMap) (err er
 }
 
 func (r *RepositoryMeta) AddByNamespace(namespace string, content string, funcMap template.FuncMap) (err error) {
-	leftDelim := gqttpl.LeftDelim
-	rightDelim := gqttpl.RightDelim
+	leftDelim := gqt.LeftDelim
+	rightDelim := gqt.RightDelim
 	if strings.HasSuffix(namespace, MetaNameSpaceSuffix) {
 		leftDelim = MetaLeftDelim
 		rightDelim = MetaRightDelim
 	}
-	t, err := gqttpl.AddTemplateByStr(namespace, content, funcMap, leftDelim, rightDelim)
+	t, err := gqt.AddTemplateByStr(namespace, content, funcMap, leftDelim, rightDelim)
 	if err != nil {
 		err = errors.WithStack(err)
 		return err
@@ -79,16 +79,16 @@ func (r *RepositoryMeta) AddByNamespace(namespace string, content string, funcMa
 }
 
 // GetByNamespace get all template under namespace
-func (r *RepositoryMeta) GetByNamespace(namespace string, data gqttpl.TplEntityInterface) (tplDefineList []*gqttpl.TPLDefine, err error) {
-	tplDefineList, err = gqttpl.ExecuteNamespaceTemplate(r.templates, namespace, data)
+func (r *RepositoryMeta) GetByNamespace(namespace string, data gqt.TplEntityInterface) (tplDefineList []*gqt.TPLDefine, err error) {
+	tplDefineList, err = gqt.ExecuteNamespaceTemplate(r.templates, namespace, data)
 	if err != nil {
 		return nil, err
 	}
 	return
 }
 
-func (r *RepositoryMeta) GetTPLDefine(fullname string, data gqttpl.TplEntityInterface) (tplDefine *gqttpl.TPLDefine, err error) {
-	tplDefine, err = gqttpl.ExecuteTemplate(r.templates, fullname, data)
+func (r *RepositoryMeta) GetTPLDefine(fullname string, data gqt.TplEntityInterface) (tplDefine *gqt.TPLDefine, err error) {
+	tplDefine, err = gqt.ExecuteTemplate(r.templates, fullname, data)
 	if err != nil {
 		return nil, err
 	}
@@ -125,7 +125,7 @@ func (r *RepositoryMeta) GetDatabaseConfig() (cfg *DatabaseConfig, err error) {
 	}
 	namespace := namespaceList[0]
 	fullname := fmt.Sprintf("%s.%s", namespace, DatabaseConfigName)
-	tplDefine, err := r.GetTPLDefine(fullname, &gqttpl.TplEmptyEntity{})
+	tplDefine, err := r.GetTPLDefine(fullname, &gqt.TplEmptyEntity{})
 	if err != nil {
 		return
 	}
@@ -143,7 +143,7 @@ func (r *RepositoryMeta) GetDatabaseConfig() (cfg *DatabaseConfig, err error) {
 	return
 }
 
-func (r *RepositoryMeta) GetDDLTPLDefine() (defineResultList []*gqttpl.TPLDefine, err error) {
+func (r *RepositoryMeta) GetDDLTPLDefine() (defineResultList []*gqt.TPLDefine, err error) {
 	ddlNamespaceList, err := r.GetNamespaceBySufix(DDLNamespaceSuffix, true)
 	if err != nil {
 		return
@@ -154,7 +154,7 @@ func (r *RepositoryMeta) GetDDLTPLDefine() (defineResultList []*gqttpl.TPLDefine
 		return
 	}
 	for _, defineResult := range defineResultList {
-		defineResult.Output = gqttpl.StandardizeSpaces(defineResult.Output)
+		defineResult.Output = gqt.StandardizeSpaces(defineResult.Output)
 	}
 	return
 }

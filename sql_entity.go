@@ -12,7 +12,7 @@ import (
 	"github.com/iancoleman/orderedmap"
 	"github.com/invopop/jsonschema"
 	"github.com/pkg/errors"
-	"github.com/suifengpiao14/gqt/v2/gqttpl"
+	"github.com/suifengpiao14/gqt/v2"
 	"github.com/suifengpiao14/jsonschemaline"
 	"github.com/suifengpiao14/templatemap"
 )
@@ -24,7 +24,7 @@ type EntityElement struct {
 	FullName   string
 	Type       string
 	OutEntity  *EntityElement // 输出对象
-	//ImplementTplEntityInterface bool // 是否需要实现 gqttpl.TplEntityInterface 接口
+	//ImplementTplEntityInterface bool // 是否需要实现 gqt.TplEntityInterface 接口
 }
 
 func GetSamePrefixEntityElements(prefix string, entityElementList []*EntityElement) (samePrefixEntityElementList []*EntityElement) {
@@ -39,7 +39,7 @@ func GetSamePrefixEntityElements(prefix string, entityElementList []*EntityEleme
 
 const STRUCT_DEFINE_NANE_FORMAT = "%sEntity"
 
-//SQLEntity 根据数据表ddl和sql tpl 生成 sql tpl 调用的输入、输出实体
+// SQLEntity 根据数据表ddl和sql tpl 生成 sql tpl 调用的输入、输出实体
 func SQLEntity(sqltplDefineText *TPLDefineText, tableList []*Table) (entityStruct string, err error) {
 	entityElement, err := SQLEntityElement(sqltplDefineText, tableList)
 	if err != nil {
@@ -204,14 +204,14 @@ func (s *SQLTplNamespace) String() string { // 这个将第一次模板解析输
 	for _, define := range s.Defines {
 		tplArr = append(tplArr, define.Text)
 	}
-	str := strings.Join(tplArr, gqttpl.EOF)
-	tplDefineList := ManualParseDefine(str, "", gqttpl.LeftDelim, gqttpl.RightDelim)
+	str := strings.Join(tplArr, gqt.EOF)
+	tplDefineList := ManualParseDefine(str, "", gqt.LeftDelim, gqt.RightDelim)
 	tplDefineList = tplDefineList.UniqueItems() // 去重
 	newTplArr := make([]string, 0)
 	for _, tplDefineText := range tplDefineList {
 		newTplArr = append(newTplArr, tplDefineText.Text)
 	}
-	out := strings.Join(newTplArr, gqttpl.EOF)
+	out := strings.Join(newTplArr, gqt.EOF)
 	return out
 }
 
@@ -221,7 +221,7 @@ func (s *SQLTplNamespace) Filename() (out string) {
 }
 
 func ManualParseDirTplDefine(tplDir string, namespaceSuffix string, leftDelim string, rightDelim string) (tplDefineList TPLDefineTextList, err error) {
-	allFileList, err := gqttpl.GetTplFilesByDir(tplDir, namespaceSuffix)
+	allFileList, err := gqt.GetTplFilesByDir(tplDir, namespaceSuffix)
 	if err != nil {
 		return
 	}
@@ -231,7 +231,7 @@ func ManualParseDirTplDefine(tplDir string, namespaceSuffix string, leftDelim st
 		if err != nil {
 			return nil, err
 		}
-		namespace := gqttpl.FileName2Namespace(filename, tplDir)
+		namespace := gqt.FileName2Namespace(filename, tplDir)
 		subTplDefineList := ManualParseDefine(string(b), namespace, leftDelim, rightDelim)
 		tplDefineList = append(tplDefineList, subTplDefineList...)
 	}
@@ -242,7 +242,7 @@ func ManualParseDefine(content string, namespace string, leftDelim string, right
 	// 解析文本
 	delim := leftDelim + "define "
 	delimLen := len(delim)
-	content = gqttpl.TrimSpaces(content) // 去除开头结尾的非有效字符
+	content = gqt.TrimSpaces(content) // 去除开头结尾的非有效字符
 	defineList := make([]string, 0)
 	for {
 		index := strings.Index(content, delim)
@@ -426,7 +426,7 @@ func InputEntityTpl() (tpl string) {
 			{{range .Variables }}
 				{{.FieldName}} {{.Type}} {{.Tag}} 
 			{{end}}
-			gqttpl.TplEmptyEntity
+			gqt.TplEmptyEntity
 		}
 
 		func (t *{{.StructName}}) TplName() string{
@@ -472,7 +472,7 @@ func (v Variables) Less(i, j int) bool { // 重写 Less() 方法， 从小到大
 	return v[i].Name < v[j].Name
 }
 
-//UniqueItems 去重
+// UniqueItems 去重
 func (v Variables) UniqueItems() (uniq []*Variable) {
 	vmap := make(map[string]*Variable)
 	for _, variable := range v {
@@ -543,18 +543,18 @@ func ParseTplVariable(tpl string, namespace string) (variableList Variables) {
 }
 
 func ParseCurlTplVariable(tplDefineText *TPLDefineText) (variableList Variables) {
-	content := gqttpl.ToEOF(tplDefineText.Content()) // 转换换行符
+	content := gqt.ToEOF(tplDefineText.Content()) // 转换换行符
 	tplVariableList := ParseTplVariable(content, tplDefineText.Namespace)
 	variableList = append(variableList, tplVariableList...)
 
 	if tplDefineText.Type() == TPL_DEFINE_TYPE_CURL_RESPONSE { // parse curl response variable ,curl response 直接采用复制，所以确保 response body 本身符合go语法
-		index := strings.Index(content, gqttpl.HTTP_HEAD_BODY_DELIM)
+		index := strings.Index(content, gqt.HTTP_HEAD_BODY_DELIM)
 		if index < 0 {
 			return
 		}
-		body := content[index+len(gqttpl.HTTP_HEAD_BODY_DELIM):]
-		body = strings.ReplaceAll(body, gqttpl.LeftDelim, "")
-		body = strings.ReplaceAll(body, gqttpl.RightDelim, "")
+		body := content[index+len(gqt.HTTP_HEAD_BODY_DELIM):]
+		body = strings.ReplaceAll(body, gqt.LeftDelim, "")
+		body = strings.ReplaceAll(body, gqt.RightDelim, "")
 		variable := &Variable{
 			Namespace: tplDefineText.Namespace,
 			Name:      "",
@@ -574,7 +574,7 @@ func ParseSQLSelectColumn(sql string) []string {
 		return make([]string, 0)
 	}
 	fieldStr := match[0][1]
-	out := strings.Split(gqttpl.StandardizeSpaces(fieldStr), ",")
+	out := strings.Split(gqt.StandardizeSpaces(fieldStr), ",")
 	return out
 }
 

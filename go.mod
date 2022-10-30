@@ -9,7 +9,7 @@ require (
 	github.com/iancoleman/strcase v0.2.0
 	github.com/pkg/errors v0.9.1
 	github.com/suifengpiao14/errorformatter v0.0.1
-	github.com/suifengpiao14/gqt/v2 v2.0.0-20220902033449-3657eff7ea78
+	github.com/suifengpiao14/gqt/v2 v2.0.1
 )
 
 require (

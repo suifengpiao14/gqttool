@@ -8,7 +8,6 @@ import (
 
 	"github.com/pkg/errors"
 	"github.com/suifengpiao14/gqt/v2"
-	"github.com/suifengpiao14/gqt/v2/gqttpl"
 )
 
 var MetaTemplatefuncMap = template.FuncMap{
@@ -16,9 +15,9 @@ var MetaTemplatefuncMap = template.FuncMap{
 	"currentTime":   gqt.CurrentTime,
 	"permanentTime": gqt.PermanentTime,
 	"contains":      strings.Contains,
-	"toCamel":       gqttpl.ToCamel,
-	"toLowerCamel":  gqttpl.ToLowerCamel,
-	"snakeCase":     gqttpl.SnakeCase,
+	"toCamel":       gqt.ToCamel,
+	"toLowerCamel":  gqt.ToLowerCamel,
+	"snakeCase":     gqt.SnakeCase,
 
 	"tplGetByPrimaryKey":        TplGetByPrimaryKey,
 	"tplGetAllByPrimaryKeyList": TplGetAllByPrimaryKeyList,

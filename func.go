@@ -16,22 +16,22 @@ import (
 	"strings"
 
 	"github.com/iancoleman/strcase"
-	"github.com/suifengpiao14/gqt/v2/gqttpl"
+	"github.com/suifengpiao14/gqt/v2"
 	"golang.org/x/tools/go/ast/astutil"
 	"golang.org/x/tools/imports"
 )
 
 // 封装 goa.design/goa/v3/codegen 方便后续可定制
 func ToCamel(name string) string {
-	return gqttpl.ToCamel(name)
+	return gqt.ToCamel(name)
 }
 
 func ToLowerCamel(name string) string {
-	return gqttpl.ToLowerCamel(name)
+	return gqt.ToLowerCamel(name)
 }
 
 func SnakeCase(name string) string {
-	return gqttpl.SnakeCase(name)
+	return gqt.SnakeCase(name)
 }
 
 func GeneratePackageName(dstDir string) (packageName string, err error) {
