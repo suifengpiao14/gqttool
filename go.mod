@@ -9,7 +9,7 @@ require (
 	github.com/iancoleman/strcase v0.2.0
 	github.com/pkg/errors v0.9.1
 	github.com/suifengpiao14/errorformatter v0.0.1
-	github.com/suifengpiao14/gqt/v2 v2.0.1
+	github.com/suifengpiao14/gqt/v2 v2.0.2
 )
 
 require (
@@ -30,13 +30,11 @@ require (
 	github.com/tidwall/sjson v1.2.5 // indirect
 	github.com/yusufpapurcu/wmi v1.2.2 // indirect
 	goa.design/goa/v3 v3.8.5 // indirect
-	golang.org/x/crypto v0.0.0-20220622213112-05595931fe9d // indirect
-	golang.org/x/sync v0.0.0-20220907140024-f12130a52804 // indirect
-	golang.org/x/sys v0.0.0-20220919091848-fb04ddd9f9c8 // indirect
-	golang.org/x/tools v0.1.12
+	golang.org/x/sync v0.1.0 // indirect
+	golang.org/x/tools v0.2.0
 	golang.org/x/xerrors v0.0.0-20220609144429-65e65417b02f // indirect
-	gorm.io/driver/mysql v1.3.6 // indirect
-	gorm.io/gorm v1.23.10 // indirect
+	gorm.io/driver/mysql v1.4.3 // indirect
+	gorm.io/gorm v1.24.0 // indirect
 
 )
 
