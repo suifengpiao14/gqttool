@@ -21,25 +21,22 @@ func Translate(name string, extraMap map[string]string) string {
 	titleArr := make([]string, 0)
 	existsWordMap := make(map[string]string)
 	formatExtraMap := make(map[string]string)
-	if extraMap != nil {
-		for k, v := range extraMap {
-			formatExtraMap[SnakeCase(k)] = v
-		}
+	for k, v := range extraMap {
+		formatExtraMap[SnakeCase(k)] = v
 	}
 	for _, word := range wordArr {
 		if _, ok := existsWordMap[word]; ok {
 			continue
 		}
-		if formatExtraMap != nil {
-			title, ok := formatExtraMap[word]
-			if ok {
-				existsWordMap[word] = title
-				titleArr = append(titleArr, title)
-				continue
-			}
+
+		title, ok := formatExtraMap[word]
+		if ok {
+			existsWordMap[word] = title
+			titleArr = append(titleArr, title)
+			continue
 		}
 
-		title, ok := TranslateMapDefault[word]
+		title, ok = TranslateMapDefault[word]
 		if ok {
 			existsWordMap[word] = title
 			titleArr = append(titleArr, title)

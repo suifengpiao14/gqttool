@@ -8,7 +8,6 @@ import (
 	"go/parser"
 	"go/scanner"
 	"go/token"
-	"io/ioutil"
 	"os"
 	"path"
 	"path/filepath"
@@ -70,7 +69,7 @@ func FinalizeGoSource(path string) error {
 	fset := token.NewFileSet()
 	file, err := parser.ParseFile(fset, path, nil, parser.ParseComments)
 	if err != nil {
-		content, _ := ioutil.ReadFile(path)
+		content, _ := os.ReadFile(path)
 		var buf bytes.Buffer
 		scanner.PrintError(&buf, err)
 		return fmt.Errorf("%s\n========\nContent:\n%s", buf.String(), content)
@@ -101,7 +100,7 @@ func FinalizeGoSource(path string) error {
 	w.Close()
 
 	// Format code using goimport standard
-	bs, err := ioutil.ReadFile(path)
+	bs, err := os.ReadFile(path)
 	if err != nil {
 		return err
 	}
@@ -113,5 +112,5 @@ func FinalizeGoSource(path string) error {
 	if err != nil {
 		return err
 	}
-	return ioutil.WriteFile(path, bs, os.ModePerm)
+	return os.WriteFile(path, bs, os.ModePerm)
 }

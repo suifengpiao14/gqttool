@@ -21,5 +21,4 @@ func TestRegexpInt(t *testing.T) {
 	str := "20"
 	ok := re.MatchString(str)
 	fmt.Println(ok)
-	return
 }
