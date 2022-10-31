@@ -292,6 +292,8 @@ func saveFile(filename string, content string, force bool) (err error) {
 			return
 		}
 	}
+	dir := path.Dir(filename)
+	os.MkdirAll(dir, os.ModePerm)
 	f, err := os.Create(filename)
 	if err != nil {
 		return
