@@ -89,6 +89,7 @@ const (
 type Column struct {
 	Prefix        string
 	CamelName     string
+	ColumnName    string // 数据库名称
 	Name          string
 	Type          string
 	Comment       string
@@ -338,13 +339,15 @@ func GenerateTable(ddlList []string, tableCfg *DatabaseConfig) (tables []*Table,
 			if tableCfg.ColumnPrefix != "" {
 				columnName = strings.TrimPrefix(columnName, tableCfg.ColumnPrefix)
 			}
+			jsonName := ToLowerCamel(columnName)
 			columnPt := &Column{
 				CamelName:     ToCamel(columnName),
-				Name:          columnDef.Name, // 这个地方记录数据库原始字段，包含前缀
+				ColumnName:    columnDef.Name, // 这个地方记录数据库原始字段，包含前缀
+				Name:          columnName,
 				Type:          goType,
 				Comment:       columnDef.Comment,
 				Nullable:      columnDef.Nullable,
-				Tag:           fmt.Sprintf("`json:\"%s\" gorm:\"column:%s\"`", ToLowerCamel(columnName), columnDef.Name),
+				Tag:           fmt.Sprintf("`json:\"%s\" gorm:\"column:%s\"`", jsonName, columnDef.Name),
 				Enums:         columnDef.Elems,
 				AutoIncrement: columnDef.AutoIncrement,
 				DefaultValue:  columnDef.DefaultValue,

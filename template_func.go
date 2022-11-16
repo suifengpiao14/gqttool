@@ -164,7 +164,7 @@ func TplInsert(data interface{}) (tpl string, err error) {
 		if isIgnoreColumn(column, table) {
 			continue
 		}
-		columns = append(columns, Backquote(column.Name))
+		columns = append(columns, Backquote(column.ColumnName))
 		values = append(values, ":"+column.CamelName)
 	}
 
@@ -190,7 +190,7 @@ func TplUpdate(data interface{}) (tpl string, err error) {
 		if isIgnoreColumn(column, table) {
 			continue
 		}
-		str := fmt.Sprintf("{{if .%s}} {{$preComma.PreComma}} `%s`=:%s {{end}} ", column.CamelName, column.Name, column.CamelName)
+		str := fmt.Sprintf("{{if .%s}} {{$preComma.PreComma}} `%s`=:%s {{end}} ", column.CamelName, column.ColumnName, column.CamelName)
 		updataList = append(updataList, str)
 	}
 	updateTpl := strings.Join(updataList, "\n")
