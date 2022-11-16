@@ -340,7 +340,7 @@ func GenerateTable(ddlList []string, tableCfg *DatabaseConfig) (tables []*Table,
 			}
 			columnPt := &Column{
 				CamelName:     ToCamel(columnName),
-				Name:          columnName,
+				Name:          columnDef.Name, // 这个地方记录数据库原始字段，包含前缀
 				Type:          goType,
 				Comment:       columnDef.Comment,
 				Nullable:      columnDef.Nullable,
