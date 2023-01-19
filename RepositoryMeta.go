@@ -22,6 +22,9 @@ type DatabaseConfig struct {
 	ColumnPrefix    string `mapstructure:"columnPrefix"`
 	DeletedAtColumn string `mapstructure:"deletedAtColumn"`
 }
+type Config struct {
+	Batch string `mapstructure:"batch"`
+}
 
 var MetaNameSpaceSuffix = gqt.MetaNamespaceSuffix
 var MetaLeftDelim = "[["
@@ -32,6 +35,7 @@ var ConfigNamespaceSuffix = gqt.ConfigNamespaceSuffix
 
 // ddl namespace sufix . define name prefix
 var DatabaseConfigName = "database"
+var ConfigName = "config"
 
 func NewRepositoryMeta() *RepositoryMeta {
 	return &RepositoryMeta{
@@ -139,6 +143,31 @@ func (r *RepositoryMeta) GetDatabaseConfig() (cfg *DatabaseConfig, err error) {
 	}
 	if cfg.LogLevel == "" {
 		cfg.LogLevel = "debug"
+	}
+	return
+}
+func (r *RepositoryMeta) GetConfig() (cfg *Config, err error) {
+	cfg = &Config{}
+	namespaceList, err := r.GetNamespaceBySufix(ConfigNamespaceSuffix, false)
+	if err != nil {
+		return
+	}
+	if len(namespaceList) == 0 {
+		return
+	}
+	namespace := namespaceList[0]
+	fullname := fmt.Sprintf("%s.%s", namespace, ConfigName)
+	tplDefine, err := r.GetTPLDefine(fullname, &gqt.TplEmptyEntity{})
+	if err != nil {
+		return
+	}
+	_, err = toml.Decode(tplDefine.Output, cfg)
+	if err != nil {
+		return
+	}
+	if cfg.Batch == "" {
+		err = errors.Errorf("config.batch required")
+		return
 	}
 	return
 }

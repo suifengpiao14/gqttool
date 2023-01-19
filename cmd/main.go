@@ -17,7 +17,6 @@ import (
 	"github.com/suifengpiao14/errorformatter"
 	"github.com/suifengpiao14/gqt/v2"
 	"github.com/suifengpiao14/gqttool"
-	"github.com/suifengpiao14/jsonschemaline"
 )
 
 func main() {
@@ -476,10 +475,24 @@ type APIModel struct {
 	InputTpl    string
 	OutputTpl   string
 }
+type TengoAPIModel struct {
+	APIID        string
+	Title        string
+	Description  string
+	Method       string
+	Route        string
+	TemplateIDs  string
+	MainScript   string
+	PreScript    string
+	PostScript   string
+	InputSchema  string
+	OutputSchema string
+}
 
 const SourceInsertTpl = "insert ignore into `source` (`source_id`,`source_type`,`config`) values('%s','%s','%s');"
-const TemplateInsertTpl = "insert ignore into `template` (`template_id`,`type`,`title`,`description`,`source_id`,`tpl`) values('%s','SQL','%s','%s','%s','%s');"
-const ApiInsertTpl = "insert ignore into `api` (`api_id`,`title`,`description`,`method`,`route`,`template_ids`,`exec`,`input`,`output`,`input_tpl`,`output_tpl`) values('%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s');"
+const TemplateInsertTpl = "insert ignore into `template` (`template_id`,`type`,`batch`,`title`,`description`,`source_id`,`tpl`) values('%s','SQL','%s','%s','%s','%s','%s');"
+const ApiInsertTpl = "insert ignore into `api` (`api_id`,`batch`,`title`,`description`,`method`,`route`,`template_ids`,`exec`,`input`,`output`,`input_tpl`,`output_tpl`) values('%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s');"
+const TengoApiInsertTpl = "insert ignore into `t_tengo_api` (`api_id`,`batch`,`title`,`description`,`method`,`route`,`template_ids`,`pre_script`,`main_script`,`post_script`,`input_schema`,`output_schema`) values('%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s');"
 
 func generateTemplateId(dbName string, tableName string, defineName string) (templateId string) {
 	templateId = fmt.Sprintf("%s%s%s", dbName, tableName, defineName)
@@ -534,7 +547,13 @@ func GenerateAPISQL(rep *gqttool.RepositoryMeta) (string, error) {
 			title := fmt.Sprintf("%s%s%s", moduleCamel, tableName, name)
 			title = gqttool.Translate(title, extraTranslatemap)
 			description := title
-			templateInsertSql := fmt.Sprintf(TemplateInsertTpl, templatId, title, description, sourceId, tpl)
+			cfg, err := rep.GetConfig()
+			if err != nil {
+				return "", err
+			}
+
+			batch := cfg.Batch
+			templateInsertSql := fmt.Sprintf(TemplateInsertTpl, templatId, batch, title, description, sourceId, tpl)
 			sqlRaws = append(sqlRaws, templateInsertSql)
 			defineType := define.Type()
 			if defineType == gqttool.TPL_DEFINE_TYPE_SQL_SELECT || defineType == gqttool.TPL_DEFINE_TYPE_SQL_UPDATE || defineType == gqttool.TPL_DEFINE_TYPE_SQL_INSERT {
@@ -551,10 +570,16 @@ func GenerateAPISQL(rep *gqttool.RepositoryMeta) (string, error) {
 				}
 				templatIds := strings.Join(templatIdArr, ",")
 				mainName := "main"
-				exec, input, output, err := gqttool.GenerateExec(mainName, table, relationEntityStructList)
+				/* 				exec, input, output, err := gqttool.GenerateExec(mainName, table, relationEntityStructList)
+				   				if err != nil {
+				   					return "", err
+				   				}
+				*/
+				mainScript, inputSchema, outputSchema, err := gqttool.GenerateTengoApi(mainName, table, relationEntityStructList)
 				if err != nil {
 					return "", err
 				}
+
 				appId := fmt.Sprintf("%s-%s-%s", module, table.TableName, name)
 				tableName := table.TableNameCamel()
 				extraTranslatemap := make(map[string]string)
@@ -565,25 +590,25 @@ func GenerateAPISQL(rep *gqttool.RepositoryMeta) (string, error) {
 				}
 				title := fmt.Sprintf("%s%s%s", module, tableName, name)
 				title = gqttool.Translate(title, extraTranslatemap)
-				inputTpl := ""
-				outputTpl := ""
-				if input != "" {
-					lineschema, err := jsonschemaline.ParseJsonschemaline(input)
-					if err != nil {
-						return "", err
-					}
-					instructTpl := jsonschemaline.ParseInstructTp(*lineschema)
-					inputTpl = instructTpl.String()
-				}
-				if output != "" {
-					lineschema, err := jsonschemaline.ParseJsonschemaline(output)
-					if err != nil {
-						return "", err
-					}
-					instructTpl := jsonschemaline.ParseInstructTp(*lineschema)
-					outputTpl = instructTpl.String()
-				}
-				apiModel := APIModel{
+				/* 				inputTpl := ""
+				   				outputTpl := ""
+				   				if input != "" {
+				   					lineschema, err := jsonschemaline.ParseJsonschemaline(input)
+				   					if err != nil {
+				   						return "", err
+				   					}
+				   					instructTpl := jsonschemaline.ParseInstructTp(*lineschema)
+				   					inputTpl = instructTpl.String()
+				   				}
+				   				if output != "" {
+				   					lineschema, err := jsonschemaline.ParseJsonschemaline(output)
+				   					if err != nil {
+				   						return "", err
+				   					}
+				   					instructTpl := jsonschemaline.ParseInstructTp(*lineschema)
+				   					outputTpl = instructTpl.String()
+				   				} */
+				/* 				apiModel := APIModel{
 					APIID:       appId,
 					Title:       title,
 					Description: title,
@@ -595,8 +620,20 @@ func GenerateAPISQL(rep *gqttool.RepositoryMeta) (string, error) {
 					Output:      output,
 					InputTpl:    inputTpl,
 					OutputTpl:   outputTpl,
+				} */
+				tengoApiModel := TengoAPIModel{
+					APIID:        appId,
+					Title:        title,
+					Description:  title,
+					Method:       "POST",
+					Route:        fmt.Sprintf("/api_v2/%s/v1/%s/%s", gqttool.SnakeCase(module), gqttool.SnakeCase(table.TableNameCamel()), gqttool.SnakeCase(name)),
+					MainScript:   mainScript,
+					TemplateIDs:  templatIds,
+					InputSchema:  inputSchema,
+					OutputSchema: outputSchema,
 				}
-				apiInsertSql := fmt.Sprintf(ApiInsertTpl, apiModel.APIID, apiModel.Title, apiModel.Description, apiModel.Method, apiModel.Route, apiModel.TemplateIDs, apiModel.Exec, apiModel.Input, apiModel.Output, apiModel.InputTpl, apiModel.OutputTpl)
+				//apiInsertSql := fmt.Sprintf(ApiInsertTpl, apiModel.APIID, batch, apiModel.Title, apiModel.Description, apiModel.Method, apiModel.Route, apiModel.TemplateIDs, apiModel.Exec, apiModel.Input, apiModel.Output, apiModel.InputTpl, apiModel.OutputTpl)
+				apiInsertSql := fmt.Sprintf(TengoApiInsertTpl, tengoApiModel.APIID, batch, tengoApiModel.Title, tengoApiModel.Description, tengoApiModel.Method, tengoApiModel.Route, tengoApiModel.TemplateIDs, tengoApiModel.PreScript, tengoApiModel.MainScript, tengoApiModel.PostScript, tengoApiModel.InputSchema, tengoApiModel.OutputSchema)
 				sqlRaws = append(sqlRaws, apiInsertSql)
 			}
 		}
